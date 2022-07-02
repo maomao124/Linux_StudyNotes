@@ -1636,3 +1636,524 @@ root@e331c5c18f3f:/etc#
 
 ## mkdir命令
 
+mkdir 命令，是 make directories 的缩写，**用于创建新目录**
+
+
+
+```sh
+[root@localhost ~]# mkdir [-mp] 目录名
+```
+
+- -m 选项用于手动配置所创建目录的权限，而不再使用默认权限。
+- -p 选项递归创建所有目录，以创建 /home/test/demo 为例，在默认情况下，你需要一层一层的创建各个目录，而使用 -p 选项，则系统会自动帮你创建 /home、/home/test 以及 /home/test/demo。
+
+
+
+```sh
+root@e331c5c18f3f:/# ls
+bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@e331c5c18f3f:/# cd tmp
+root@e331c5c18f3f:/tmp# ls
+root@e331c5c18f3f:/tmp# mkdir test
+root@e331c5c18f3f:/tmp# ls -l
+total 4
+drwxr-xr-x 2 root root 4096 Jul  2 04:37 test
+root@e331c5c18f3f:/tmp# mkdir t1/t2/t3
+mkdir: cannot create directory 't1/t2/t3': No such file or directory
+root@e331c5c18f3f:/tmp# mkdir -p t1/t2/t3
+root@e331c5c18f3f:/tmp# ls -l
+total 8
+drwxr-xr-x 3 root root 4096 Jul  2 04:40 t1
+drwxr-xr-x 2 root root 4096 Jul  2 04:37 test
+root@e331c5c18f3f:/tmp# cd t1
+root@e331c5c18f3f:/tmp/t1# ls -l
+total 4
+drwxr-xr-x 3 root root 4096 Jul  2 04:40 t2
+root@e331c5c18f3f:/tmp/t1# cd t2
+root@e331c5c18f3f:/tmp/t1/t2# ls -l
+total 4
+drwxr-xr-x 2 root root 4096 Jul  2 04:40 t3
+root@e331c5c18f3f:/tmp/t1/t2#
+```
+
+
+
+
+
+## rmdir命令
+
+rmdir（remove empty directories 的缩写）命令**用于删除空目录**
+
+
+
+```sh
+[root@localhost ~]# rmdir [-p] 目录名
+```
+
+* -p 选项用于递归删除空目录
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# ls -l
+total 8
+drwxr-xr-x 3 root root 4096 Jul  2 04:40 t1
+drwxr-xr-x 2 root root 4096 Jul  2 04:37 test
+root@e331c5c18f3f:/tmp# rmdir test
+root@e331c5c18f3f:/tmp# ls -l
+total 4
+drwxr-xr-x 3 root root 4096 Jul  2 04:40 t1
+root@e331c5c18f3f:/tmp# rmdir -p t1
+rmdir: failed to remove 't1': Directory not empty
+root@e331c5c18f3f:/tmp# rmdir -p t1/t2/t3
+root@e331c5c18f3f:/tmp# ls
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+
+
+## touch命令
+
+**创建文件及修改文件时间戳**
+
+touch 命令不光可以用来创建文件（当指定操作文件不存在时，该命令会在当前位置建立一个空文件），此命令更重要的功能是修改文件的时间参数（但当文件存在时，会修改此文件的时间参数）
+
+
+
+Linux 系统中，每个文件主要拥有 3 个时间参数（通过 stat 命令进行查看），分别是文件的访问时间、数据修改时间以及状态修改时间：
+
+- 访问时间（Access Time，简称 atime）：只要文件的内容被读取，访问时间就会更新。例如，使用 cat 命令可以查看文件的内容，此时文件的访问时间就会发生改变。
+- 数据修改时间（Modify Time，简称 mtime）：当文件的内容数据发生改变，此文件的数据修改时间就会跟着相应改变。
+- 状态修改时间（Change Time，简称 ctime）：当文件的状态发生变化，就会相应改变这个时间。比如说，如果文件的权限或者属性发生改变，此时间就会相应改变。
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# stat hello.txt
+  File: hello.txt
+  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+Device: c6h/198d        Inode: 63251       Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-07-02 04:46:05.298133084 +0000
+Modify: 2022-07-02 04:46:05.298133084 +0000
+Change: 2022-07-02 04:46:05.298133084 +0000
+ Birth: 2022-07-02 04:46:05.298133084 +0000
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+```sh
+[root@localhost ~]# touch [选项] 文件名
+```
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jul  2 04:46 hello.txt
+root@e331c5c18f3f:/tmp# touch test.txt
+root@e331c5c18f3f:/tmp# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jul  2 04:46 hello.txt
+-rw-r--r-- 1 root root 0 Jul  2 04:49 test.txt
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+
+
+## ln命令
+
+**建立链接（硬链接和软链接）**
+
+
+
+ext4 文件系统会把分区主要分为两大部分：小部分用于保存文件的 inode (i 节点）信息；剩余的大部分用于保存 block 信息。
+
+inode 的默认大小为 128 Byte，用来记录文件的权限（r、w、x）、文件的所有者和属组、文件的大小、文件的状态改变时间（ctime）、文件的最近一次读取时间（atime）、文件的最近一次修改时间（mtime）、文件的数据真正保存的 block 编号。每个文件需要占用一个 inode。 inode 中是不记录文件名的，那是因为文件名记录在文件所在目录的 block 中。
+
+block 的大小可以是 1KB、2KB、4KB，默认为 4KB。block 用于实际的数据存储，如果一个 block 放不下数据，则可以占用多个 block。例如，有一个 10KB 的文件需要存储，则会占用 3 个 block，虽然最后一个 block 不能占满，但也不能再放入其他文件的数据。这 3 个 block 有可能是连续的，也有可能是分散的。
+
+
+
+* 每个文件都独自占用一个 inode，文件内容由 inode 的记录来指向；
+
+* 如果想要读取文件内容，就必须借助目录中记录的文件名找到该文件的 inode，才能成功找到文件内容所在的 block 块；
+
+
+
+ln 命令用于给文件创建链接，根据 Linux 系统存储文件的特点，链接的方式分为以下 2 种：
+
+- **软链接：**类似于 Windows 系统中给文件创建快捷方式，即产生一个特殊的文件，该文件用来指向另一个文件，此链接方式同样适用于目录。
+- **硬链接：**我们知道，文件的基本信息都存储在 inode 中，而硬链接指的就是给一个文件的 inode 分配多个文件名，通过任何一个文件名，都可以找到此文件的 inode，从而读取该文件的数据信息。
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# ln [选项] 源文件 目标文件
+```
+
+选项：
+
+- -s：建立软链接文件。如果不加 "-s" 选项，则建立硬链接文件；
+- -f：强制。如果目标文件已经存在，则删除目标文件后再建立链接文件；
+
+
+
+软链接文件的源文件必须写成绝对路径，而不能写成相对路径（硬链接没有这样的要求）；否则软链接文件会报错。
+
+
+
+### 硬链接
+
+
+
+当我们查找一个文件，比如 /root/test 时，要经过以下步骤：
+
+1. 首先找到根目录的 inode（根目录的 inode 是系统已知的，inode 号是 2），然后判断用户是否有权限访问根目录的 block。
+2. 如果有权限，则可以在根目录的 block 中访问到 /root 的文件名及对应的 inode 号。
+3. 通过 /root/ 目录的 inode 号，可以查找到 /root/ 目录的 inode 信息，接着判断用户是否有权限访问 /root/ 目录的 block。
+4. 如果有权限，则可以从 /root/ 目录的 block 中读取到 test 文件的文件名及对应的 inode 号。
+5. 通过 test 文件的 inode 号，就可以找到 test 文件的 inode 信息，接着判断用户是否有权限访问 test 文件的 block。
+6. 如果有权限，则可以读取 block 中的数据，这样就完成了 /root/test 文件的读取与访问。
+
+
+
+这就是硬链接的原理。硬链接的特点如下：
+
+- 不论是修改源文件（test 文件），还是修改硬链接文件（test-hard 文件），另一个文件中的数据都会发生改变。
+- 不论是删除源文件，还是删除硬链接文件，只要还有一个文件存在，这个文件（inode 号是 262147 的文件）都可以被访问。
+- 硬链接不会建立新的 inode 信息，也不会更改 inode 的总数。
+- 硬链接不能跨文件系统（分区）建立，因为在不同的文件系统中，inode 号是重新计算的。
+- 硬链接不能链接目录，因为如果给目录建立硬链接，那么不仅目录本身需要重新建立，目录下所有的子文件，包括子目录中的所有子文件都需要建立硬链接，这对当前的 Linux 来讲过于复杂。
+
+
+
+### 软链接
+
+软链接也称作符号链接
+
+软链接的特点和 Windows 中的快捷方式完全一致
+
+
+
+步骤：
+
+1. 首先找到根目录的 inode 索引信息，然后判断用户是否有权限访问根目录的 block。
+2. 如果有权限访问根目录的 block，就会在 block 中查找到 /tmp/ 目录的 inode 号。
+3. 接着访问 /tmp/ 目录的 inode 信息，判断用户是否有权限访问 /tmp/ 目录的 block。
+4. 如果有权限，就会在 block 中读取到软链接文件 check-soft 的 inode 号。因为软链接文件会真正建立自己的 inode 索引和 block，所以软链接文件和源文件的 inode 号是不一样的。
+5. 通过软链接文件的 inode 号，找到了 check-soft 文件 inode 信息，判断用户是否有权限访问 block。
+6. 如果有权限，就会发现 check-soft 文件的 block 中没有实际数据，仅有源文件 check 的 inode 号。
+7. 接着通过源文件的 inode 号，访问到源文件 check 的 inode 信息，判断用户是否有权限访问 block。
+8. 如果有权限，就会在 check 文件的 block 中读取到真正的数据，从而完成数据访问。
+
+
+
+特点：
+
+- 不论是修改源文件（check），还是修改硬链接文件（check-soft)，另一个文件中的数据都会发生改变。
+- 删除软链接文件，源文件不受影响。而删除原文件，软链接文件将找不到实际的数据，从而显示文件不存在。
+- 软链接会新建自己的 inode 信息和 block，只是在 block 中不存储实际文件数据，而存储的是源文件的文件名及 inode 号。
+- 软链接可以链接目录。
+- 软链接可以跨分区。
+
+
+
+
+
+## cp命令
+
+cp 命令，**主要用来复制文件和目录**，同时借助某些选项，还可以实现复制整个目录
+
+
+
+```sh
+[root@localhost ~]# cp [选项] 源文件 目标文件
+```
+
+
+
+选项：
+
+- -a：相当于 -d、-p、-r 选项的集合；
+- -d：如果源文件为软链接（对硬链接无效），则复制出的目标文件也为软链接；
+- -i：询问，如果目标文件已经存在，则会询问是否覆盖；
+- -l：把目标文件建立为源文件的硬链接文件，而不是复制源文件；
+- -s：把目标文件建立为源文件的软链接文件，而不是复制源文件；
+- -p：复制后目标文件保留源文件的属性（包括所有者、所属组、权限和时间）；
+- -r：递归复制，用于复制目录；
+- -u：若目标文件比源文件有差异，则使用该选项可以更新目标文件，此选项可用于对文件的升级和备用。
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jul  2 04:46 hello.txt
+-rw-r--r-- 1 root root 0 Jul  2 04:49 test.txt
+root@e331c5c18f3f:/tmp# mkdir test
+root@e331c5c18f3f:/tmp# ls -l
+total 4
+-rw-r--r-- 1 root root    0 Jul  2 04:46 hello.txt
+drwxr-xr-x 2 root root 4096 Jul  2 05:04 test
+-rw-r--r-- 1 root root    0 Jul  2 04:49 test.txt
+root@e331c5c18f3f:/tmp# cp hello.txt ./test
+root@e331c5c18f3f:/tmp# ls -l
+total 4
+-rw-r--r-- 1 root root    0 Jul  2 04:46 hello.txt
+drwxr-xr-x 2 root root 4096 Jul  2 05:05 test
+-rw-r--r-- 1 root root    0 Jul  2 04:49 test.txt
+root@e331c5c18f3f:/tmp# cd test
+root@e331c5c18f3f:/tmp/test# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jul  2 05:05 hello.txt
+root@e331c5c18f3f:/tmp/test#
+```
+
+```sh
+root@e331c5c18f3f:/tmp# cp -i hello.txt ./test
+cp: overwrite './test/hello.txt'? yes
+```
+
+
+
+
+
+## rm命令
+
+**永久性地删除文件系统中指定的文件或目录**。在使用 rm 命令删除文件或目录时，系统不会产生任何提示信息
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rm [选项] 文件或目录
+```
+
+- -f：强制删除（force），和 -i 选项相反，使用 -f，系统将不再询问，而是直接删除目标文件或目录。
+- -i：和 -f 正好相反，在删除文件或目录之前，系统会给出提示信息，使用 -i 可以有效防止不小心删除有用的文件或目录。
+- -r：递归删除，主要用于删除目录，可删除指定目录及包含的所有内容，包括所有的子目录和文件。
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# ls
+hello.txt  test  test.txt
+root@e331c5c18f3f:/tmp# rm test.txt
+root@e331c5c18f3f:/tmp# ls
+hello.txt  test
+root@e331c5c18f3f:/tmp# rm -i hello.txt
+rm: remove regular empty file 'hello.txt'? no
+root@e331c5c18f3f:/tmp# ls
+hello.txt  test
+root@e331c5c18f3f:/tmp# rm -i hello.txt
+rm: remove regular empty file 'hello.txt'? yes
+root@e331c5c18f3f:/tmp# ls
+test
+root@e331c5c18f3f:/tmp# rm test
+rm: cannot remove 'test': Is a directory
+root@e331c5c18f3f:/tmp# rm -rf test
+root@e331c5c18f3f:/tmp# ls
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+
+
+## mv命令
+
+mv 命令（move 的缩写），**既可以在不同的目录之间移动文件或目录，也可以对文件和目录进行重命名**
+
+
+
+```sh
+[root@localhost ~]# mv [选项] 源文件 目标文件
+```
+
+
+
+选项：
+
+- -f：强制覆盖，如果目标文件已经存在，则不询问，直接强制覆盖；
+- -i：交互移动，如果目标文件已经存在，则询问用户是否覆盖（默认选项）；
+- -n：如果目标文件已经存在，则不会覆盖移动，而且不询问用户；
+- -v：显示文件或目录的移动过程；
+- -u：若目标文件已经存在，但两者相比，源文件更新，则会对目标文件进行升级；
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# ls
+root@e331c5c18f3f:/tmp# touch 1.txt
+root@e331c5c18f3f:/tmp# touch 2.txt
+root@e331c5c18f3f:/tmp# mkdir test
+root@e331c5c18f3f:/tmp# mv 1.txt ./test
+root@e331c5c18f3f:/tmp# ls -l
+total 4
+-rw-r--r-- 1 root root    0 Jul  2 05:21 2.txt
+drwxr-xr-x 2 root root 4096 Jul  2 05:22 test
+root@e331c5c18f3f:/tmp# cd test
+root@e331c5c18f3f:/tmp/test# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jul  2 05:21 1.txt
+root@e331c5c18f3f:/tmp/test#
+```
+
+
+
+
+
+## 命令自动补全
+
+按 Tab 键，Shell 就可以自动将文件名补全
+
+连续按两次 Tab 键，显示目录
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# mk
+mkdir             mkfifo            mkfs.bfs          mkfs.ext2         mkfs.ext4         mkhomedir_helper  mknod             mktemp
+mke2fs            mkfs              mkfs.cramfs       mkfs.ext3         mkfs.minix        mklost+found      mkswap
+root@e331c5c18f3f:/tmp# mk
+```
+
+
+
+
+
+## 命令执行过程
+
+* 判断路径
+* 检查别名
+* 判断是内部命令还是外部命令
+* 查找外部命令对应的可执行文件
+
+
+
+### 判断路径
+
+断用户是否以绝对路径或相对路径的方式输入命令（如 /bin/ls），如果是的话直接执行。
+
+
+
+### 检查别名
+
+inux 系统会检查用户输入的命令是否为“别名命令”。要知道，通过 alias 命令是可以给现有命令自定义别名的，即用一个自定义的命令名称来替换原本的命令名称。
+
+
+
+### 判断是内部命令还是外部命令
+
+Linux命令行解释器（又称为 Shell）会判断用户输入的命令是内部命令还是外部命令。其中，内部命令指的是解释器内部的命令，会被直接执行；而用户通常输入的命令都是外部命令，这些命令交给步骤四继续处理。
+
+内部命令由 Shell 自带，会随着系统启动，可以直接从内存中读取；而外部命令仅是在系统中有对应的可执行文件，执行时需要读取该文件。
+
+判断一个命令属于内部命令还是外部命令，可以使用 type 命令实现
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# type pwd
+pwd is a shell builtin
+root@e331c5c18f3f:/tmp# type cp
+cp is hashed (/usr/bin/cp)
+root@e331c5c18f3f:/tmp# type ls
+ls is aliased to `ls --color=auto'
+root@e331c5c18f3f:/tmp# type gcc
+bash: type: gcc: not found
+root@e331c5c18f3f:/tmp#
+
+```
+
+
+
+
+
+### 查找外部命令对应的可执行文件
+
+当用户执行的是外部命令时，系统会在指定的多个路径中查找该命令的可执行文件，而定义这些路径的变量，就称为 PATH 环境变量，其作用就是告诉 Shell 待执行命令的可执行文件可能存放的位置，也就是说，Shell 会在 PATH 变量包含的多个路径中逐个查找，直到找到为止。如果找不到，Shell 会提供用户“找不到此命令”。
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# gcc
+bash: gcc: command not found
+root@e331c5c18f3f:/tmp# redis-clli
+bash: redis-clli: command not found
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+
+
+
+
+## 环境变量
+
+变量是计算机系统用于保存可变值的数据类型，我们可以直接通过变量名称来提取到对应的变量值。在 Linux 系统中，环境变量是用来定义系统运行环境的一些参数，比如每个用户不同的家目录（HOME）、邮件存放位置（MAIL）等。
+
+Linux 系统中环境变量的名称一般都是大写的
+
+
+
+查看Linux 系统中所有的环境变量：
+
+```sh
+env
+```
+
+
+
+```sh
+root@e331c5c18f3f:/tmp# env
+HOSTNAME=e331c5c18f3f
+PWD=/tmp
+HOME=/root
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+TERM=xterm
+SHLVL=1
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+_=/usr/bin/env
+OLDPWD=/tmp/test
+root@e331c5c18f3f:/tmp#
+```
+
+
+
+| 环境变量名称 |                  作用                  |
+| :----------: | :------------------------------------: |
+|     HOME     |       用户的主目录（也称家目录）       |
+|    SHELL     |      用户使用的 Shell 解释器名称       |
+|     PATH     | 定义命令行解释器搜索用户执行命令的路径 |
+|    EDITOR    |          用户默认的文本解释器          |
+|    RANDOM    |            生成一个随机数字            |
+|     LANG     |           系统语言、语系名称           |
+|   HISTSIZE   |         输出的历史命令记录条数         |
+| HISTFILESIZE |         保存的历史命令记录条数         |
+|     PS1      |           Bash解释器的提示符           |
+|     MAIL     |              邮件保存路径              |
+
+
+
+
+
+
+
+
+
+
+
+# 打包（归档）和压缩
+
