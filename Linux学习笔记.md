@@ -3160,3 +3160,200 @@ void Lcd_init()
 
 ## 撤销和恢复撤销
 
+
+
+|  快捷键   |                             功能                             |
+| :-------: | :----------------------------------------------------------: |
+| u（小写） |  undo 的第 1 个字母，功能是撤销最近一次对文本做的修改操作。  |
+|  Ctrl+R   |    Redo 的第 1 个字母，功能是恢复最近一次所做的撤销操作。    |
+| U（大写） | 第一次会撤销对一行文本（光标所在行）做过的全部操作，第二次使用该命令会恢复对该行文本做过的所有操作。 |
+
+
+
+
+
+## 可视化模式
+
+
+
+|       命令       |                             功能                             |
+| :--------------: | :----------------------------------------------------------: |
+|    v（小写）     | 又称字符可视化模式，此模式下目标文本的选择是以字符为单位的，也就是说，该模式下要一个字符一个字符的选中要操作的文本。 |
+|    V（大写）     | 又称行可视化模式，此模式化目标文本的选择是以行为单位的，也就是说，该模式化可以一行一行的选中要操作的文本。 |
+| Ctrl+v（组合键） | 又称块可视化模式，该模式下可以选中文本中的一个矩形区域作为目标文本，以按下 Ctrl+v 位置作为矩形的一角，光标移动的终点位置作为它的对角。 |
+
+
+
+|   命令    |                             功能                             |
+| :-------: | :----------------------------------------------------------: |
+|     d     |                     删除选中的部分文本。                     |
+|     D     | 删除选中部分所在的行，和 d 不同之处在于，即使选中文本中有些字符所在的行没有都选中，删除时也会一并删除。 |
+|     y     |                  将选中部分复制到剪贴板中。                  |
+| p（小写） |               将剪贴板中的内容粘贴到光标之后。               |
+| P（大写） |               将剪贴板中的内容粘贴到光标之前。               |
+| u（小写） |           将选中部分中的大写字符全部改为小写字符。           |
+| U（大写） |           将选中部分中的小写字符全部改为大写字符。           |
+|     >     | 将选中部分右移（缩进）一个 tab 键规定的长度（CentOS 6.x 中，一个tab键默认相当于 8 个空白字符的长度）。 |
+|     <     | 将选中部分左移一个 tab 键规定的长度（CentOS 6.x 中，一个tab键默认相当于 8 个空白字符的长度）。 |
+
+
+
+```sh
+                {
+                        if (y1 == -1)
+                        {
+                                y1 = ev.value;
+                        }
+                        y2 = ev.value; 
+                } 
+ 
+                //»¬¶¯½áÊø£¬±æ±ð·½Ïò 
+                if (ev.type == EV_KEY && ev.code == BTN_TOUCH && ev.value == 0) 
+                { 
+                        int deltx = abs(x2 - x1); 
+                        int delty = abs(y2 - y1); 
+ 
+                        close(fd_input); 
+ 
+                        if (deltx > delty) 
+                        { 
+-- 可视 --                                      35        70,4-25       16%
+```
+
+```sh
+               }
+                //absolute ¾ø¶ÔÊÂ¼þ(´¥ÃþÆÁÊÂ¼þ)  ´¥ÃþÆÁ°´¼ü x
+                if (ev.type == EV_ABS && ev.code == ABS_X)
+                {
+                        if (x1 == -1)
+                        {
+                                //value ±íÊ¾°´ÏÂµÄ×´Ì¬ ,1 °´ÏÂ×´Ì¬,0 µ¯Æð×´Ì¬ 
+                                x1 = ev.value; 
+                        } 
+                        x2 = ev.value; 
+                } 
+                //absolute ¾ø¶ÔÊÂ¼þ(´¥ÃþÆÁÊÂ¼þ)  ´¥ÃþÆÁ°´¼ü y 
+                if (ev.type == EV_ABS && ev.code == ABS_Y) 
+                { 
+                        if (y1 == -1) 
+                        { 
+                                y1 = ev.value; 
+                        }
+-- 可视 行 --                                   12        57,5-26       12%
+```
+
+```sh
+                                //value ±íÊ¾°´ÏÂµÄ×´Ì¬ ,1 °´ÏÂ×´Ì¬,0 µ¯Æð×´Ì¬
+                                x1 = ev.value;
+                        }
+                        x2 = ev.value;
+                }
+                //absolute ¾ø¶ÔÊÂ¼þ(´¥ÃþÆÁÊÂ¼þ)  ´¥ÃþÆÁ°´¼ü y
+                if (ev.type == EV_ABS && ev.code == ABS_Y)
+                {
+                        if (y1 == -1)
+                        {
+                                y1 = ev.value;
+                        }
+                        y2 = ev.value;
+                }
+
+                //»¬¶¯½áÊø£¬±æ±ð·½Ïò
+                if (ev.type == EV_KEY && ev.code == BTN_TOUCH && ev.value == 0)
+-- 可视 块 --                                   12x15     68,11-39      14%
+```
+
+
+
+
+
+## 显示行号
+
+
+
+|          设置参数           |                            含 义                             |
+| :-------------------------: | :----------------------------------------------------------: |
+|      :set nu :set nonu      |                       设置与取消行号。                       |
+|      :syn on :syn off       | 是否依据语法显示相关的颜色帮助。在Vim中修改相关的配置文件或Shell脚本文件 时（如前面示例的脚本/etc/init.d/sshd)，默认会显示相应的颜色，用来帮助排错。如果觉得颜色产生了干扰，则可以取消此设置 |
+| set hlsearch set nohlsearch |    设置是否将査找的字符串高亮显示。默认是hlsearch高亮显示    |
+|   set nobackup set backup   | 是否保存自动备份文件。默认是nobackup不自动备份。如果设定了:set backup，则会产生“文件名〜”作为备份文件 |
+|    set ruler set noruler    |         设置是否显示右下角的状态栏。默认是ruler显示          |
+| set showmode set noshowmode | 设置是否在左下角显示如“一INSERT--”之类的状态栏。默认是showmode显示 |
+
+
+
+```sh
+{
+        int i, j;
+        for (j = y; j < y + h; j++) //Ã¿Ò»ÐÐ
+        {
+                for (i = x; i < x + w; i++) //Ã¿Ò»ÐÐµÄÃ¿Ò»¸öµã
+                {
+                        Lcd_draw_point(i, j, color);
+                }
+        }
+}
+
+int Lcd_draw_bmp(char* name, int w, int h, int x, int y)
+{
+        int fd_bmp = open(name, O_RDWR);
+        if (fd_bmp == -1)
+        {
+                printf("open bmp error\n");
+                return -1;
+        }
+                                                          212,1-8       52%
+```
+
+```sh
+{
+        int i, j;
+        for (j = y; j < y + h; j++) //Ã¿Ò»ÐÐ
+        {
+                for (i = x; i < x + w; i++) //Ã¿Ò»ÐÐµÄÃ¿Ò»¸öµã
+                {
+                        Lcd_draw_point(i, j, color);
+                }
+        }
+}
+
+int Lcd_draw_bmp(char* name, int w, int h, int x, int y)
+{
+        int fd_bmp = open(name, O_RDWR);
+        if (fd_bmp == -1)
+        {
+                printf("open bmp error\n");
+                return -1;
+        }
+:set nu
+```
+
+```sh
+207 {
+208         int i, j;
+209         for (j = y; j < y + h; j++) //Ã¿Ò»ÐÐ
+210         {
+211                 for (i = x; i < x + w; i++) //Ã¿Ò»ÐÐµÄÃ¿Ò»¸öµã
+212                 {
+213                         Lcd_draw_point(i, j, color);
+214                 }
+215         }
+216 }
+217 
+218 int Lcd_draw_bmp(char* name, int w, int h, int x, int y)
+219 {
+220         int fd_bmp = open(name, O_RDWR);
+221         if (fd_bmp == -1)
+222         {
+223                 printf("open bmp error\n");
+224                 return -1;
+225         }
+:set nu                                                   212,1-8       52%
+```
+
+
+
+
+
+# 配置文件.vimrc
+
