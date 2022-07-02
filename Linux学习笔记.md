@@ -2846,3 +2846,134 @@ int main()
 
 
 
+| 快捷键  |                功能描述                |
+| :-----: | :------------------------------------: |
+|    x    |         删除光标所在位置的字符         |
+|   dd    |             删除光标所在行             |
+|   ndd   |   删除当前行（包括此行）后 n 行文本    |
+|   dG    | 删除光标所在行一直到文件末尾的所有内容 |
+|    D    |        删除光标位置到行尾的内容        |
+| :a1,a2d |     函数从 a1 行到 a2 行的文本内容     |
+
+
+
+被删除的内容并没有真正删除，都放在了剪贴板中。将光标移动到指定位置处，按下 "p" 键，就可以将刚才删除的内容又粘贴到此处
+
+
+
+#### 复制和粘贴文本
+
+
+
+|  快捷键   |                          功能描述                          |
+| :-------: | :--------------------------------------------------------: |
+|     p     |                将剪贴板中的内容粘贴到光标后                |
+| P（大写） |                将剪贴板中的内容粘贴到光标前                |
+|     y     |                  复制已选中的文本到剪贴板                  |
+|    yy     | 将光标所在行复制到剪贴板，此命令前可以加数字 n，可复制多行 |
+|    yw     |                将光标位置的单词复制到剪贴板                |
+
+
+
+
+
+#### 其他常用快捷键
+
+
+
+| 快捷键 |       功能描述       |
+| :----: | :------------------: |
+|   J    |    把两行进行连接    |
+|   u    | 撤销上一次执行的命令 |
+
+
+
+```sh
+               {
+                        printf("debug: Slide left\n");
+                        bmp_location_increase();
+                }
+                else if (location == 4)
+                {
+                        printf("debug: Slide right\n");
+                        bmp_location_reduce();
+                }
+                else
+                {
+                        printf("debug: Slide error!\n");
+                }
+
+        }
+        //¹Ø±ÕÆÁÄ»
+        Lcd_close();
+        return 0;
+}
+
+
+
+
+                                                              396,1-8      底端
+```
+
+```sh
+                {
+                        printf("debug: Slide left\n");
+                        bmp_location_increase();
+                }
+                else if (location == 4)
+                {
+                        printf("debug: Slide right\n");
+                        bmp_location_reduce();
+                }
+                else
+                { printf("debug: Slide error!\n");
+                }
+
+        }
+        //¹Ø±ÕÆÁÄ»
+        Lcd_close();
+        return 0;
+}
+
+
+
+
+~                                                                               
+                                                              399,4-18     底端
+```
+
+```sh
+               {
+                        printf("debug: Slide left\n");
+                        bmp_location_increase();
+                }
+                else if (location == 4)
+                {
+                        printf("debug: Slide right\n");
+                        bmp_location_reduce();
+                }
+                else
+                { 
+                        printf("debug: Slide error!\n");
+                }
+
+        }
+        //¹Ø±ÕÆÁÄ»
+        Lcd_close();
+        return 0;
+}
+
+
+
+
+1 行被加入；before #1  30 seconds ago                         399,3-17     底端
+```
+
+
+
+
+
+
+
+### 保存退出文本
+
