@@ -2157,3 +2157,457 @@ root@e331c5c18f3f:/tmp#
 
 # 打包（归档）和压缩
 
+归档：也称为打包，指的是一个文件或目录的集合，而这个集合被存储在一个文件中。归档文件没有经过压缩，因此，它占用的空间是其中所有文件和目录的总和。
+
+压缩是指利用算法将文件进行处理，已达到保留最大文件信息，而让文件体积变小的目的。其基本原理为，通过查找文件内的重复字节，建立一个相同字节的词典文件，并用一个代码表示。
+
+采用压缩工具对文件进行压缩，生成的文件称为压缩包
+
+使用前需要利用压缩工具将文件数据还原，此过程又称解压缩
+
+
+
+
+
+## tar命令
+
+### 打包
+
+命令：
+
+```sh
+[root@localhost ~]#tar [选项] 源文件或目录
+```
+
+
+
+|  选项   |                             含义                             |
+| :-----: | :----------------------------------------------------------: |
+|   -c    |                  将多个文件或目录进行打包。                  |
+|   -A    |                  追加 tar 文件到归档文件。                   |
+| -f 包名 | 指定包的文件名。包的扩展名是用来给管理员识别格式的，所以一定要正确指定扩展名 |
+|   -v    |                       显示打包文件过程                       |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ tar -cvf a.tar a.c
+a.c
+mao@ubuntu:~/桌面$ ls
+1.txt  a.out                                    filea.c  linux_file.c
+2.txt  a.tar                                    func1.c  main.c
+a.c    English_early_education_machine_input.c  func2.c  main.h
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+### 解压
+
+
+
+```sh
+[root@localhost ~]#tar [选项] 压缩包
+```
+
+
+
+|  选项   |                            含义                            |
+| :-----: | :--------------------------------------------------------: |
+|   -x    |                  对 tar 包做解打包操作。                   |
+|   -f    |                指定要解压的 tar 包的包名。                 |
+|   -t    | 只查看 tar 包中有哪些文件或目录，不对 tar 包做解打包操作。 |
+| -C 目录 |                      指定解打包位置。                      |
+|   -v    |                   显示解打包的具体过程。                   |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ tar -tvf a.tar
+-rw------- mao/mao        8859 2021-12-30 04:31 a.c
+mao@ubuntu:~/桌面$ tar -xvf a.tar
+a.c
+mao@ubuntu:~/桌面$ ls -l
+总用量 96
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+
+```
+
+
+
+
+
+## zip命令
+
+
+
+命令：
+
+```sh
+[root@localhost ~]#zip [选项] 压缩包名 源文件或源目录列表
+```
+
+
+
+|   选项    |                             含义                             |
+| :-------: | :----------------------------------------------------------: |
+|    -r     |  递归压缩目录，及将制定目录下的所有文件以及子目录全部压缩。  |
+|    -m     |  将文件压缩之后，删除原始文件，相当于把文件移到压缩文件中。  |
+|    -v     |                   显示详细的压缩过程信息。                   |
+|    -q     |              在压缩的时候不显示命令的执行过程。              |
+| -压缩级别 | 压缩级别是从 1~9 的数字，-1 代表压缩速度更快，-9 代表压缩效果更好。 |
+|    -u     |            更新压缩文件，即往压缩文件中添加新文件            |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 96
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ zip -v a.zip a.c
+  adding: a.c	(in=8859) (out=2742) (deflated 69%)
+total bytes=8859, compressed=2742 -> 69% savings
+mao@ubuntu:~/桌面$ ls -l
+总用量 100
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## unzip命令
+
+unzip 命令可以**查看和解压缩 zip 文件**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# unzip [选项] 压缩包名
+```
+
+
+
+|    选项     |                             含义                             |
+| :---------: | :----------------------------------------------------------: |
+|  -d 目录名  |                 将压缩文件解压到指定目录下。                 |
+|     -n      |                解压时并不覆盖已经存在的文件。                |
+|     -o      |         解压时覆盖已经存在的文件，并且无需用户确认。         |
+|     -v      | 查看压缩文件的详细信息，包括压缩文件中包含的文件大小、文件名以及压缩比等，但并不做解压操作。 |
+|     -t      |              测试压缩文件有无损坏，但并不解压。              |
+| -x 文件列表 |           解压文件，但不包含文件列表中指定的文件。           |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ unzip -t a.zip
+Archive:  a.zip
+    testing: a.c                      OK
+No errors detected in compressed data of a.zip.
+mao@ubuntu:~/桌面$ unzip a.zip
+Archive:  a.zip
+replace a.c? [y]es, [n]o, [A]ll, [N]one, [r]ename: y
+  inflating: a.c                     
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## gzip命令
+
+gzip 是 Linux 系统中经常用来对文件进行压缩和解压缩的命令，通过此命令压缩得到的新文件，其扩展名通常标记为“.gz”
+
+gzip 命令只能用来压缩文件，不能压缩目录，即便指定了目录，也只能压缩目录内的所有文件
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# gzip [选项] 源文件
+```
+
+
+
+| 选项  |                             含义                             |
+| :---: | :----------------------------------------------------------: |
+|  -c   |          将压缩数据输出到标准输出中，并保留源文件。          |
+|  -d   |                    对压缩文件进行解压缩。                    |
+|  -r   |          递归压缩指定目录下以及子目录下的所有文件。          |
+|  -v   |    对于每个压缩和解压缩的文件，显示相应的文件名和压缩比。    |
+|  -l   | 对每一个压缩文件，显示以下字段：1.压缩文件的大小；2.未压缩文件的大小；3.压缩比；4.未压缩文件的名称。 |
+| -数字 | 用于指定压缩等级，-1 压缩等级最低，压缩比最差；-9 压缩比最高。默认压缩比是 -6。 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 100
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ gzip a.c
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  2764 12月 30  2021 a.c.gz
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+
+```
+
+
+
+
+
+## gunzip命令
+
+gunzip 是一个使用广泛的解压缩命令，它**用于解压被 gzip 压缩过的文件**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# gunzip [选项] 文件
+```
+
+
+
+| 选项 |                        含义                        |
+| :--: | :------------------------------------------------: |
+|  -r  | 递归处理，解压缩指定目录下以及子目录下的所有文件。 |
+|  -c  |        把解压缩后的文件输出到标准输出设备。        |
+|  -f  |    强制解压缩文件，不理会文件是否已存在等情况。    |
+|  -l  |                 列出压缩文件内容。                 |
+|  -v  |                 显示命令执行过程。                 |
+|  -t  |    测试压缩文件是否正常，但不对其做解压缩操作。    |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ gunzip -l a.c.gz 
+         compressed        uncompressed  ratio uncompressed_name
+               2764                8859  69.0% a.c
+mao@ubuntu:~/桌面$ gunzip a.c.gz 
+mao@ubuntu:~/桌面$ ls -l
+总用量 100
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+
+```
+
+
+
+
+
+## bzip2命令
+
+bzip2 命令同 gzip 命令类似，只能对文件进行压缩（或解压缩），对于目录只能压缩（或解压缩）该目录及子目录下的所有文件。当执行压缩任务完成后，会生成一个以“.bz2”为后缀的压缩包。
+
+.bz2"格式的算法更先进、压缩比更好
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# bzip2 [选项] 源文件
+```
+
+
+
+| 选项  |                             含义                             |
+| :---: | :----------------------------------------------------------: |
+|  -d   | 执行解压缩，此时该选项后的源文件应为标记有 .bz2 后缀的压缩包文件。 |
+|  -k   | bzip2 在压缩或解压缩任务完成后，会删除原始文件，若要保留原始文件，可使用此选项。 |
+|  -f   | bzip2 在压缩或解压缩时，若输出文件与现有文件同名，默认不会覆盖现有文件，若使用此选项，则会强制覆盖现有文件。 |
+|  -t   |                   测试压缩包文件的完整性。                   |
+|  -v   |              压缩或解压缩文件时，显示详细信息。              |
+| -数字 | 这个参数和 gzip 命令的作用一样，用于指定压缩等级，-1 压缩等级最低，压缩比最差；-9 压缩比最高 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 100
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ bzip2 a.c
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  2831 12月 30  2021 a.c.bz2
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+
+```
+
+
+
+
+
+## bunzip2命令
+
+**bz2格式的解压缩命令**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# bunzip2 [选项] 源文件
+```
+
+
+
+| 选项 |                             含义                             |
+| :--: | :----------------------------------------------------------: |
+|  -k  | 解压缩后，默认会删除原来的压缩文件。若要保留压缩文件，需使用此参数。 |
+|  -f  | 解压缩时，若输出的文件与现有文件同名时，默认不会覆盖现有的文件。若要覆盖，可使用此选项。 |
+|  -v  |                      显示命令执行过程。                      |
+|  -L  |                      列出压缩文件内容。                      |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  2831 12月 30  2021 a.c.bz2
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ bunzip2 a.c.bz2
+mao@ubuntu:~/桌面$ ls -l
+总用量 100
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+mao@ubuntu:~/桌面$ 
+
+```
+
+
+
+
+
+
+
+
+
+# Vim文本编辑器
+
