@@ -5384,3 +5384,101 @@ rpm 命令还可以查询未安装软件包中包含的所有文件以及打算�
 
 ### rpm -qf
 
+**查询系统文件属于哪个RPM包**
+
+rpm -ql 命令是通过软件包查询所含文件的安装路径，rpm 还支持反向查询，即查询某系统文件所属哪个 RPM 软件包
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -qf 系统文件名
+```
+
+
+
+-f 选项的含义是查询系统文件所属哪个软件包，是 file 的首字母。
+
+
+
+```sh
+[root@889e0484bdd2 /]# rpm -qf /bin/ls
+coreutils-single-8.30-8.el8.x86_64
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# rpm -qf /usr/bin/gzip
+gzip-1.9-12.el8.x86_64
+[root@889e0484bdd2 /]#
+```
+
+
+
+### rpm -qR
+
+**查询软件包的依赖关系**
+
+使用 rpm 命令安装 RPM 包，需考虑与其他 RPM 包的依赖关系。rpm -qR 命令就用来查询某已安装软件包依赖的其他包
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -qR 包名
+```
+
+-R（大写）选项的含义是查询软件包的依赖性，是 requires 的首字母。
+
+
+
+
+
+```sh
+[root@889e0484bdd2 /]# rpm -qR gzip-1.9-12.el8.x86_64
+/bin/sh
+/bin/sh
+/bin/sh
+/sbin/install-info
+coreutils
+libc.so.6()(64bit)
+libc.so.6(GLIBC_2.14)(64bit)
+libc.so.6(GLIBC_2.17)(64bit)
+libc.so.6(GLIBC_2.2.5)(64bit)
+libc.so.6(GLIBC_2.3)(64bit)
+libc.so.6(GLIBC_2.3.4)(64bit)
+libc.so.6(GLIBC_2.4)(64bit)
+libc.so.6(GLIBC_2.6)(64bit)
+rpmlib(CompressedFileNames) <= 3.0.4-1
+rpmlib(FileDigests) <= 4.6.0-1
+rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+rpmlib(PayloadIsXz) <= 5.2-1
+rtld(GNU_HASH)
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# rpm -qR yum-4.4.2-11.el8.noarch
+config(yum) = 4.4.2-11.el8
+dnf = 4.4.2-11.el8
+rpmlib(CompressedFileNames) <= 3.0.4-1
+rpmlib(FileDigests) <= 4.6.0-1
+rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+rpmlib(PayloadIsXz) <= 5.2-1
+[root@889e0484bdd2 /]#
+```
+
+
+
+在此命令的基础上增加 -p 选项，即可实现查找未安装软件包的依赖性
+
+
+
+
+
+
+
+## RPM包验证数字证书
+
