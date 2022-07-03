@@ -4442,7 +4442,945 @@ awk 的强大之处在于脚本命令，它由 2 部分组成，分别为匹配�
 
 # 软件安装
 
+## 软件包
+
+GPL，全称 General Public License，中文名称“通用性公开许可证”，简单理解 GPL 就是一个保护软件自由的一个协议
+
+Linux下的软件包可细分为两种，分别是源码包和二进制包。
 
 
 
+### 源码包
+
+源码包就是一大堆源代码程序，是由程序员按照特定的格式和语法编写出来的
+
+
+
+### 二进制包
+
+二进制包，也就是源码包经过成功编译之后产生的包。
+
+由于二进制包在发布之前就已经完成了编译的工作，因此用户安装软件的速度较快，且安装过程报错几率大大减小。
+
+
+
+因此二进制包又被称为默认安装软件包。目前主要有以下 2 大主流的二进制包管理系统：
+
+- RPM 包管理系统：功能强大，安装、升级、査询和卸载非常简单方便，因此很多 Linux 发行版都默认使用此机制作为软件安装的管理方式，例如 Fedora、CentOS、SuSE 等。
+- DPKG 包管理系统：由 Debian Linux 所开发的包管理机制，通过 DPKG 包，Debian Linux 就可以进行软件包管理，主要应用在 Debian 和 Ubuntu 中。
+
+
+
+### 比较
+
+源码包需要我们自己去软件官方网站进行下载，包中通常包含以下内容：
+
+- 源代码文件。
+- 配置和检测程序（如 configure 或 config 等）。
+- 软件安装说明和软件说明（如 INSTALL 或 README）。
+
+
+使用源码包安装软件具有以下几点好处：
+
+- 开源。如果你有足够的能力，则可以修改源代码。
+- 可以自由选择所需的功能。
+- 因为软件是编译安装的，所以更加适合自己的系统，更加稳定，效率也更高。
+- 卸载方便。
+
+
+但同时，使用源码包安装软件也有几点不足：
+
+- 安装过程步骤较多，尤其是在安装较大的软件集合时（如 LAMP 环境搭建），容易出现拼写错误。
+- 编译时间较长，所以安装时间比二进制安装要长。
+- 因为软件是编译安装的，所以在安装过程中一旦报错，新手很难解决。
+
+
+
+使用 RMP 包安装软件具有以下 2 点好处：
+
+1. 包管理系统简单，只通过几个命令就可以实现包的安装、升级、査询和卸载。
+2. 安装速度比源码包安装快得多。
+
+
+与此同时，使用 RMP 包安装软件有如下不足：
+
+- 经过编译，不能在看到源代码。
+- 功能选择不如源码包灵活。
+- 依赖性。有时我们会发现，在安装软件包 a 时需要先安装 b 和 c，而在安装 b 时需要先安装 d 和 e。这就需要先安装 d 和 e，再安装 b 和 c，最后才能安装 。需要有一定的顺序，但是有时依赖性会非常强。
+
+
+
+
+
+## RPM包统一命名规则
+
+规则：
+
+```sh
+包名-版本号-发布次数-发行商-Linux平台-适合的硬件平台-包扩展名
+```
+
+
+
+
+
+## Docker安装centOS
+
+
+
+搜索：
+
+```sh
+docker search centos
+```
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker search centos
+NAME                                         DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+centos                                       The official build of CentOS.                   7216      [OK]
+kasmweb/centos-7-desktop                     CentOS 7 desktop for Kasm Workspaces            21
+continuumio/centos5_gcc5_base                                                                3
+dokken/centos-7                              CentOS 7 image for kitchen-dokken               2
+dokken/centos-stream-9                                                                       1
+couchbase/centos7-systemd                    centos7-systemd images with additional debug…   1                    [OK]
+spack/centos7                                CentOS 7 with Spack preinstalled                1
+datadog/centos-i386                                                                          0
+dokken/centos-8                              CentOS 8 image for kitchen-dokken               0
+dokken/centos-6                              CentOS 6 image for kitchen-dokken               0
+spack/centos6                                CentOS 6 with Spack preinstalled                0
+dokken/centos-stream-8                                                                       0
+bitnami/centos-extras-base                                                                   0
+corpusops/centos                             centos corpusops baseimage                      0
+couchbase/centos-72-java-sdk                                                                 0
+couchbase/centos-72-jenkins-core                                                             0
+fnndsc/centos-python3                        Source for a slim Centos-based Python3 image…   0                    [OK]
+couchbase/centos-69-sdk-build                                                                0
+bitnami/centos-base-buildpack                Centos base compilation image                   0                    [OK]
+couchbase/centos-69-sdk-nodevtoolset-build                                                   0
+couchbase/centos-70-sdk-build                                                                0
+spack/centos-stream                                                                          0
+galaxy/centos-wheel                                                                          0
+galaxy/centos32                                                                              0
+galaxy/centos32-wheel                                                                        0
+PS C:\Users\mao\Desktop>
+```
+
+
+
+拉取：
+
+```sh
+docker pull centos
+```
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker pull centos
+Using default tag: latest
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+docker.io/library/centos:latest
+PS C:\Users\mao\Desktop>
+```
+
+
+
+查看镜像：
+
+```sh
+docker images
+```
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker images
+REPOSITORY            TAG       IMAGE ID       CREATED        SIZE
+docker_compose_boot   1.0       aaef57816a3b   2 weeks ago    588MB
+java17                1.0       282982c69086   2 weeks ago    489MB
+grafana/grafana       latest    c4b778290339   2 weeks ago    292MB
+tomcat                latest    c795915cb678   5 weeks ago    680MB
+redis                 latest    53aa81e8adfa   5 weeks ago    117MB
+mysql                 latest    65b636d5542b   5 weeks ago    524MB
+ubuntu                latest    d2e4e1f51132   2 months ago   77.8MB
+centos                latest    5d0da3dc9764   9 months ago   231MB
+google/cadvisor       latest    eb1210707573   3 years ago    69.6MB
+tutum/influxdb        0.9       7aa2a38f2ef6   6 years ago    275MB
+PS C:\Users\mao\Desktop>
+```
+
+
+
+运行实例：
+
+```sh
+docker run -it --name centos centos
+```
+
+可以使用容器数据卷
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker run -it --name centos centos
+[root@889e0484bdd2 /]#
+```
+
+
+
+退出：
+
+```sh
+exit
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# exit
+exit
+PS C:\Users\mao\Desktop>
+```
+
+
+
+查看状态：
+
+```sh
+docker ps -a
+```
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker ps -a
+CONTAINER ID   IMAGE                     COMMAND                  CREATED              STATUS                        PORTS                    NAMES
+889e0484bdd2   centos                    "/bin/bash"              About a minute ago   Exited (0) 43 seconds ago                              centos
+e331c5c18f3f   ubuntu                    "bash"                   2 days ago           Exited (255) 10 minutes ago                            ubuntu
+bc3a894f3f5a   mysql                     "docker-entrypoint.s…"   10 days ago          Exited (0) 10 days ago                                 mysql3
+acc4ae47d7fe   mysql                     "docker-entrypoint.s…"   10 days ago          Exited (0) 10 days ago                                 mysql2
+1219851e3bc5   grafana/grafana           "/run.sh"                2 weeks ago          Exited (0) 10 minutes ago                              desktop_grafana_1
+059cf60a61b1   google/cadvisor           "/usr/bin/cadvisor -…"   2 weeks ago          Exited (0) 10 minutes ago                              desktop_cadvisor_1
+71da6b2b40a2   tutum/influxdb:0.9        "/run.sh"                2 weeks ago          Exited (0) 10 minutes ago                              desktop_influxdb_1
+e955fb5f7a77   docker_compose_boot:1.0   "java -jar Docker_co…"   2 weeks ago          Exited (143) 2 weeks ago                               docker_compose_boot1
+72a29340a31e   redis                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                                 compose_redis
+ce530f498cc4   mysql                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                                 compose_mysql
+8a8076944128   redis                     "docker-entrypoint.s…"   2 weeks ago          Exited (255) 2 weeks ago      0.0.0.0:6380->6379/tcp   redis1
+2d379d342bb6   mysql                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                                 mysql1
+3ca156e4541d   tomcat                    "catalina.sh run"        2 weeks ago          Exited (143) 10 days ago                               tomcat1
+PS C:\Users\mao\Desktop>
+```
+
+
+
+
+
+启动：
+
+```sh
+docker start -i centos
+```
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker start -i centos
+[root@889e0484bdd2 /]#
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@889e0484bdd2 /]# ls  -l
+total 48
+lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+drwxr-xr-x   5 root root  360 Jul  3 12:33 dev
+drwxr-xr-x   1 root root 4096 Jul  3 12:30 etc
+drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+drwx------   2 root root 4096 Sep 15  2021 lost+found
+drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+dr-xr-xr-x 283 root root    0 Jul  3 12:33 proc
+dr-xr-x---   1 root root 4096 Jul  3 12:31 root
+drwxr-xr-x  11 root root 4096 Sep 15  2021 run
+lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+dr-xr-xr-x  11 root root    0 Jul  3 12:33 sys
+drwxrwxrwt   7 root root 4096 Sep 15  2021 tmp
+drwxr-xr-x  12 root root 4096 Sep 15  2021 usr
+drwxr-xr-x  20 root root 4096 Sep 15  2021 var
+[root@889e0484bdd2 /]#
+```
+
+
+
+RPM
+
+```sh
+[root@889e0484bdd2 /]# rpm
+RPM version 4.14.3
+Copyright (C) 1998-2002 - Red Hat, Inc.
+This program may be freely redistributed under the terms of the GNU GPL
+
+Usage: rpm [-afgpcdLAlsiv?] [-a|--all] [-f|--file] [-g|--group] [-p|--package] [--pkgid] [--hdrid] [--triggeredby] [--whatconflicts] [--whatrequires]
+        [--whatobsoletes] [--whatprovides] [--whatrecommends] [--whatsuggests] [--whatsupplements] [--whatenhances] [--nomanifest] [-c|--configfiles]
+        [-d|--docfiles] [-L|--licensefiles] [-A|--artifactfiles] [--dump] [-l|--list] [--queryformat=QUERYFORMAT] [-s|--state] [--nofiledigest]
+        [--nofiles] [--nodeps] [--noscript] [--allfiles] [--allmatches] [--badreloc] [-e|--erase=<package>+] [--excludedocs] [--excludepath=<path>]
+        [--force] [-F|--freshen=<packagefile>+] [-h|--hash] [--ignorearch] [--ignoreos] [--ignoresize] [--noverify] [-i|--install] [--justdb]
+        [--nodeps] [--nofiledigest] [--nocontexts] [--nocaps] [--noorder] [--noscripts] [--notriggers] [--oldpackage] [--percent] [--prefix=<dir>]
+        [--relocate=<old>=<new>] [--replacefiles] [--replacepkgs] [--test] [-U|--upgrade=<packagefile>+] [--reinstall=<packagefile>+]
+        [-D|--define='MACRO EXPR'] [--undefine=MACRO] [-E|--eval='EXPR'] [--target=CPU-VENDOR-OS] [--macros=<FILE:...>] [--noplugins] [--nodigest]
+        [--nosignature] [--rcfile=<FILE:...>] [-r|--root=ROOT] [--dbpath=DIRECTORY] [--querytags] [--showrc] [--quiet] [-v|--verbose] [--version]
+        [-?|--help] [--usage] [--scripts] [--setperms] [--setugids] [--setcaps] [--restore] [--conflicts] [--obsoletes] [--provides] [--requires]
+        [--recommends] [--suggests] [--supplements] [--enhances] [--info] [--changelog] [--changes] [--xml] [--triggers] [--filetriggers] [--last]
+        [--dupes] [--filesbypkg] [--fileclass] [--filecolor] [--fileprovide] [--filerequire] [--filecaps]
+[root@889e0484bdd2 /]#
+```
+
+
+
+yum：
+
+```sh
+[root@889e0484bdd2 /]# yum
+Failed to set locale, defaulting to C.UTF-8
+usage: yum [options] COMMAND
+
+List of Main Commands:
+
+alias                     List or create command aliases
+autoremove                remove all unneeded packages that were originally installed as dependencies
+check                     check for problems in the packagedb
+check-update              check for available package upgrades
+clean                     remove cached data
+deplist                   List package's dependencies and what packages provide them
+distro-sync               synchronize installed packages to the latest available versions
+downgrade                 Downgrade a package
+group                     display, or use, the groups information
+help                      display a helpful usage message
+history                   display, or use, the transaction history
+info                      display details about a package or group of packages
+install                   install a package or packages on your system
+list                      list a package or groups of packages
+makecache                 generate the metadata cache
+mark                      mark or unmark installed packages as installed by user.
+module                    Interact with Modules.
+provides                  find what package provides the given value
+reinstall                 reinstall a package
+remove                    remove a package or packages from your system
+repolist                  display the configured software repositories
+repoquery                 search for packages matching keyword
+repository-packages       run commands on top of all packages in given repository
+search                    search package details for the given string
+shell                     run an interactive YUM shell
+swap                      run an interactive YUM mod for remove and install one spec
+updateinfo                display advisories about packages
+upgrade                   upgrade a package or packages on your system
+upgrade-minimal           upgrade, but only 'newest' package match which fixes a problem that affects your system
+
+General YUM options:
+  -c [config file], --config [config file]
+                        config file location
+  -q, --quiet           quiet operation
+  -v, --verbose         verbose operation
+  --version             show YUM version and exit
+  --installroot [path]  set install root
+  --nodocs              do not install documentations
+  --noplugins           disable all plugins
+  --enableplugin [plugin]
+                        enable plugins by name
+  --disableplugin [plugin]
+                        disable plugins by name
+  --releasever RELEASEVER
+                        override the value of $releasever in config and repo
+                        files
+  --setopt SETOPTS      set arbitrary config and repo options
+  --skip-broken         resolve depsolve problems by skipping packages
+  -h, --help, --help-cmd
+                        show command help
+  --allowerasing        allow erasing of installed packages to resolve
+                        dependencies
+  -b, --best            try the best available package versions in
+                        transactions.
+  --nobest              do not limit the transaction to the best candidate
+  -C, --cacheonly       run entirely from system cache, don't update cache
+  -R [minutes], --randomwait [minutes]
+                        maximum command wait time
+  -d [debug level], --debuglevel [debug level]
+                        debugging output level
+  --debugsolver         dumps detailed solving results into files
+  --showduplicates      show duplicates, in repos, in list/search commands
+  -e ERRORLEVEL, --errorlevel ERRORLEVEL
+                        error output level
+  --obsoletes           enables yum's obsoletes processing logic for upgrade
+                        or display capabilities that the package obsoletes for
+                        info, list and repoquery
+  --rpmverbosity [debug level name]
+                        debugging output level for rpm
+  -y, --assumeyes       automatically answer yes for all questions
+  --assumeno            automatically answer no for all questions
+  --enablerepo [repo]   Enable additional repositories. List option. Supports
+                        globs, can be specified multiple times.
+  --disablerepo [repo]  Disable repositories. List option. Supports globs, can
+                        be specified multiple times.
+  --repo [repo], --repoid [repo]
+                        enable just specific repositories by an id or a glob,
+                        can be specified multiple times
+  --enable              enable repos with config-manager command
+                        (automatically saves)
+  --disable             disable repos with config-manager command
+                        (automatically saves)
+  -x [package], --exclude [package], --excludepkgs [package]
+                        exclude packages by name or glob
+  --disableexcludes [repo], --disableexcludepkgs [repo]
+                        disable excludepkgs
+  --repofrompath [repo,path]
+                        label and path to an additional repository to use
+                        (same path as in a baseurl), can be specified multiple
+                        times.
+  --noautoremove        disable removal of dependencies that are no longer
+                        used
+  --nogpgcheck          disable gpg signature checking (if RPM policy allows)
+  --color COLOR         control whether color is used
+  --refresh             set metadata as expired before running the command
+  -4                    resolve to IPv4 addresses only
+  -6                    resolve to IPv6 addresses only
+  --destdir DESTDIR, --downloaddir DESTDIR
+                        set directory to copy packages to
+  --downloadonly        only download packages
+  --comment COMMENT     add a comment to transaction
+  --bugfix              Include bugfix relevant packages, in updates
+  --enhancement         Include enhancement relevant packages, in updates
+  --newpackage          Include newpackage relevant packages, in updates
+  --security            Include security relevant packages, in updates
+  --advisory ADVISORY, --advisories ADVISORY
+                        Include packages needed to fix the given advisory, in
+                        updates
+  --bz BUGZILLA, --bzs BUGZILLA
+                        Include packages needed to fix the given BZ, in
+                        updates
+  --cve CVES, --cves CVES
+                        Include packages needed to fix the given CVE, in
+                        updates
+  --sec-severity {Critical,Important,Moderate,Low}, --secseverity {Critical,Important,Moderate,Low}
+                        Include security relevant packages matching the
+                        severity, in updates
+  --forcearch ARCH      Force the use of an architecture
+[root@889e0484bdd2 /]#
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# type yum
+yum is hashed (/usr/bin/yum)
+[root@889e0484bdd2 /]# type rpm
+rpm is hashed (/usr/bin/rpm)
+[root@889e0484bdd2 /]#
+```
+
+
+
+
+
+## RPM包
+
+通常情况下，RPM 包采用系统默认的安装路径
+
+
+
+|    安装路径     |           含 义            |
+| :-------------: | :------------------------: |
+|      /etc/      |      配置文件安装目录      |
+|    /usr/bin/    |    可执行的命令安装目录    |
+|    /usr/lib/    | 程序所使用的函数库保存位置 |
+| /usr/share/doc/ | 基本的软件使用手册保存位置 |
+| /usr/share/man/ |      帮助文件保存位置      |
+
+
+
+
+
+### RPM 包的安装
+
+
+
+安装 RPM 的命令格式为：
+
+```sh
+[root@localhost ~]# rpm -ivh 包全名
+```
+
+注意一定是包全名。涉及到包全名的命令，一定要注意路径，可能软件包在光盘中，因此需提前做好设备的挂载工作。
+
+
+
+- -i：安装（install）;
+- -v：显示更详细的信息（verbose）;
+- -h：打印 #，显示安装进度（hash）;
+
+
+
+此命令还可以一次性安装多个软件包，仅需将包全名用空格分开即可
+
+```sh
+[root@localhost ~]# rpm -ivh a.rpm b.rpm c.rpm
+```
+
+
+
+如果还有其他安装要求（比如强制安装某软件而不管它是否有依赖性），可以通过以下选项进行调整：
+
+- -nodeps：不检测依赖性安装。软件安装时会检测依赖性，确定所需的底层软件是否安装，如果没有安装则会报错。如果不管依赖性，想强制安装，则可以使用这个选项。注意，这样不检测依赖性安装的软件基本上是不能使用的，所以不建议这样做。
+- -replacefiles：替换文件安装。如果要安装软件包，但是包中的部分文件已经存在，那么在正常安装时会报"某个文件已经存在"的错误，从而导致软件无法安装。使用这个选项可以忽略这个报错而覆盖安装。
+- -replacepkgs：替换软件包安装。如果软件包已经安装，那么此选项可以把软件包重复安装一遍。
+- -force：强制安装。不管是否已经安装，都重新安装。也就是 -replacefiles 和 -replacepkgs 的综合。
+- -test：测试安装。不会实际安装，只是检测一下依赖性。
+- -prefix：指定安装路径。为安装软件指定安装路径，而不使用默认安装路径。
+
+
+
+
+
+### RPM包的升级
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -Uvh 包全名
+```
+
+
+
+-U（大写）选项的含义是：如果该软件没安装过则直接安装；若没安装则升级至最新版本。
+
+
+
+或者：
+
+```sh
+[root@localhost ~]# rpm -Fvh 包全名
+```
+
+-F（大写）选项的含义是：如果该软件没有安装，则不会安装，必须安装有较低版本才能升级。
+
+
+
+### RPM包的卸载
+
+RPM 软件包的卸载要考虑包之间的依赖性
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -e 包名
+```
+
+-e 选项表示卸载，也就是 erase 的首字母。
+
+
+
+
+
+## rpm命令查询软件包
+
+
+
+使用 rpm 做查询命令的格式如下：
+
+```sh
+[root@localhost ~]# rpm 选项 查询对象
+```
+
+
+
+### rpm -q
+
+**查询软件包是否安装**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -q 包名
+```
+
+
+
+-q 表示查询，是 query 的首字母
+
+
+
+### rpm -qa
+
+**查询系统中所有安装的软件包**
+
+
+
+命令：
+
+```sh
+rpm -qa
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# rpm -qa
+crypto-policies-20210209-1.gitbfb6bed.el8_3.noarch
+python3-pip-wheel-9.0.3-19.el8.noarch
+ncurses-base-6.1-7.20180224.el8.noarch
+dnf-data-4.4.2-11.el8.noarch
+dhcp-common-4.3.6-44.0.1.el8.noarch
+centos-gpg-keys-8-2.el8.noarch
+centos-linux-repos-8-2.el8.noarch
+filesystem-3.8-3.el8.x86_64
+pcre2-10.32-2.el8.x86_64
+ncurses-libs-6.1-7.20180224.el8.x86_64
+glibc-common-2.28-151.el8.x86_64
+bash-4.4.19-14.el8.x86_64
+zlib-1.2.11-17.el8.x86_64
+bzip2-libs-1.0.6-26.el8.x86_64
+libgpg-error-1.31-1.el8.x86_64
+elfutils-libelf-0.182-3.el8.x86_64
+libcom_err-1.45.6-1.el8.x86_64
+libxml2-2.9.7-9.el8.x86_64
+expat-2.2.5-4.el8.x86_64
+libuuid-2.32.1-27.el8.x86_64
+chkconfig-1.13-2.el8.x86_64
+gmp-6.1.2-10.el8.x86_64
+libattr-2.4.48-3.el8.x86_64
+coreutils-single-8.30-8.el8.x86_64
+sed-4.5-2.el8.x86_64
+libcap-ng-0.7.9-5.el8.x86_64
+libsmartcols-2.32.1-27.el8.x86_64
+lz4-libs-1.8.3-2.el8.x86_64
+file-libs-5.33-16.el8_3.1.x86_64
+p11-kit-0.23.22-1.el8.x86_64
+cracklib-2.9.6-15.el8.x86_64
+libunistring-0.9.9-3.el8.x86_64
+libassuan-2.5.1-3.el8.x86_64
+keyutils-libs-1.5.10-6.el8.x86_64
+libnl3-3.5.0-1.el8.x86_64
+p11-kit-trust-0.23.22-1.el8.x86_64
+pcre-8.42-4.el8.x86_64
+systemd-libs-239-45.el8.x86_64
+dbus-tools-1.12.8-12.el8.x86_64
+libusbx-1.0.23-4.el8.x86_64
+ca-certificates-2020.2.41-80.0.el8_2.noarch
+libdb-5.3.28-40.el8.x86_64
+iproute-5.9.0-4.el8.x86_64
+libdb-utils-5.3.28-40.el8.x86_64
+tpm2-tss-2.3.2-3.el8.x86_64
+xz-5.2.4-3.el8.x86_64
+ethtool-5.8-5.el8.x86_64
+libsemanage-2.9-6.el8.x86_64
+dbus-daemon-1.12.8-12.el8.x86_64
+libfdisk-2.32.1-27.el8.x86_64
+mpfr-3.1.6-1.el8.x86_64
+gnutls-3.6.14-7.el8_3.x86_64
+snappy-1.1.8-3.el8.x86_64
+libmetalink-0.1.3-7.el8.x86_64
+libksba-1.3.5-7.el8.x86_64
+ipcalc-0.2.4-4.el8.x86_64
+libseccomp-2.5.1-1.el8.x86_64
+gawk-4.2.1-2.el8.x86_64
+krb5-libs-1.18.2-8.el8.x86_64
+libnsl2-1.2.0-2.20180605git4a062cf.el8.x86_64
+platform-python-3.6.8-37.el8.x86_64
+libpwquality-1.4.4-3.el8.x86_64
+util-linux-2.32.1-27.el8.x86_64
+curl-7.61.1-18.el8.x86_64
+rpm-libs-4.14.3-13.el8.x86_64
+python3-libcomps-0.1.11-5.el8.x86_64
+cyrus-sasl-lib-2.1.27-5.el8.x86_64
+libyaml-0.1.7-5.el8.x86_64
+npth-1.5-4.el8.x86_64
+gpgme-1.13.1-7.el8.x86_64
+libdnf-0.55.0-7.el8.x86_64
+python3-hawkey-0.55.0-7.el8.x86_64
+pciutils-libs-3.7.0-1.el8.x86_64
+rdma-core-32.0-4.el8.x86_64
+libpcap-1.9.1-5.el8.x86_64
+device-mapper-1.02.175-5.el8.x86_64
+cryptsetup-libs-2.3.3-4.el8.x86_64
+elfutils-libs-0.182-3.el8.x86_64
+systemd-239-45.el8.x86_64
+iputils-20180629-7.el8.x86_64
+libkcapi-1.2.0-2.el8.x86_64
+systemd-udev-239-45.el8.x86_64
+dracut-network-049-135.git20210121.el8.x86_64
+rpm-build-libs-4.14.3-13.el8.x86_64
+python3-dnf-4.4.2-11.el8.noarch
+yum-4.4.2-11.el8.noarch
+binutils-2.30-93.el8.x86_64
+vim-minimal-8.0.1763-15.el8.x86_64
+less-530-1.el8.x86_64
+rootfiles-8.1-22.el8.noarch
+libgcc-8.4.1-1.el8.x86_64
+python3-setuptools-wheel-39.2.0-6.el8.noarch
+tzdata-2021a-1.el8.noarch
+libreport-filesystem-2.9.5-15.el8.x86_64
+hwdata-0.314-8.8.el8.noarch
+dbus-common-1.12.8-12.el8.noarch
+centos-linux-release-8.4-1.2105.el8.noarch
+setup-2.12.2-6.el8.noarch
+basesystem-11-5.el8.noarch
+libselinux-2.9-5.el8.x86_64
+glibc-minimal-langpack-2.28-151.el8.x86_64
+glibc-2.28-151.el8.x86_64
+libsepol-2.9-2.el8.x86_64
+xz-libs-5.2.4-3.el8.x86_64
+libcap-2.26-4.el8.x86_64
+info-6.5-6.el8.x86_64
+libzstd-1.4.4-1.el8.x86_64
+libxcrypt-4.1.1-4.el8.x86_64
+sqlite-libs-3.26.0-13.el8.x86_64
+libstdc++-8.4.1-1.el8.x86_64
+popt-1.18-1.el8.x86_64
+readline-7.0-10.el8.x86_64
+json-c-0.13.1-0.4.el8.x86_64
+libacl-2.2.53-1.el8.x86_64
+libblkid-2.32.1-27.el8.x86_64
+libmount-2.32.1-27.el8.x86_64
+audit-libs-3.0-0.17.20191104git1c2f876.el8.x86_64
+lua-libs-5.3.4-11.el8.x86_64
+libgcrypt-1.8.5-4.el8.x86_64
+libffi-3.1-22.el8.x86_64
+gzip-1.9-12.el8.x86_64
+cracklib-dicts-2.9.6-15.el8.x86_64
+libidn2-2.2.0-1.el8.x86_64
+gdbm-libs-1.18-1.el8.x86_64
+libmnl-1.0.4-6.el8.x86_64
+libtasn1-4.13-3.el8.x86_64
+lzo-2.08-14.el8.x86_64
+grep-3.1-6.el8.x86_64
+dbus-libs-1.12.8-12.el8.x86_64
+dhcp-libs-4.3.6-44.0.1.el8.x86_64
+procps-ng-3.3.15-6.el8.x86_64
+openssl-libs-1.1.1g-15.el8_3.x86_64
+kmod-libs-25-17.el8.x86_64
+kmod-25-17.el8.x86_64
+libarchive-3.3.3-1.el8.x86_64
+ima-evm-utils-1.3.2-12.el8.x86_64
+squashfs-tools-4.3-20.el8.x86_64
+gdbm-1.18-1.el8.x86_64
+shadow-utils-4.6-12.el8.x86_64
+libutempter-1.1.6-14.el8.x86_64
+acl-2.2.53-1.el8.x86_64
+nettle-3.4.1-2.el8.x86_64
+glib2-2.56.4-9.el8.x86_64
+libcomps-0.1.11-5.el8.x86_64
+findutils-4.6.0-20.el8.x86_64
+cpio-2.12-10.el8.x86_64
+libnghttp2-1.33.0-3.el8_2.1.x86_64
+libsigsegv-2.11-5.el8.x86_64
+libverto-0.3.0-5.el8.x86_64
+libtirpc-1.1.4-4.el8.x86_64
+platform-python-setuptools-39.2.0-6.el8.noarch
+python3-libs-3.6.8-37.el8.x86_64
+pam-1.3.1-14.el8.x86_64
+libcurl-minimal-7.61.1-18.el8.x86_64
+rpm-4.14.3-13.el8.x86_64
+libsolv-0.7.16-2.el8.x86_64
+bind-export-libs-9.11.26-3.el8.x86_64
+openldap-2.4.46-16.el8.x86_64
+libmodulemd-2.9.4-2.el8.x86_64
+gnupg2-2.2.20-2.el8.x86_64
+librepo-1.12.0-3.el8.x86_64
+python3-libdnf-0.55.0-7.el8.x86_64
+python3-gpg-1.13.1-7.el8.x86_64
+pciutils-3.7.0-1.el8.x86_64
+libibverbs-32.0-4.el8.x86_64
+iptables-libs-1.8.4-17.el8.x86_64
+device-mapper-libs-1.02.175-5.el8.x86_64
+elfutils-default-yama-scope-0.182-3.el8.noarch
+systemd-pam-239-45.el8.x86_64
+dbus-1.12.8-12.el8.x86_64
+dhcp-client-4.3.6-44.0.1.el8.x86_64
+libkcapi-hmaccalc-1.2.0-2.el8.x86_64
+dracut-049-135.git20210121.el8.x86_64
+dracut-squash-049-135.git20210121.el8.x86_64
+python3-rpm-4.14.3-13.el8.x86_64
+dnf-4.4.2-11.el8.noarch
+kexec-tools-2.0.20-46.el8.x86_64
+tar-1.30-5.el8.x86_64
+hostname-3.20-6.el8.x86_64
+langpacks-en-1.0-12.el8.noarch
+[root@889e0484bdd2 /]#
+```
+
+
+
+还可以使用管道符查找出需要的内容
+
+
+
+
+
+### rpm -qi
+
+**查询软件包的详细信息**
+
+
+
+```sh
+[root@localhost ~]# rpm -qi 包名
+```
+
+
+
+-i 选项表示查询软件信息，是 information 的首字母。
+
+
+
+查询gzip-1.9-12.el8.x86_64
+
+```sh
+[root@889e0484bdd2 /]# rpm -qi gzip-1.9-12.el8.x86_64
+Name        : gzip
+Version     : 1.9
+Release     : 12.el8
+Architecture: x86_64
+Install Date: Wed Sep 15 14:17:30 2021
+Group       : Applications/File
+Size        : 353139
+License     : GPLv3+ and GFDL
+Signature   : RSA/SHA256, Wed Jan 13 20:53:46 2021, Key ID 05b555b38483c65d
+Source RPM  : gzip-1.9-12.el8.src.rpm
+Build Date  : Wed Jan 13 15:02:05 2021
+Build Host  : x86-01.mbox.centos.org
+Relocations : (not relocatable)
+Packager    : CentOS Buildsys <bugs@centos.org>
+Vendor      : CentOS
+URL         : http://www.gzip.org/
+Summary     : The GNU data compression program
+Description :
+The gzip package contains the popular GNU gzip data compression
+program. Gzipped files have a .gz extension.
+
+Gzip should be installed on your system, because it is a
+very commonly used data compression program.
+[root@889e0484bdd2 /]#
+```
+
+
+
+还可以查询未安装软件包的详细信息：
+
+```sh
+[root@localhost ~]# rpm -qip 包全名
+```
+
+
+
+-p 选项表示查询未安装的软件包，是 package 的首字母。
+
+这里用的是包全名，且未安装的软件包需使用“绝对路径+包全名”的方式才能确定包。
+
+
+
+
+
+### rpm -ql
+
+**查询软件包的文件列表**
+
+各安装文件会分门别类安放在适当的目录文件下。使用 rpm 命令可以查询到已安装软件包中包含的所有文件及各自安装路径
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# rpm -ql 包名
+```
+
+
+
+-l 选项表示列出软件包所有文件的安装目录。
+
+
+
+查询gzip-1.9-12.el8.x86_64文件列表：
+
+```sh
+[root@889e0484bdd2 /]# rpm -ql gzip-1.9-12.el8.x86_64
+/etc/profile.d/colorzgrep.csh
+/etc/profile.d/colorzgrep.sh
+/usr/bin/gunzip
+/usr/bin/gzexe
+/usr/bin/gzip
+/usr/bin/zcat
+/usr/bin/zcmp
+/usr/bin/zdiff
+/usr/bin/zegrep
+/usr/bin/zfgrep
+/usr/bin/zforce
+/usr/bin/zgrep
+/usr/bin/zless
+/usr/bin/zmore
+/usr/bin/znew
+/usr/lib/.build-id
+/usr/lib/.build-id/69
+/usr/lib/.build-id/69/f880422e6ff80dbb4b461f1ffa03e8e943299e
+/usr/share/doc/gzip
+/usr/share/doc/gzip/AUTHORS
+/usr/share/doc/gzip/ChangeLog
+/usr/share/doc/gzip/NEWS
+/usr/share/doc/gzip/README
+/usr/share/doc/gzip/THANKS
+/usr/share/doc/gzip/TODO
+/usr/share/info/gzip.info.gz
+/usr/share/licenses/gzip
+/usr/share/licenses/gzip/COPYING
+/usr/share/licenses/gzip/fdl-1.3.txt
+/usr/share/man/man1/gunzip.1.gz
+/usr/share/man/man1/gzexe.1.gz
+/usr/share/man/man1/gzip.1.gz
+/usr/share/man/man1/zcat.1.gz
+/usr/share/man/man1/zcmp.1.gz
+/usr/share/man/man1/zdiff.1.gz
+/usr/share/man/man1/zforce.1.gz
+/usr/share/man/man1/zgrep.1.gz
+/usr/share/man/man1/zless.1.gz
+/usr/share/man/man1/zmore.1.gz
+/usr/share/man/man1/znew.1.gz
+[root@889e0484bdd2 /]#
+```
+
+
+
+rpm 命令还可以查询未安装软件包中包含的所有文件以及打算安装的路径
+
+
+
+```sh
+[root@localhost ~]# rpm -qlp 包全名
+```
+
+
+
+需要使用“绝对路径+包全名”的方式才能确定包
+
+
+
+
+
+### rpm -qf
 
