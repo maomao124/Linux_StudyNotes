@@ -3452,3 +3452,717 @@ Vim 用户配置文件比系统配置文件的优先级高
 
 # 文本处理
 
+
+
+## cat命令
+
+cat 命令可以**用来显示文本文件的内容**
+
+也可以**把几个文件内容附加到另一个文件中**，即连接合并文件
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# cat [选项] 文件名
+或者
+[root@localhost ~]# cat 文件1 文件2 > 文件3
+```
+
+
+
+| 选项 |                           含义                           |
+| :--: | :------------------------------------------------------: |
+|  -A  |      相当于 -vET 选项的整合，用于列出所有隐藏符号；      |
+|  -E  |                 列出每行结尾的回车符 $；                 |
+|  -n  |                 对输出的所有行进行编号；                 |
+|  -b  |        同 -n 不同，此选项表示只对非空行进行编号。        |
+|  -T  |                 把 Tab 键 ^I 显示出来；                  |
+|  -V  |                      列出特殊字符；                      |
+|  -s  | 当遇到有连续 2 行以上的空白行时，就替换为 1 行的空白行。 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ touch in.txt
+mao@ubuntu:~/桌面$ touch in2.txt
+mao@ubuntu:~/桌面$ vi in.txt
+mao@ubuntu:~/桌面$ vi in2.txt
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ cat in.txt
+12345
+
+mao@ubuntu:~/桌面$ cat in2.txt
+67890
+mao@ubuntu:~/桌面$ cat -n in.txt
+     1	12345
+     2	
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ cat in.txt in2.txt >out.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 112
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao    13 7月   2 21:52 out.txt
+mao@ubuntu:~/桌面$ cat -n out.txt
+     1	12345
+     2	
+     3	67890
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## more命令
+
+more 命令可以**分页显示文本文件的内容**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# more [选项] 文件名
+```
+
+
+
+| 选项 |                           含义                           |
+| :--: | :------------------------------------------------------: |
+|  -f  |   计算行数时，以实际的行数，而不是自动换行过后的行数。   |
+|  -p  |  不以卷动的方式显示每一页，而是先清除屏幕后再显示内容。  |
+|  -c  |   跟 -p 选项相似，不同的是先显示内容再清除其他旧资料。   |
+|  -s  |  当遇到有连续两行以上的空白行时，就替换为一行的空白行。  |
+|  -u  | 不显示下引号（根据环境变量 TERM 指定的终端而有所不同）。 |
+|  +n  |         从第 n 行开始显示文件内容，n 代表数字。          |
+|  -n  |               一次显示的行数，n 代表数字。               |
+
+
+
+more 命令的执行会打开一个交互界面
+
+
+
+|      交互指令       |             功能             |
+| :-----------------: | :--------------------------: |
+|       h 或 ？       | 显示 more 命令交互命令帮助。 |
+|       q 或 Q        |         退出 more。          |
+|          v          |   在当前行启动一个编辑器。   |
+|         :f          | 显示当前文件的文件名和行号。 |
+| !<命令> 或 :!<命令> |  在子Shell中执行指定命令。   |
+|       回车键        |        向下移动一行。        |
+|       空格键        |        向下移动一页。        |
+|       Ctrl+l        |          刷新屏幕。          |
+|          =          |      显示当前行的行号。      |
+|          '          |  转到上一次搜索开始的地方。  |
+|       Ctrf+f        |        向下滚动一页。        |
+|          .          |     重复上次输入的命令。     |
+|      / 字符串       |      搜索指定的字符串。      |
+|          d          |        向下移动半页。        |
+|          b          |        向上移动一页。        |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ more a.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+//ȫ�ֱ���
+int fd;  //��ʾ��Ļ���ļ�������
+int* plcd = NULL; //��Ļӳ�����ڴ��׵�ַ
+int bmp_location = 1;                      //��ǰλ�ڵڼ���ͼƬ��1��ʾ��ǰλ�ڵ�1��ͼƬ
+
+enum Mov_Dir
+{
+	MOVE_UP = 1,
+	MOVE_DOWN,
+	MOVE_LEFT,
+	MOVE_RIGHT
+};
+
+#define BTN_TOUCH 0x14a //���������� 
+
+/*
+--更多--(4%)
+```
+
+
+
+
+
+## head命令
+
+head 命令可以**显示指定文件前若干行的文件内容**
+
+
+
+```sh
+[root@localhost ~]# head [选项] 文件名
+```
+
+
+
+| 选项 |                             含义                             |
+| :--: | :----------------------------------------------------------: |
+| -n K | 这里的 K 表示行数，该选项用来显示文件前 K 行的内容；如果使用 "-K" 作为参数，则表示除了文件最后 K 行外，显示剩余的全部内容。 |
+| -c K | 这里的 K 表示字节数，该选项用来显示文件前 K 个字节的内容；如果使用 "-K"，则表示除了文件最后 K 字节的内容，显示剩余全部内容。 |
+|  -v  |                         显示文件名；                         |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ head -n 10 a.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+//ȫ�ֱ���
+int fd;  //��ʾ��Ļ���ļ�������
+int* plcd = NULL; //��Ļӳ�����ڴ��׵�ַ
+mao@ubuntu:~/桌面$ head -10 a.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+//ȫ�ֱ���
+int fd;  //��ʾ��Ļ���ļ�������
+int* plcd = NULL; //��Ļӳ�����ڴ��׵�ַ
+mao@ubuntu:~/桌面$ head -c 10 a.c
+#include <mao@ubuntu:~/桌面$ head -20 a.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+//ȫ�ֱ���
+int fd;  //��ʾ��Ļ���ļ�������
+int* plcd = NULL; //��Ļӳ�����ڴ��׵�ַ
+int bmp_location = 1;                      //��ǰλ�ڵڼ���ͼƬ��1��ʾ��ǰλ�ڵ�1��ͼƬ
+
+enum Mov_Dir
+{
+	MOVE_UP = 1,
+	MOVE_DOWN,
+	MOVE_LEFT,
+	MOVE_RIGHT
+};
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## less命令
+
+less 命令的作用和 more 十分类似，都用来浏览文本文件中的内容，不同之处在于，使用 more 命令浏览文件内容时，只能不断向后翻看，而使用 less 命令浏览，既可以向后翻看，也可以向前翻看。
+
+
+
+less 命令还提供了以下几个功能：
+
+- 使用光标键可以在文本文件中前后（左后）滚屏；
+- 用行号或百分比作为书签浏览文件；
+- 提供更加友好的检索、高亮显示等操作；
+- 兼容常用的字处理程序（如 Vim、Emacs）的键盘操作；
+- 阅读到文件结束时，less 命令不会退出；
+- 屏幕底部的信息提示更容易控制使用，而且提供了更多的信息。
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# less [选项] 文件名
+```
+
+
+
+|      选项       |                        选项含义                        |
+| :-------------: | :----------------------------------------------------: |
+|       -N        |                    显示每行的行号。                    |
+|       -S        |                行过长时将超出部分舍弃。                |
+|       -e        |              当文件显示结束后，自动离开。              |
+|       -g        |               只标志最后搜索到的关键同。               |
+|       -Q        |                     不使用警告音。                     |
+|       -i        |                  忽略搜索时的大小写。                  |
+|       -m        |              显示类似 more 命令的百分比。              |
+|       -f        | 强迫打开特殊文件，比如外围设备代号、目录和二进制文件。 |
+|       -s        |                  显示连续空行为一行。                  |
+| -b <缓冲区大小> |                   设置缓冲区的大小。                   |
+|   -o <文件名>   |          将 less 输出的内容保存到指定文件中。          |
+|    -x <数字>    |            将 Tab 键显示为规定的数字空格。             |
+
+
+
+
+
+
+
+在使用 less 命令查看文件内容的过程中，和 more 命令一样，也会进入交互界面
+
+
+
+|  交互指令  |                  功能                  |
+| :--------: | :------------------------------------: |
+|  /字符串   |        向下搜索“字符串”的功能。        |
+|  ?字符串   |        向上搜索“字符串”的功能。        |
+|     n      |  重复*前一个搜索（与 / 成 ? 有关）。   |
+|     N      | 反向重复前一个搜索（与 / 或 ? 有关）。 |
+|     b      |             向上移动一页。             |
+|     d      |             向下移动半页。             |
+|   h 或 H   |             显示帮助界面。             |
+|   q 或 Q   |            退出 less 命令。            |
+|     y      |             向上移动一行。             |
+|   空格键   |             向下移动一页。             |
+|   回车键   |             向下移动一行。             |
+| 【PgDn】键 |             向下移动一页。             |
+| 【PgUp】键 |             向上移动一页。             |
+|   Ctrl+f   |             向下移动一页。             |
+|   Ctrl+b   |             向上移动一页。             |
+|   Ctrl+d   |             向下移动一页。             |
+|   Ctrl+u   |             向上移动半页。             |
+|     j      |             向下移动一行。             |
+|     k      |             向上移动一行。             |
+|     G      |            移动至最后一行。            |
+|     g      |             移动到第一行。             |
+|     ZZ     |            退出 less 命令。            |
+|     v      |     使用配置的编辑器编辑当前文件。     |
+|     [      |       移动到本文档的上一个节点。       |
+|     ]      |       移动到本文档的下一个节点。       |
+|     p      |        移动到同级的上一个节点。        |
+|     u      |             向上移动半页。             |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ^C
+mao@ubuntu:~/桌面$ less -N a.c
+"a.c" may be a binary file.  See it anyway? 
+```
+
+```sh
+      8 //ȫ<BE>ֱ<E4><C1><BF>
+      9 int fd;  //<B1><ED>ʾ<C6><C1>Ļ<B5><C4><CE>ļ<FE><C3><E8><CA><F6><B7><FB>
+     10 int* plcd = NULL; //<C6><C1>Ļӳ<C9><E4><BA><F3><B5><C4><C4>ڴ<E6><CA>׵<D8>ַ
+     11 int bmp_location = 1;                      //<B5><B1>ǰλ<D3>ڵڼ<B8><D5>
+     11 <C5>ͼƬ<A3><AC>1<B1><ED>ʾ<B5><B1>ǰλ<D3>ڵ<DA>1<D5><C5>ͼƬ
+     12 
+     13 enum Mov_Dir
+     14 {
+     15         MOVE_UP = 1,
+     16         MOVE_DOWN,
+     17         MOVE_LEFT,
+     18         MOVE_RIGHT
+     19 };
+     20 
+     21 #define BTN_TOUCH 0x14a //<B4><A5><C3><FE><C6><C1><B0><B4><BC><FC> 
+     22 
+     23 /*
+     24         Get_Fingler_Direction : <BB><F1>ȡ<D3>û<A7><CA><D6>ָ<BB><AC><B6>
+     24 <AF><B5>ķ<BD><CF><F2>
+     25         <B2><CE><CA><FD>: <CE><DE>
+     26         <B7><B5><BB><D8>ֵ: <B7><B5><BB>ط<BD><CF><F2>
+     27                 enum Mov_Dir
+     28 */
+:
+```
+
+
+
+
+
+
+
+## tail命令
+
+tail 命令和 head 命令正好相反，它用来**查看文件末尾的数据**
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# tail [选项] 文件名
+```
+
+
+
+| 选项 |                             含义                             |
+| :--: | :----------------------------------------------------------: |
+| -n K | 这里的 K 指的是行数，该选项表示输出最后 K 行，在此基础上，如果使用 -n +K，则表示从文件的第 K 行开始输出。 |
+| -c K | 这里的 K 指的是字节数，该选项表示输出文件最后 K 个字节的内容，在此基础上，使用 -c +K 则表示从文件第 K 个字节开始输出。 |
+|  -f  |                 输出文件变化后新增加的数据。                 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ tail -n 15 a.c
+		}
+		else
+		{
+			printf("debug: Slide error!\n");
+		}
+
+	}
+	//�ر���Ļ
+	Lcd_close();
+	return 0;
+}
+
+
+
+
+mao@ubuntu:~/桌面$ tail -20 a.c
+		}
+		else if (location == 4)
+		{
+			printf("debug: Slide right\n");
+			bmp_location_reduce();
+		}
+		else
+		{
+			printf("debug: Slide error!\n");
+		}
+
+	}
+	//�ر���Ļ
+	Lcd_close();
+	return 0;
+}
+
+
+
+
+mao@ubuntu:~/桌面$ tail -c -30 a.c
+se();
+	return 0;
+}
+
+
+
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## 重定向
+
+Linux 中标准的输入设备默认指的是键盘，标准的输出设备默认指的是显示器
+
+- 输入重定向：指的是重新指定设备来代替键盘作为新的输入设备；
+- 输出重定向：指的是重新指定设备来代替显示器作为新的输出设备。
+
+
+
+通常是用文件或命令的执行结果来代替键盘作为新的输入设备，而新的输出设备通常指的就是文件。
+
+
+
+### 输入重定向
+
+
+
+|      命令符号格式      |                             作用                             |
+| :--------------------: | :----------------------------------------------------------: |
+|      命令 < 文件       |                 将指定文件作为命令的输入设备                 |
+|     命令 << 分界符     | 表示从标准输入设备（键盘）中读入，直到遇到分界符才停止（读入的数据不包括分界符），这里的分界符其实就是自定义的字符串 |
+| 命令 < 文件 1 > 文件 2 | 将文件 1 作为命令的输入设备，该命令的执行结果输出到文件 2 中。 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat in.txt
+12345
+
+mao@ubuntu:~/桌面$ cat < in.txt
+12345
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+虽然执行结果相同，但第一行代表是以键盘作为输入设备，而第二行代码是以文件作为输入设备。
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat << /
+> we
+> w
+> q
+> t
+> u
+> 7
+> 6
+> 5
+> 566554gy
+> /
+we
+w
+q
+t
+u
+7
+6
+5
+566554gy
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+当指定了 / 作为分界符之后，只要不输入 /，就可以一直输入数据
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l < in.txt > out.txt
+mao@ubuntu:~/桌面$ cat out.txt
+总用量 108
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   2 22:19 out.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+### 输出重定向
+
+输出重定向还可以细分为标准输出重定向和错误输出重定向两种技术
+
+
+
+|             命令符号格式             |                             作用                             |
+| :----------------------------------: | :----------------------------------------------------------: |
+|             命令 > 文件              | 将命令执行的标准输出结果重定向输出到指定的文件中，如果该文件已包含数据，会清空原有数据，再写入新数据。 |
+|             命令 2> 文件             | 将命令执行的错误输出结果重定向到指定的文件中，如果该文件中已包含数据，会清空原有数据，再写入新数据。 |
+|             命令 >> 文件             | 将命令执行的标准输出结果重定向输出到指定的文件中，如果该文件已包含数据，新数据将写入到原有内容的后面。 |
+|            命令 2>> 文件             | 将命令执行的错误输出结果重定向到指定的文件中，如果该文件中已包含数据，新数据将写入到原有内容的后面。 |
+| 命令 >> 文件 2>&1 或者 命令 &>> 文件 | 将标准输出或者错误输出写入到指定文件，如果该文件中已包含数据，新数据将写入到原有内容的后面。注意，第一种格式中，最后的 2>&1 是一体的，可以认为是固定写法。 |
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat out.txt 
+mao@ubuntu:~/桌面$ ls -l
+总用量 108
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   2 22:22 out.txt
+mao@ubuntu:~/桌面$ ls -l > out.txt
+mao@ubuntu:~/桌面$ cat out.txt 
+总用量 108
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   2 22:23 out.txt
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ ls -l >> out.txt 
+mao@ubuntu:~/桌面$ cat out.txt 
+总用量 108
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   2 22:23 out.txt
+总用量 112
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao 20480 7月   2 04:37 a.tar
+-rw-rw-r-- 1 mao mao  2898 7月   2 04:51 a.zip
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao     6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao     7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao   834 7月   2 22:23 out.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## grep命令
+
+**查找文件内容**
+
+很多时候，我们并不需要列出文件的全部内容，而是从文件中找到包含指定信息的那些行
+
+grep 命令的由来可以追溯到 UNIX 诞生的早期，在 UNIX 系统中，搜索的模式（patterns）被称为正则表达式（regular expressions），为了要彻底搜索一个文件，有的用户在要搜索的字符串前加上前缀 global（全面的），一旦找到相匹配的内容，用户就像将其输出（print）到屏幕上，而将这一系列的操作整合到一起就是 global regular expressions print，而这也就是 grep 命令的全称。
+
+
+
+| 通配符 |                        功能                         |
+| :----: | :-------------------------------------------------: |
+|   c*   | 将匹配 0 个（即空白）或多个字符 c（c 为任一字符）。 |
+|   .    |       将匹配任何一个字符，且只能是一个字符。        |
+| [xyz]  |            匹配方括号中的任意一个字符。             |
+| [^xyz] |          匹配除方括号中字符外的所有字符。           |
+|   ^    |                   锁定行的开头。                    |
+|   $    |                   锁定行的结尾。                    |
+
+
+
+在基本正则表达式中，如通配符 *、+、{、|、( 和 )等，已经失去了它们原本的含义，而若要恢复它们原本的含义，则要在之前添加反斜杠 \，如：
+
+```sh
+ \*、\+、\{、\|、\( 和 \)
+```
+
+
+
+grep 命令是用来在每一个文件或中（或特定输出上）搜索特定的模式，当使用 grep 时，包含指定字符模式的每一行内容，都会被打印（显示）到屏幕上，但是使用 grep 命令并不改变文件中的内容。
+
+
+
+命令：
+
+```sh
+[root@localhost ~]# grep [选项] 模式 文件名
+```
+
+
+
+| 选项 |                            含义                            |
+| :--: | :--------------------------------------------------------: |
+|  -c  |                仅列出文件中包含模式的行数。                |
+|  -i  |                  忽略模式中的字母大小写。                  |
+|  -l  |                  列出带有匹配行的文件名。                  |
+|  -n  |                 在每一行的最前面列出行号。                 |
+|  -v  |                   列出没有匹配模式的行。                   |
+|  -w  | 把表达式当做一个完整的单字符来搜寻，忽略那些部分匹配的行。 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ grep -n main a.c
+372:int main()
+mao@ubuntu:~/桌面$ grep -n printf a.c
+123:		printf("open lcd failed\n");
+152:		printf("mmap failed\n");
+184:		printf("bro,your point out of the LCD\n");
+223:		printf("open bmp error\n");
+309:		printf("increase error! \a \n");
+367:		printf("reduce error! \a \n");
+382:			printf("debug: Slide up\n");
+386:			printf("debug: Slide down\n");
+390:			printf("debug: Slide left\n");
+395:			printf("debug: Slide right\n");
+400:			printf("debug: Slide error!\n");
+匹配到二进制文件 a.c
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## sed命令
+
