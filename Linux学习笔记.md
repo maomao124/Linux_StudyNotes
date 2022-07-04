@@ -7306,11 +7306,258 @@ Linux 计算日期的时间是以 1970 年 1 月 1 日作为 1 不断累加得�
 
 ## /etc/group
 
+/etc/group 文件是用户组配置文件，即用户组的所有信息都存放在此文件中。
+
+此文件是记录组 ID（GID）和组名相对应的文件
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat /etc/group
+root:x:0:
+daemon:x:1:
+bin:x:2:
+sys:x:3:
+adm:x:4:syslog,mao
+tty:x:5:syslog
+disk:x:6:
+lp:x:7:
+mail:x:8:
+news:x:9:
+uucp:x:10:
+man:x:12:
+proxy:x:13:
+kmem:x:15:
+dialout:x:20:
+fax:x:21:
+voice:x:22:
+cdrom:x:24:mao
+floppy:x:25:
+tape:x:26:
+sudo:x:27:mao
+audio:x:29:pulse
+dip:x:30:mao
+www-data:x:33:
+backup:x:34:
+operator:x:37:
+list:x:38:
+irc:x:39:
+src:x:40:
+gnats:x:41:
+shadow:x:42:
+utmp:x:43:
+video:x:44:
+sasl:x:45:
+plugdev:x:46:mao
+staff:x:50:
+games:x:60:
+users:x:100:
+nogroup:x:65534:
+systemd-journal:x:101:
+systemd-network:x:102:
+systemd-resolve:x:103:
+systemd-timesync:x:104:
+crontab:x:105:
+messagebus:x:106:
+input:x:107:
+kvm:x:108:
+render:x:109:
+syslog:x:110:
+tss:x:111:
+bluetooth:x:112:
+ssl-cert:x:113:
+uuidd:x:114:
+tcpdump:x:115:
+avahi-autoipd:x:116:
+rtkit:x:117:
+ssh:x:118:
+netdev:x:119:
+lpadmin:x:120:mao
+avahi:x:121:
+scanner:x:122:saned
+saned:x:123:
+nm-openvpn:x:124:
+whoopsie:x:125:
+colord:x:126:
+geoclue:x:127:
+pulse:x:128:
+pulse-access:x:129:
+gdm:x:130:
+sssd:x:131:
+lxd:x:132:mao
+mao:x:1000:
+sambashare:x:133:mao
+systemd-coredump:x:999:
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+每个字段对应的含义为：
+
+```sh
+组名：密码：GID：该用户组中的用户列表
+```
 
 
 
 
 
+### 组名
+
+也就是是用户组的名称，有字母或数字构成
+
+
+
+### 组密码
+
+和 /etc/passwd 文件一样，这里的 "x" 仅仅是密码标识，真正加密后的组密码默认保存在 /etc/gshadow 文件中
+
+
+
+### 组ID
+
+就是群组的 ID 号，Linux 系统就是通过 GID 来区分用户组的
+
+
+
+### 组中的用户
+
+此字段列出每个群组包含的所有用户。需要注意的是，如果该用户组是这个用户的初始组，则该用户不会写入这个字段，可以这么理解，该字段显示的用户都是这个用户组的附加用户。
+
+每个用户都可以加入多个附加组，但是只能属于一个初始组
+
+
+
+
+
+
+
+## /etc/gshadow
+
+组用户信息存储在 /etc/group 文件中，而将组用户的密码信息存储在 /etc/gshadow 文件中
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo cat /etc/gshadow
+[sudo] mao 的密码： 
+root:*::
+daemon:*::
+bin:*::
+sys:*::
+adm:*::syslog,mao
+tty:*::syslog
+disk:*::
+lp:*::
+mail:*::
+news:*::
+uucp:*::
+man:*::
+proxy:*::
+kmem:*::
+dialout:*::
+fax:*::
+voice:*::
+cdrom:*::mao
+floppy:*::
+tape:*::
+sudo:*::mao
+audio:*::pulse
+dip:*::mao
+www-data:*::
+backup:*::
+operator:*::
+list:*::
+irc:*::
+src:*::
+gnats:*::
+shadow:*::
+utmp:*::
+video:*::
+sasl:*::
+plugdev:*::mao
+staff:*::
+games:*::
+users:*::
+nogroup:*::
+systemd-journal:!::
+systemd-network:!::
+systemd-resolve:!::
+systemd-timesync:!::
+crontab:!::
+messagebus:!::
+input:!::
+kvm:!::
+render:!::
+syslog:!::
+tss:!::
+bluetooth:!::
+ssl-cert:!::
+uuidd:!::
+tcpdump:!::
+avahi-autoipd:!::
+rtkit:!::
+ssh:!::
+netdev:!::
+lpadmin:!::mao
+avahi:!::
+scanner:!::saned
+saned:!::
+nm-openvpn:!::
+whoopsie:!::
+colord:!::
+geoclue:!::
+pulse:!::
+pulse-access:!::
+gdm:!::
+sssd:!::
+lxd:!::mao
+mao:!::
+sambashare:!::mao
+systemd-coredump:!!::
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+每个字段的含义如下：
+
+```sh
+组名：加密密码：组管理员：组附加用户列表
+```
+
+
+
+
+
+### 组名
+
+同 /etc/group 文件中的组名相对应。
+
+
+
+### 组密码
+
+对于大多数用户来说，通常不设置组密码，因此该字段常为空，但有时为 "!"，指的是该群组没有组密码，也不设有群组管理员
+
+
+
+### 组管理员
+
+考虑到 Linux 系统中账号太多，而超级管理员 root 可能比较忙碌，因此当有用户想要加入某群组时，root 或许不能及时作出回应。这种情况下，如果有群组管理员，那么他就能将用户加入自己管理的群组中，也就免去麻烦 root 了
+
+
+
+### 组中的附加用户
+
+该字段显示这个用户组中有哪些附加用户
+
+
+
+
+
+## /etc/login.defs
 
 
 
