@@ -6963,6 +6963,138 @@ ldd -v 可执行文件名
 
 
 
+## Ubuntu系统apt命令
+
+此命令类似于centOS的yum命令
+
+
+
+```sh
+mao@ubuntu:~/桌面$ apt
+apt 2.0.6 (amd64)
+用法： apt [选项] 命令
+
+命令行软件包管理器 apt 提供软件包搜索，管理和信息查询等功能。
+它提供的功能与其他 APT 工具相同（像 apt-get 和 apt-cache），
+但是默认情况下被设置得更适合交互。
+
+常用命令：
+  list - 根据名称列出软件包
+  search - 搜索软件包描述
+  show - 显示软件包细节
+  install - 安装软件包
+  reinstall - 重新安装软件包
+  remove - 移除软件包
+  autoremove - 卸载所有自动安装且不再使用的软件包
+  update - 更新可用软件包列表
+  upgrade - 通过 安装/升级 软件来更新系统
+  full-upgrade - 通过 卸载/安装/升级 来更新系统
+  edit-sources - 编辑软件源信息文件
+  satisfy - 使系统满足依赖关系字符串
+
+参见 apt(8) 以获取更多关于可用命令的信息。
+程序配置选项及语法都已经在 apt.conf(5) 中阐明。
+欲知如何配置软件源，请参阅 sources.list(5)。
+软件包及其版本偏好可以通过 apt_preferences(5) 来设置。
+关于安全方面的细节可以参考 apt-secure(8).
+                                         本 APT 具有超级牛力。
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+最常用的 Linux 包管理命令都被分散在了 apt-get、apt-cache 和 apt-config 这三条命令当中。
+
+apt 命令的引入就是为了解决命令过于分散的问题，它包括了 apt-get 命令出现以来使用最广泛的功能选项，以及 apt-cache 和 apt-config 命令中很少用到的功能。
+
+在使用 apt 命令时，用户不必再由 apt-get 转到 apt-cache 或 apt-config，而且 apt 更加结构化，并为用户提供了管理软件包所需的必要选项。
+
+
+
+
+
+### 参数
+
+
+
+| 参数 | 说明 |
+| :--: | :--: |
+|-h 	|	帮助文件。 |
+|-q 	|	输出到日志 - 无进展指示 |
+|-qq 	|	不输出信息，错误除外 |
+|-d 	|	仅下载 - 不安装或解压归档文件 |
+| -s 	|	不实际安装。模拟执行命令 |
+| -y 	|	在需要确认的场景中回应 yes|
+| -f    |尝试修正系统依赖损坏处|
+| -m 	|	如果归档无法定位，尝试继续 |
+| -u 	|	同时显示更新软件包的列表 |
+| -b 	|	获取源码包后编译 |
+| -V 	|	显示详细的版本号 |
+| -c=? 	|	阅读此配置文件 |
+| -o=? 		|设置自定的配置选项，如 -o dir::cache=/tmp |
+
+
+
+
+
+### 升级和安装
+
+
+
+| 命令 | 说明 |
+| :--: | :--: |
+|apt-get update			|			 更新源文件，并不会做任何安装升级操作|
+|apt-get upgrade				|		 升级所有已安装的包|
+|apt-get install packagename			|	 安装指定的包|
+|apt-get install packagename --only-upgrade	|	仅升级指定的包|
+|apt-get install packagename --reinstall  | 		 重新安装包|
+|apt-get -f install   				|	 修复安装|
+|apt-get build-dep packagename		|		安装相关的编译环境|
+|apt-get source packagename  		|		下载该包的源代码|
+|apt-get dist-upgrade 			|		 升级系统|
+
+
+
+
+
+
+
+### 查询和显示
+
+
+
+| 命令 | 说明 |
+| :--: | :--: |
+|apt-cache search packagename 		|		查询指定的包  　　|
+|apt-cache show packagename 		|		显示包的相关信息，如说明、大小、版本等 |
+|apt-cache depends packagename 		|		了解使用该包依赖哪些包|
+|apt-cache rdepends packagename 	|			 查看该包被哪些包依赖|
+
+
+
+
+
+
+
+### 删除和清理
+
+
+
+| 命令 | 说明 |
+| :--: | :--: |
+|apt-get remove packagename		|		删除包  　　|
+|apt-get remove packagename -- purge 		|	删除包，包括删除配置文件等 |
+|apt-get autoremove packagename --purge |			删除包及其依赖的软件+配置文件等（只对6.10有效，推荐使用）|
+|apt-get clean 					|	 清理无用的包 |
+|apt-get autoclean 			|		 清理无用的包 |
+|apt-get check 				|		 检查是否有损坏的依赖|
+
+
+
+
+
+
+
 
 
 
