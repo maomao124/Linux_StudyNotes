@@ -6885,3 +6885,432 @@ bash: /usr/bin/java: No such file or directory
 
 ## yum管理软件组
 
+yum 命令除了可以对软件包进行查询、安装、升级和卸载外，还可完成对软件包组的查询、安装和卸载操作。
+
+
+
+### 查询软件组包含的软件
+
+既然是软件包组，说明包含不只一个软件包，通过 yum 命令可以查询某软件包组中具体包含的软件包
+
+
+
+命令：
+
+```sh
+yum groupinfo 软件组名
+```
+
+
+
+### 安装软件组
+
+
+
+命令：
+
+```sh
+yum groupinstall 软件组名
+```
+
+
+
+
+
+### 卸载软件组
+
+
+
+命令：
+
+```sh
+yum groupremove 软件组名
+```
+
+
+
+
+
+
+
+## 函数库的安装
+
+函数库就是一些函数的集合，每个函数都具有独立的功能且能被外界调用
+
+
+
+CentOS 中，安装函数库可直接使用 yum 命令
+
+安装命令：
+
+```sh
+yum install 函数库名
+```
+
+
+
+查看可执行程序调用了哪些函数库：
+
+```sh
+ldd -v 可执行文件名
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 用户和用户组管理
+
+## 关系
+
+Linux 是多用户多任务操作系统，换句话说，Linux 系统支持多个用户在同一时间内登陆，不同用户可以执行不同的任务，并且互不影响。
+
+
+
+用户和用户组的对应关系有以下 4 种：
+
+1. 一对一：一个用户可以存在一个组中，是组中的唯一成员；
+2. 一对多：一个用户可以存在多个用户组中，此用户具有这多个组的共同权限；
+3. 多对一：多个用户可以存在一个组中，这些用户具有和组相同的权限；
+4. 多对多：多个用户可以存在多个组中，也就是以上 3 种关系的扩展。
+
+
+
+
+
+
+
+## UID和GID
+
+UID和GID，即用户ID和组ID，User ID，简称 UID，Group ID，简称 GID
+
+
+
+登陆 Linux 系统时，虽然输入的是自己的用户名和密码，但其实 Linux 并不认识你的用户名称，它只认识用户名对应的 ID 号（也就是一串数字）。Linux 系统将所有用户的名称与 ID 的对应关系都存储在 /etc/passwd 文件中。
+
+
+
+
+
+## /etc/passwd
+
+Linux 系统中的 /etc/passwd 文件，是系统用户配置文件，存储了系统中所有用户的基本信息，并且所有用户都可以对此文件执行读操作。
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:114::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:115::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:109:116:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+usbmux:x:110:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+rtkit:x:111:117:RealtimeKit,,,:/proc:/usr/sbin/nologin
+dnsmasq:x:112:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+cups-pk-helper:x:113:120:user for cups-pk-helper service,,,:/home/cups-pk-helper:/usr/sbin/nologin
+speech-dispatcher:x:114:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+avahi:x:115:121:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/usr/sbin/nologin
+kernoops:x:116:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+whoopsie:x:120:125::/nonexistent:/bin/false
+colord:x:121:126:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+geoclue:x:122:127::/var/lib/geoclue:/usr/sbin/nologin
+pulse:x:123:128:PulseAudio daemon,,,:/var/run/pulse:/usr/sbin/nologin
+gnome-initial-setup:x:124:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:125:130:Gnome Display Manager:/var/lib/gdm3:/bin/false
+sssd:x:126:131:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+mao:x:1000:1000:linux,,,:/home/mao:/bin/bash
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+/etc/passwd 文件中的内容非常规律，每行记录对应一个用户。
+
+
+
+这些用户中的绝大多数是系统或服务正常运行所必需的用户，这种用户通常称为系统用户或伪用户。系统用户无法用来登录系统，但也不能删除，因为一旦删除，依赖这些用户运行的服务或程序就不能正常执行，会导致系统问题。
+
+
+
+每行用户信息都以 "：" 作为分隔符，划分为 7 个字段，每个字段所表示的含义如下：
+
+```sh
+用户名：密码：UID（用户ID）：GID（组ID）：描述性信息：主目录：默认Shell
+```
+
+
+
+### 用户名
+
+用户名，就是一串代表用户身份的字符串。
+
+Linux 系统是通过 UID 来识别用户身份，分配用户权限的。/etc/passwd 文件中就定义了用户名和 UID 之间的对应关系。
+
+
+
+### 密码
+
+"x" 表示此用户设有密码，但不是真正的密码，真正的密码保存在 /etc/shadow 文件中，此文件只有 root 用户可以浏览和操作
+
+
+
+### UID
+
+UID，也就是用户 ID。每个用户都有唯一的一个 UID，Linux 系统通过 UID 来识别不同的用户。
+
+UID 就是一个 0~65535 之间的数，不同范围的数字表示不同的用户身份
+
+
+
+| UID 范围  |                           用户身份                           |
+| :-------: | :----------------------------------------------------------: |
+|     0     | 超级用户。UID 为 0 就代表这个账号是管理员账号。在 Linux 中，如何把普通用户升级成管理员呢？只需把其他用户的 UID 修改为 0 就可以了，这一点和 Windows 是不同的。不过不建议建立多个管理员账号。 |
+|   1~499   | 系统用户（伪用户）。也就是说，此范围的 UID 保留给系统使用。其中，1~99 用于系统自行创建的账号；100~499 分配给有系统账号需求的用户。  其实，除了 0 之外，其他的 UID 并无不同，这里只是默认 500 以下的数字给系统作为保留账户，只是一个公认的习惯而已。 |
+| 500~65535 |                          普通用户。                          |
+
+
+
+
+
+### GID
+
+全称“Group ID”，简称“组ID”，表示用户初始组的组 ID 号。
+
+初始组，指用户登陆时就拥有这个用户组的相关权限。每个用户的初始组只能有一个，通常就是将和此用户的用户名相同的组名作为该用户的初始组。比如说，我们手工添加用户 lamp，在建立用户 lamp 的同时，就会建立 lamp 组作为 lamp 用户的初始组。
+
+附加组，指用户可以加入多个其他的用户组，并拥有这些组的权限。每个用户只能有一个初始组，除初始组外，用户再加入其他的用户组，这些用户组就是这个用户的附加组。附加组可以有多个，而且用户可以有这些附加组的权限。
+
+
+
+
+
+### 描述性信息
+
+用来解释这个用户的意义
+
+
+
+
+
+### 主目录
+
+用户登录后有操作权限的访问目录，通常称为用户的主目录
+
+root 超级管理员账户的主目录为 /root，普通用户的主目录为 /home/yourIDname
+
+
+
+
+
+### 默认Shell
+
+Shell 就是 Linux 的命令解释器，是用户和 Linux 内核之间沟通的桥梁
+
+
+
+
+
+
+
+## /etc/shadow
+
+/etc/shadow 文件，用于存储 Linux 系统中用户的密码信息
+
+由于该文件允许所有用户读取，易导致用户密码泄露，因此 Linux 系统将用户的密码信息从 /etc/passwd 文件中分离出来，并单独放到了此文件中
+
+/etc/shadow 文件只有 root 用户拥有读权限，其他用户没有任何权限，这样就保证了用户密码的安全性
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo cat /etc/shadow
+[sudo] mao 的密码： 
+root:!:18915:0:99999:7:::
+daemon:*:18858:0:99999:7:::
+bin:*:18858:0:99999:7:::
+sys:*:18858:0:99999:7:::
+sync:*:18858:0:99999:7:::
+games:*:18858:0:99999:7:::
+man:*:18858:0:99999:7:::
+lp:*:18858:0:99999:7:::
+mail:*:18858:0:99999:7:::
+news:*:18858:0:99999:7:::
+uucp:*:18858:0:99999:7:::
+proxy:*:18858:0:99999:7:::
+www-data:*:18858:0:99999:7:::
+backup:*:18858:0:99999:7:::
+list:*:18858:0:99999:7:::
+irc:*:18858:0:99999:7:::
+gnats:*:18858:0:99999:7:::
+nobody:*:18858:0:99999:7:::
+systemd-network:*:18858:0:99999:7:::
+systemd-resolve:*:18858:0:99999:7:::
+systemd-timesync:*:18858:0:99999:7:::
+messagebus:*:18858:0:99999:7:::
+syslog:*:18858:0:99999:7:::
+_apt:*:18858:0:99999:7:::
+tss:*:18858:0:99999:7:::
+uuidd:*:18858:0:99999:7:::
+tcpdump:*:18858:0:99999:7:::
+avahi-autoipd:*:18858:0:99999:7:::
+usbmux:*:18858:0:99999:7:::
+rtkit:*:18858:0:99999:7:::
+dnsmasq:*:18858:0:99999:7:::
+cups-pk-helper:*:18858:0:99999:7:::
+speech-dispatcher:!:18858:0:99999:7:::
+avahi:*:18858:0:99999:7:::
+kernoops:*:18858:0:99999:7:::
+saned:*:18858:0:99999:7:::
+nm-openvpn:*:18858:0:99999:7:::
+hplip:*:18858:0:99999:7:::
+whoopsie:*:18858:0:99999:7:::
+colord:*:18858:0:99999:7:::
+geoclue:*:18858:0:99999:7:::
+pulse:*:18858:0:99999:7:::
+gnome-initial-setup:*:18858:0:99999:7:::
+gdm:*:18858:0:99999:7:::
+sssd:*:18858:0:99999:7:::
+mao:$1$dvdYmO70$JMt6qRizm5GFCwQh6dk5/1:18915:0:99999:7:::
+systemd-coredump:!!:18915::::::
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+文件中每行代表一个用户，同样使用 ":" 作为分隔符，不同之处在于，每行用户信息被划分为 9 个字段。每个字段的含义如下：
+
+```sh
+用户名：加密密码：最后一次修改时间：最小修改时间间隔：密码有效期：密码需要变更前的警告天数：密码过期后的宽限时间：账号失效时间：保留字段
+```
+
+
+
+### 用户名
+
+用户名，就是一串代表用户身份的字符串。
+
+Linux 系统是通过 UID 来识别用户身份，分配用户权限的。/etc/passwd 文件中就定义了用户名和 UID 之间的对应关系。
+
+
+
+
+
+### 加密密码
+
+这里保存的是真正加密的密码。目前 Linux 的密码采用的是 SHA512 散列加密算法，原来采用的是 MD5 或 DES 加密算法。SHA512 散列加密算法的加密等级更高，也更加安全。
+
+所有伪用户的密码都是 "!!" 或 "*"，代表没有密码是不能登录的。当然，新创建的用户如果不设定密码，那么它的密码项也是 "!!"，代表这个用户没有密码，不能登录。
+
+
+
+
+
+### 最后一次修改时间
+
+此字段表示最后一次修改密码的时间
+
+Linux 计算日期的时间是以 1970 年 1 月 1 日作为 1 不断累加得到的时间，到 1971 年 1 月 1 日，则为 366 天，则为365
+
+
+
+
+
+### 最小修改时间间隔
+
+该字段规定了从第 3 字段（最后一次修改密码的日期）起，多长时间之内不能修改密码。如果是 0，则密码可以随时修改；如果是 10，则代表密码修改后 10 天之内不能再次修改密码。
+
+
+
+
+
+### 密码有效期
+
+经常变更密码是个好习惯，为了强制要求用户变更密码，这个字段可以指定距离第 3 字段（最后一次更改密码）多长时间内需要再次变更密码，否则该账户密码进行过期阶段。
+该字段的默认值为 99999，也就是 273 年，可认为是永久生效。如果改为 90，则表示密码被修改 90 天之后必须再次修改，否则该用户即将过期。管理服务器时，通过这个字段强制用户定期修改密码。
+
+
+
+
+
+### 密码需要变更前的警告天数
+
+当账户密码有效期快到时，系统会发出警告信息给此账户，提醒用户 "再过 n 天你的密码就要过期了，请尽快重新设置你的密码！"。
+
+该字段的默认值是 7，也就是说，距离密码有效期的第 7 天开始，每次登录系统都会向该账户发出 "修改密码" 的警告信息。
+
+
+
+
+
+### 密码过期后的宽限天数
+
+也称为“口令失效日”，简单理解就是，在密码过期后，用户如果还是没有修改密码，则在此字段规定的宽限天数内，用户还是可以登录系统的；如果过了宽限天数，系统将不再让此账户登陆，也不会提示账户过期，是完全禁用。
+
+比如说，此字段规定的宽限天数是 10，则代表密码过期 10 天后失效；如果是 0，则代表密码过期后立即失效；如果是 -1，则代表密码永远不会失效。
+
+
+
+
+
+### 账号失效时间
+
+该字段表示，账号在此字段规定的时间之外，不论你的密码是否过期，都将无法使用
+
+该字段通常被使用在具有收费服务的系统中。
+
+
+
+
+
+
+
+
+
+## /etc/group
+
+
+
+
+
+
+
+
+
