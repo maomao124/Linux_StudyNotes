@@ -5480,5 +5480,432 @@ rpmlib(PayloadIsXz) <= 5.2-1
 
 
 
-## RPM包验证数字证书
+## RPM包验证
+
+RPM 包校验可用来判断已安装的软件包（或文件）是否被修改
+
+
+
+```sh
+[root@localhost ~]# rpm -Va
+```
+
+-Va 选项表示校验系统中已安装的所有软件包
+
+
+
+```sh
+[root@localhost ~]# rpm -V 已安装的包名
+```
+
+-V 选项表示校验指定 RPM 包中的文件，是 verity 的首字母
+
+
+
+```sh
+[root@localhost ~]# rpm -Vf 系统文件名
+```
+
+-Vf 选项表示校验某个系统文件是否被修改
+
+
+
+```sh
+[root@889e0484bdd2 /]# rpm -Va
+S.5....T.  c /etc/dnf/vars/infra
+.M.......    /
+missing     /boot
+missing     /usr/lib/udev/hwdb.d
+missing     /usr/lib/udev/hwdb.d/20-OUI.hwdb
+missing     /usr/lib/udev/hwdb.d/20-acpi-vendor.hwdb
+missing     /usr/lib/udev/hwdb.d/20-bluetooth-vendor-product.hwdb
+missing     /usr/lib/udev/hwdb.d/20-net-ifname.hwdb
+missing     /usr/lib/udev/hwdb.d/20-pci-classes.hwdb
+missing     /usr/lib/udev/hwdb.d/20-pci-vendor-model.hwdb
+missing     /usr/lib/udev/hwdb.d/20-sdio-classes.hwdb
+missing     /usr/lib/udev/hwdb.d/20-sdio-vendor-model.hwdb
+missing     /usr/lib/udev/hwdb.d/20-usb-classes.hwdb
+missing     /usr/lib/udev/hwdb.d/20-usb-vendor-model.hwdb
+missing     /usr/lib/udev/hwdb.d/20-vmbus-class.hwdb
+missing     /usr/lib/udev/hwdb.d/60-evdev.hwdb
+missing     /usr/lib/udev/hwdb.d/60-keyboard.hwdb
+missing     /usr/lib/udev/hwdb.d/60-sensor.hwdb
+missing     /usr/lib/udev/hwdb.d/70-joystick.hwdb
+missing     /usr/lib/udev/hwdb.d/70-mouse.hwdb
+missing     /usr/lib/udev/hwdb.d/70-pointingstick.hwdb
+missing     /usr/lib/udev/hwdb.d/70-touchpad.hwdb
+.M....G..  g /var/log/lastlog
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# rpm -V centos-gpg-keys-8-2.el8.noarch
+[root@889e0484bdd2 /]#
+```
+
+
+
+
+
+
+
+## cpio命令
+
+cpio 命令用于**从归档包中存入和读取文件**，换句话说，cpio 命令可以从归档包中提取文件（或目录），也可以将文件（或目录）复制到归档包中。
+
+
+
+归档包，也可称为文件库，其实就是 cpio 或 tar 格式的文件，该文件中包含其他文件以及一些相关信息（文件名、访问权限等）。归档包既可以是磁盘中的文件，也可以是磁带或管道。
+
+
+
+- 使用 cpio 备份数据时如果使用的是绝对路径，那么还原数据时会自动恢复到绝对路径下；同理，如果备份数据使用的是相对路径，那么数据会还原到相对路径下。
+- cpio 命令无法自行指定备份（或还原）的文件，需要目标文件（或目录）的完整路径才能成功读取，因此此命令常与 find 命令配合使用。
+- cpio 命令恢复数据时不会自动覆盖同名文件，也不会创建目录（直接解压到当前文件夹）。
+
+
+
+把数据备份到文件库中：
+
+```sh
+[root@localhost ~]# cpio -o[vcB] > [文件丨设备]
+```
+
+- -o：copy-out模式，备份；
+- -v：显示备份过程；
+- -c：使用较新的portable format存储方式；
+- -B：设定输入/输出块为 5120Bytes，而不是模式的 512Bytes；
+
+
+
+把数据从文件库中恢复：
+
+```sh
+[root@localhost ~]# cpio -i[vcdu] < [文件|设备]
+```
+
+- -i：copy-in 模式，还原；
+- -v：显示还原过程；
+- -c：较新的 portable format 存储方式；
+- -d：还原时自动新建目录；
+- -u：自动使用较新的文件覆盖较旧的文件；
+
+
+
+
+
+## yum
+
+yum，全称“Yellow dog Updater, Modified”，是一个专门为了解决包的依赖关系而存在的软件包管理器。
+
+yum 是改进型的 RPM 软件管理器，它很好的解决了 RPM 所面临的软件包依赖问题。yum 在服务器端存有所有的 RPM 包，并将各个包之间的依赖关系记录在文件中，当管理员使用 yum 安装 RPM 包时，yum 会先从服务器端下载包的依赖性文件，通过分析此文件从服务器端一次性下载所有相关的 RPM 包并进行安装
+
+
+
+
+
+## 解决Docker centOS 无法使用yum问题
+
+
+
+错误描述：
+
+```sh
+Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
+```
+
+从仓库 ‘appstream’ 下载元数据失败：由于镜像列表中没有 URL，不能准备内部镜像列表
+
+
+
+ping百度，查看是否为网络问题：
+
+```sh
+ping baidu.com
+```
+
+
+
+```sh
+[root@889e0484bdd2 rpm-gpg]# ping baidu.com
+PING baidu.com (220.181.38.251) 56(84) bytes of data.
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=1 ttl=37 time=48.7 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=2 ttl=37 time=50.2 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=3 ttl=37 time=48.3 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=4 ttl=37 time=48.9 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=5 ttl=37 time=50.1 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=6 ttl=37 time=48.9 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=7 ttl=37 time=48.8 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=8 ttl=37 time=48.3 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=9 ttl=37 time=48.0 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=10 ttl=37 time=50.4 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=11 ttl=37 time=48.9 ms
+64 bytes from 220.181.38.251 (220.181.38.251): icmp_seq=12 ttl=37 time=47.10 ms
+^C
+--- baidu.com ping statistics ---
+12 packets transmitted, 12 received, 0% packet loss, time 20074ms
+rtt min/avg/max/mdev = 47.990/48.976/50.441/0.818 ms
+[root@889e0484bdd2 rpm-gpg]#
+```
+
+网络正常
+
+
+
+如果网络正常，便是 CentOS 已经停止维护的问题。2020 年 12 月 8 号，CentOS 官方宣布了停止维护 CentOS Linux 的计划，并推出了 CentOS Stream 项目，CentOS Linux 8 作为 RHEL 8 的复刻版本，生命周期缩短，于 2021 年 12 月 31 日停止更新并停止维护（EOL），更多的信息可以查看 CentOS 官方公告。如果需要更新 CentOS，需要将镜像从 mirror.centos.org 更改为 vault.centos.org
+
+
+
+进入到 yum 的 repos 目录：
+
+```sh
+cd /etc/yum.repos.d/
+```
+
+
+
+修改 centos 文件内容：
+
+```sh
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+```
+
+
+
+生成缓存更新：
+
+```sh
+yum makecache
+```
+
+
+
+最后使用yum list验证
+
+
+
+```sh
+[root@889e0484bdd2 rpm-gpg]# cd /etc/yum.repos.d/
+[root@889e0484bdd2 yum.repos.d]# ls
+CentOS-Linux-AppStream.repo          CentOS-Linux-Debuginfo.repo  CentOS-Linux-FastTrack.repo         CentOS-Linux-Plus.repo
+CentOS-Linux-BaseOS.repo             CentOS-Linux-Devel.repo      CentOS-Linux-HighAvailability.repo  CentOS-Linux-PowerTools.repo
+CentOS-Linux-ContinuousRelease.repo  CentOS-Linux-Extras.repo     CentOS-Linux-Media.repo             CentOS-Linux-Sources.repo
+[root@889e0484bdd2 yum.repos.d]# sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+[root@889e0484bdd2 yum.repos.d]# sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+[root@889e0484bdd2 yum.repos.d]# yum makecache
+Failed to set locale, defaulting to C.UTF-8
+CentOS Linux 8 - AppStream                                                                                                      1.1 MB/s | 8.4 MB     00:07
+CentOS Linux 8 - BaseOS                                                                                                         1.0 MB/s | 4.6 MB     00:04
+CentOS Linux 8 - Extras                                                                                                         4.6 kB/s |  10 kB     00:02
+Metadata cache created.
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+
+
+
+
+
+
+## yum命令
+
+### yum查询命令
+
+
+
+查询所有已安装和可安装的软件包
+
+```sh
+yum list
+```
+
+
+
+```sh
+xz-devel.x86_64                                                            5.2.4-3.el8                                                                 baseos
+xz-libs.i686                                                               5.2.4-3.el8                                                                 baseos
+yajl.i686                                                                  2.1.0-10.el8                                                                appstream
+yajl.x86_64                                                                2.1.0-10.el8                                                                appstream
+yelp.x86_64                                                                2:3.28.1-3.el8                                                              appstream
+yelp-libs.i686                                                             2:3.28.1-3.el8                                                              appstream
+yelp-libs.x86_64                                                           2:3.28.1-3.el8                                                              appstream
+yelp-tools.noarch                                                          3.28.0-3.el8                                                                appstream
+yelp-xsl.noarch                                                            3.28.0-2.el8                                                                appstream
+yp-tools.x86_64                                                            4.2.3-1.el8                                                                 appstream
+ypbind.x86_64                                                              3:2.5-2.el8                                                                 appstream
+ypserv.x86_64                                                              4.0-6.20170331git5bfba76.el8                                                appstream
+yum.noarch                                                                 4.7.0-4.el8                                                                 baseos
+yum-utils.noarch                                                           4.0.21-3.el8                                                                baseos
+zenity.x86_64                                                              3.28.1-1.el8                                                                appstream
+zip.x86_64                                                                 3.0-23.el8                                                                  baseos
+zlib.i686                                                                  1.2.11-17.el8                                                               baseos
+zlib-devel.i686                                                            1.2.11-17.el8                                                               baseos
+zlib-devel.x86_64                                                          1.2.11-17.el8                                                               baseos
+zsh.x86_64                                                                 5.5.1-6.el8_1.2                                                             baseos
+zsh-html.noarch                                                            5.5.1-6.el8_1.2                                                             appstream
+zstd.x86_64                                                                1.4.4-1.el8                                                                 appstream
+zziplib.i686                                                               0.13.68-9.el8                                                               appstream
+zziplib.x86_64                                                             0.13.68-9.el8                                                               appstream
+zziplib-utils.x86_64                                                       0.13.68-9.el8                                                               appstream
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+只列举一部分
+
+
+
+
+
+查询执行软件包的安装情况
+
+```sh
+yum list 包名
+```
+
+
+
+```sh
+[root@889e0484bdd2 yum.repos.d]# yum list zip.x86_64
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 0:05:06 ago on Mon Jul  4 06:25:24 2022.
+Available Packages
+zip.x86_64                                                                   3.0-23.el8                                                                   baseos
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+
+
+
+
+从 yum 源服务器上查找与关键字相关的所有软件包
+
+```sh
+yum search 关键字
+```
+
+
+
+```sh
+[root@889e0484bdd2 yum.repos.d]# yum search mysql
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 0:06:02 ago on Mon Jul  4 06:25:24 2022.
+================================================================ Name & Summary Matched: mysql =================================================================
+mysql.x86_64 : MySQL client programs and shared libraries
+apr-util-mysql.x86_64 : APR utility library MySQL DBD driver
+dovecot-mysql.x86_64 : MySQL back end for dovecot
+freeradius-mysql.x86_64 : MySQL support for freeradius
+mysql-common.x86_64 : The shared files required for MySQL server and client
+mysql-devel.x86_64 : Files for development of MySQL applications
+mysql-errmsg.x86_64 : The error messages files required by MySQL server
+mysql-libs.x86_64 : The shared libraries required for MySQL clients
+mysql-selinux.noarch : SELinux policy modules for MySQL and MariaDB packages
+mysql-server.x86_64 : The MySQL server and related files
+mysql-test.x86_64 : The test suite distributed with MySQL
+pcp-pmda-mysql.x86_64 : Performance Co-Pilot (PCP) metrics for MySQL
+perl-DBD-MySQL.x86_64 : A MySQL interface for Perl
+php-mysqlnd.x86_64 : A module for PHP applications that use MySQL databases
+postfix-mysql.x86_64 : Postfix MySQL map support
+python2-PyMySQL.noarch : Pure-Python MySQL client library
+python3-PyMySQL.noarch : Pure-Python MySQL client library
+python38-PyMySQL.noarch : Pure-Python MySQL client library
+python39-PyMySQL.noarch : Pure-Python MySQL client library
+qt5-qtbase-mysql.i686 : MySQL driver for Qt5's SQL classes
+qt5-qtbase-mysql.x86_64 : MySQL driver for Qt5's SQL classes
+rsyslog-mysql.x86_64 : MySQL support for rsyslog
+rubygem-mysql2.x86_64 : A simple, fast Mysql library for Ruby, binding to libmysql
+rubygem-mysql2-doc.noarch : Documentation for rubygem-mysql2
+==================================================================== Summary Matched: mysql ====================================================================
+mariadb-devel.x86_64 : Files for development of MariaDB/MySQL applications
+mariadb-java-client.noarch : Connects applications developed in Java to MariaDB and MySQL databases
+mariadb-server-utils.x86_64 : Non-essential server utilities for MariaDB/MySQL applications
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+```sh
+[root@889e0484bdd2 yum.repos.d]# yum search jdk
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 0:06:30 ago on Mon Jul  4 06:25:24 2022.
+================================================================= Name & Summary Matched: jdk ==================================================================
+copy-jdk-configs.noarch : JDKs configuration files copier
+java-1.8.0-openjdk.x86_64 : OpenJDK 8 Runtime Environment
+java-1.8.0-openjdk-accessibility.x86_64 : OpenJDK 8 accessibility connector
+java-1.8.0-openjdk-demo.x86_64 : OpenJDK 8 Demos
+java-1.8.0-openjdk-devel.x86_64 : OpenJDK 8 Development Environment
+java-1.8.0-openjdk-headless.x86_64 : OpenJDK 8 Headless Runtime Environment
+java-1.8.0-openjdk-headless-slowdebug.x86_64 : OpenJDK 8 Runtime Environment unoptimised with full debugging on
+java-1.8.0-openjdk-javadoc.noarch : OpenJDK 8 API documentation
+java-1.8.0-openjdk-javadoc-zip.noarch : OpenJDK 8 API documentation compressed in a single archive
+java-1.8.0-openjdk-slowdebug.x86_64 : OpenJDK 8 Runtime Environment unoptimised with full debugging on
+java-1.8.0-openjdk-src.x86_64 : OpenJDK 8 Source Bundle
+java-11-openjdk.x86_64 : OpenJDK 11 Runtime Environment
+java-11-openjdk-demo.x86_64 : OpenJDK 11 Demos
+java-11-openjdk-devel.x86_64 : OpenJDK 11 Development Environment
+java-11-openjdk-headless.x86_64 : OpenJDK 11 Headless Runtime Environment
+java-11-openjdk-javadoc.x86_64 : OpenJDK 11 API documentation
+java-11-openjdk-javadoc-zip.x86_64 : OpenJDK 11 API documentation compressed in a single archive
+java-11-openjdk-jmods.x86_64 : JMods for OpenJDK 11
+java-11-openjdk-src.x86_64 : OpenJDK 11 Source Bundle
+java-11-openjdk-static-libs.x86_64 : OpenJDK 11 libraries for static linking
+java-17-openjdk.x86_64 : OpenJDK 17 Runtime Environment
+java-17-openjdk-demo.x86_64 : OpenJDK 17 Demos
+java-17-openjdk-devel.x86_64 : OpenJDK 17 Development Environment
+java-17-openjdk-headless.x86_64 : OpenJDK 17 Headless Runtime Environment
+java-17-openjdk-javadoc.x86_64 : OpenJDK 17 API documentation
+java-17-openjdk-javadoc-zip.x86_64 : OpenJDK 17 API documentation compressed in a single archive
+java-17-openjdk-jmods.x86_64 : JMods for OpenJDK 17
+java-17-openjdk-src.x86_64 : OpenJDK 17 Source Bundle
+java-17-openjdk-static-libs.x86_64 : OpenJDK 17 libraries for static linking
+===================================================================== Summary Matched: jdk =====================================================================
+icedtea-web.x86_64 : Additional Java components for OpenJDK - Java browser plug-in and Web Start implementation
+jmc.x86_64 : JDK Mission Control is a profiling and diagnostics tool
+jmc-core.noarch : Core API for JDK Mission Control
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+
+
+
+
+查询执行软件包的详细信息：
+
+```sh
+yum info 包名
+```
+
+
+
+
+
+```sh
+[root@889e0484bdd2 yum.repos.d]# yum info zip.x86_64
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 0:10:01 ago on Mon Jul  4 06:25:24 2022.
+Available Packages
+Name         : zip
+Version      : 3.0
+Release      : 23.el8
+Architecture : x86_64
+Size         : 270 k
+Source       : zip-3.0-23.el8.src.rpm
+Repository   : baseos
+Summary      : A file compression and packaging utility compatible with PKZIP
+URL          : http://www.info-zip.org/Zip.html
+License      : BSD
+Description  : The zip program is a compression and file packaging utility.  Zip is
+             : analogous to a combination of the UNIX tar and compress commands and
+             : is compatible with PKZIP (a compression and file packaging utility for
+             : MS-DOS systems).
+             :
+             : Install the zip package if you need to compress files using the zip
+             : program.
+
+[root@889e0484bdd2 yum.repos.d]#
+```
+
+
+
+
+
+### yum安装命令
 
