@@ -7559,5 +7559,665 @@ mao@ubuntu:~/桌面$
 
 ## /etc/login.defs
 
+/etc/login.defs 文件用于在创建用户时，**对用户的一些基本属性做默认设置**，例如指定用户 UID 和 GID 的范围，用户的过期时间，密码的最大长度，等等
 
+该文件的用户默认配置对 root 用户无效
+
+当此文件中的配置与 /etc/passwd 和 /etc/shadow 文件中的用户信息有冲突时，系统会以/etc/passwd 和 /etc/shadow 为准
+
+
+
+|          设置项          |                             含义                             |
+| :----------------------: | :----------------------------------------------------------: |
+| MAIL_DIR /var/spool/mail | 创建用户时，系统会在目录 /var/spool/mail 中创建一个用户邮箱  |
+|   PASS_MAX_DAYS 99999    | 密码有效期，99999 是自 1970 年 1 月 1 日起密码有效的天数，相当于 273 年，可理解为密码始终有效。 |
+|     PASS_MIN_DAYS 0      | 表示自上次修改密码以来，最少隔多少天后用户才能再次修改密码，默认值是 0。 |
+|      PASS_MIN_LEN 5      | 指定密码的最小长度，默认不小于 5 位，但是现在用户登录时验证已经被 PAM 模块取代，所以这个选项并不生效。 |
+|     PASS_WARN_AGE 7      | 指定在密码到期前多少天，系统就开始通过用户密码即将到期，默认为 7 天。 |
+|       UID_MIN 500        | 指定最小 UID 为 500，也就是说，添加用户时，默认 UID 从 500 开始。注意，如果手工指定了一个用户的 UID 是 550，那么下一个创建的用户的 UID 就会从 551 开始，哪怕 500~549 之间的 UID 没有使用。 |
+|      UID_MAX 60000       |                指定用户最大的 UID 为 60000。                 |
+|       GID_MIN 500        | 指定最小 GID 为 500，也就是在添加组时，组的 GID 从 500 开始。 |
+|      GID_MAX 60000       |                   用户 GID 最大为 60000。                    |
+|     CREATE_HOME yes      | 指定在创建用户时，是否同时创建用户主目录，yes 表示创建，no 则不创建，默认是 yes。 |
+|        UMASK 077         |               用户主目录的权限默认设置为 077。               |
+|   USERGROUPS_ENAB yes    | 指定删除用户的时候是否同时删除用户组，准备地说，这里指的是删除用户的初始组，此项的默认值为 yes。 |
+|  ENCRYPT_METHOD SHA512   | 指定用户密码采用的加密规则，默认采用 SHA512，这是新的密码加密模式，原先的 Linux 只能用 DES 或 MD5 加密。 |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat -n /etc/login.defs
+     1	#
+     2	# /etc/login.defs - Configuration control definitions for the login package.
+     3	#
+     4	# Three items must be defined:  MAIL_DIR, ENV_SUPATH, and ENV_PATH.
+     5	# If unspecified, some arbitrary (and possibly incorrect) value will
+     6	# be assumed.  All other items are optional - if not specified then
+     7	# the described action or option will be inhibited.
+     8	#
+     9	# Comment lines (lines beginning with "#") and blank lines are ignored.
+    10	#
+    11	# Modified for Linux.  --marekm
+    12	
+    13	# REQUIRED for useradd/userdel/usermod
+    14	#   Directory where mailboxes reside, _or_ name of file, relative to the
+    15	#   home directory.  If you _do_ define MAIL_DIR and MAIL_FILE,
+    16	#   MAIL_DIR takes precedence.
+    17	#
+    18	#   Essentially:
+    19	#      - MAIL_DIR defines the location of users mail spool files
+    20	#        (for mbox use) by appending the username to MAIL_DIR as defined
+    21	#        below.
+    22	#      - MAIL_FILE defines the location of the users mail spool files as the
+    23	#        fully-qualified filename obtained by prepending the user home
+    24	#        directory before $MAIL_FILE
+    25	#
+    26	# NOTE: This is no more used for setting up users MAIL environment variable
+    27	#       which is, starting from shadow 4.0.12-1 in Debian, entirely the
+    28	#       job of the pam_mail PAM modules
+    29	#       See default PAM configuration files provided for
+    30	#       login, su, etc.
+    31	#
+    32	# This is a temporary situation: setting these variables will soon
+    33	# move to /etc/default/useradd and the variables will then be
+    34	# no more supported
+    35	MAIL_DIR        /var/mail
+    36	#MAIL_FILE      .mail
+    37	
+    38	#
+    39	# Enable logging and display of /var/log/faillog login failure info.
+    40	# This option conflicts with the pam_tally PAM module.
+    41	#
+    42	FAILLOG_ENAB		yes
+    43	
+    44	#
+    45	# Enable display of unknown usernames when login failures are recorded.
+    46	#
+    47	# WARNING: Unknown usernames may become world readable. 
+    48	# See #290803 and #298773 for details about how this could become a security
+    49	# concern
+    50	LOG_UNKFAIL_ENAB	no
+    51	
+    52	#
+    53	# Enable logging of successful logins
+    54	#
+    55	LOG_OK_LOGINS		no
+    56	
+    57	#
+    58	# Enable "syslog" logging of su activity - in addition to sulog file logging.
+    59	# SYSLOG_SG_ENAB does the same for newgrp and sg.
+    60	#
+    61	SYSLOG_SU_ENAB		yes
+    62	SYSLOG_SG_ENAB		yes
+    63	
+    64	#
+    65	# If defined, all su activity is logged to this file.
+    66	#
+    67	#SULOG_FILE	/var/log/sulog
+    68	
+    69	#
+    70	# If defined, file which maps tty line to TERM environment parameter.
+    71	# Each line of the file is in a format something like "vt100  tty01".
+    72	#
+    73	#TTYTYPE_FILE	/etc/ttytype
+    74	
+    75	#
+    76	# If defined, login failures will be logged here in a utmp format
+    77	# last, when invoked as lastb, will read /var/log/btmp, so...
+    78	#
+    79	FTMP_FILE	/var/log/btmp
+    80	
+    81	#
+    82	# If defined, the command name to display when running "su -".  For
+    83	# example, if this is defined as "su" then a "ps" will display the
+    84	# command is "-su".  If not defined, then "ps" would display the
+    85	# name of the shell actually being run, e.g. something like "-sh".
+    86	#
+    87	SU_NAME		su
+    88	
+    89	#
+    90	# If defined, file which inhibits all the usual chatter during the login
+    91	# sequence.  If a full pathname, then hushed mode will be enabled if the
+    92	# user's name or shell are found in the file.  If not a full pathname, then
+    93	# hushed mode will be enabled if the file exists in the user's home directory.
+    94	#
+    95	HUSHLOGIN_FILE	.hushlogin
+    96	#HUSHLOGIN_FILE	/etc/hushlogins
+    97	
+    98	#
+    99	# *REQUIRED*  The default PATH settings, for superuser and normal users.
+   100	#
+   101	# (they are minimal, add the rest in the shell startup files)
+   102	ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   103	ENV_PATH	PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+   104	
+   105	#
+   106	# Terminal permissions
+   107	#
+   108	#	TTYGROUP	Login tty will be assigned this group ownership.
+   109	#	TTYPERM		Login tty will be set to this permission.
+   110	#
+   111	# If you have a "write" program which is "setgid" to a special group
+   112	# which owns the terminals, define TTYGROUP to the group number and
+   113	# TTYPERM to 0620.  Otherwise leave TTYGROUP commented out and assign
+   114	# TTYPERM to either 622 or 600.
+   115	#
+   116	# In Debian /usr/bin/bsd-write or similar programs are setgid tty
+   117	# However, the default and recommended value for TTYPERM is still 0600
+   118	# to not allow anyone to write to anyone else console or terminal
+   119	
+   120	# Users can still allow other people to write them by issuing 
+   121	# the "mesg y" command.
+   122	
+   123	TTYGROUP	tty
+   124	TTYPERM		0600
+   125	
+   126	#
+   127	# Login configuration initializations:
+   128	#
+   129	#	ERASECHAR	Terminal ERASE character ('\010' = backspace).
+   130	#	KILLCHAR	Terminal KILL character ('\025' = CTRL/U).
+   131	#	UMASK		Default "umask" value.
+   132	#
+   133	# The ERASECHAR and KILLCHAR are used only on System V machines.
+   134	# 
+   135	# UMASK is the default umask value for pam_umask and is used by
+   136	# useradd and newusers to set the mode of the new home directories.
+   137	# 022 is the "historical" value in Debian for UMASK
+   138	# 027, or even 077, could be considered better for privacy
+   139	# There is no One True Answer here : each sysadmin must make up his/her
+   140	# mind.
+   141	#
+   142	# If USERGROUPS_ENAB is set to "yes", that will modify this UMASK default value
+   143	# for private user groups, i. e. the uid is the same as gid, and username is
+   144	# the same as the primary group name: for these, the user permissions will be
+   145	# used as group permissions, e. g. 022 will become 002.
+   146	#
+   147	# Prefix these values with "0" to get octal, "0x" to get hexadecimal.
+   148	#
+   149	ERASECHAR	0177
+   150	KILLCHAR	025
+   151	UMASK		022
+   152	
+   153	#
+   154	# Password aging controls:
+   155	#
+   156	#	PASS_MAX_DAYS	Maximum number of days a password may be used.
+   157	#	PASS_MIN_DAYS	Minimum number of days allowed between password changes.
+   158	#	PASS_WARN_AGE	Number of days warning given before a password expires.
+   159	#
+   160	PASS_MAX_DAYS	99999
+   161	PASS_MIN_DAYS	0
+   162	PASS_WARN_AGE	7
+   163	
+   164	#
+   165	# Min/max values for automatic uid selection in useradd
+   166	#
+   167	UID_MIN			 1000
+   168	UID_MAX			60000
+   169	# System accounts
+   170	#SYS_UID_MIN		  100
+   171	#SYS_UID_MAX		  999
+   172	
+   173	#
+   174	# Min/max values for automatic gid selection in groupadd
+   175	#
+   176	GID_MIN			 1000
+   177	GID_MAX			60000
+   178	# System accounts
+   179	#SYS_GID_MIN		  100
+   180	#SYS_GID_MAX		  999
+   181	
+   182	#
+   183	# Max number of login retries if password is bad. This will most likely be
+   184	# overriden by PAM, since the default pam_unix module has it's own built
+   185	# in of 3 retries. However, this is a safe fallback in case you are using
+   186	# an authentication module that does not enforce PAM_MAXTRIES.
+   187	#
+   188	LOGIN_RETRIES		5
+   189	
+   190	#
+   191	# Max time in seconds for login
+   192	#
+   193	LOGIN_TIMEOUT		60
+   194	
+   195	#
+   196	# Which fields may be changed by regular users using chfn - use
+   197	# any combination of letters "frwh" (full name, room number, work
+   198	# phone, home phone).  If not defined, no changes are allowed.
+   199	# For backward compatibility, "yes" = "rwh" and "no" = "frwh".
+   200	# 
+   201	CHFN_RESTRICT		rwh
+   202	
+   203	#
+   204	# Should login be allowed if we can't cd to the home directory?
+   205	# Default in no.
+   206	#
+   207	DEFAULT_HOME	yes
+   208	
+   209	#
+   210	# If defined, this command is run when removing a user.
+   211	# It should remove any at/cron/print jobs etc. owned by
+   212	# the user to be removed (passed as the first argument).
+   213	#
+   214	#USERDEL_CMD	/usr/sbin/userdel_local
+   215	
+   216	#
+   217	# Enable setting of the umask group bits to be the same as owner bits
+   218	# (examples: 022 -> 002, 077 -> 007) for non-root users, if the uid is
+   219	# the same as gid, and username is the same as the primary group name.
+   220	#
+   221	# If set to yes, userdel will remove the user's group if it contains no
+   222	# more members, and useradd will create by default a group with the name
+   223	# of the user.
+   224	#
+   225	USERGROUPS_ENAB yes
+   226	
+   227	#
+   228	# Instead of the real user shell, the program specified by this parameter
+   229	# will be launched, although its visible name (argv[0]) will be the shell's.
+   230	# The program may do whatever it wants (logging, additional authentification,
+   231	# banner, ...) before running the actual shell.
+   232	#
+   233	# FAKE_SHELL /bin/fakeshell
+   234	
+   235	#
+   236	# If defined, either full pathname of a file containing device names or
+   237	# a ":" delimited list of device names.  Root logins will be allowed only
+   238	# upon these devices.
+   239	#
+   240	# This variable is used by login and su.
+   241	#
+   242	#CONSOLE	/etc/consoles
+   243	#CONSOLE	console:tty01:tty02:tty03:tty04
+   244	
+   245	#
+   246	# List of groups to add to the user's supplementary group set
+   247	# when logging in on the console (as determined by the CONSOLE
+   248	# setting).  Default is none.
+   249	#
+   250	# Use with caution - it is possible for users to gain permanent
+   251	# access to these groups, even when not logged in on the console.
+   252	# How to do it is left as an exercise for the reader...
+   253	#
+   254	# This variable is used by login and su.
+   255	#
+   256	#CONSOLE_GROUPS		floppy:audio:cdrom
+   257	
+   258	#
+   259	# If set to "yes", new passwords will be encrypted using the MD5-based
+   260	# algorithm compatible with the one used by recent releases of FreeBSD.
+   261	# It supports passwords of unlimited length and longer salt strings.
+   262	# Set to "no" if you need to copy encrypted passwords to other systems
+   263	# which don't understand the new algorithm.  Default is "no".
+   264	#
+   265	# This variable is deprecated. You should use ENCRYPT_METHOD.
+   266	#
+   267	#MD5_CRYPT_ENAB	no
+   268	
+   269	#
+   270	# If set to MD5 , MD5-based algorithm will be used for encrypting password
+   271	# If set to SHA256, SHA256-based algorithm will be used for encrypting password
+   272	# If set to SHA512, SHA512-based algorithm will be used for encrypting password
+   273	# If set to DES, DES-based algorithm will be used for encrypting password (default)
+   274	# Overrides the MD5_CRYPT_ENAB option
+   275	#
+   276	# Note: It is recommended to use a value consistent with
+   277	# the PAM modules configuration.
+   278	#
+   279	ENCRYPT_METHOD SHA512
+   280	
+   281	#
+   282	# Only used if ENCRYPT_METHOD is set to SHA256 or SHA512.
+   283	#
+   284	# Define the number of SHA rounds.
+   285	# With a lot of rounds, it is more difficult to brute forcing the password.
+   286	# But note also that it more CPU resources will be needed to authenticate
+   287	# users.
+   288	#
+   289	# If not specified, the libc will choose the default number of rounds (5000).
+   290	# The values must be inside the 1000-999999999 range.
+   291	# If only one of the MIN or MAX values is set, then this value will be used.
+   292	# If MIN > MAX, the highest value will be used.
+   293	#
+   294	# SHA_CRYPT_MIN_ROUNDS 5000
+   295	# SHA_CRYPT_MAX_ROUNDS 5000
+   296	
+   297	################# OBSOLETED BY PAM ##############
+   298	#						#
+   299	# These options are now handled by PAM. Please	#
+   300	# edit the appropriate file in /etc/pam.d/ to	#
+   301	# enable the equivelants of them.
+   302	#
+   303	###############
+   304	
+   305	#MOTD_FILE
+   306	#DIALUPS_CHECK_ENAB
+   307	#LASTLOG_ENAB
+   308	#MAIL_CHECK_ENAB
+   309	#OBSCURE_CHECKS_ENAB
+   310	#PORTTIME_CHECKS_ENAB
+   311	#SU_WHEEL_ONLY
+   312	#CRACKLIB_DICTPATH
+   313	#PASS_CHANGE_TRIES
+   314	#PASS_ALWAYS_WARN
+   315	#ENVIRON_FILE
+   316	#NOLOGINS_FILE
+   317	#ISSUE_FILE
+   318	#PASS_MIN_LEN
+   319	#PASS_MAX_LEN
+   320	#ULIMIT
+   321	#ENV_HZ
+   322	#CHFN_AUTH
+   323	#CHSH_AUTH
+   324	#FAIL_DELAY
+   325	
+   326	################# OBSOLETED #######################
+   327	#						  #
+   328	# These options are no more handled by shadow.    #
+   329	#                                                 #
+   330	# Shadow utilities will display a warning if they #
+   331	# still appear.                                   #
+   332	#                                                 #
+   333	###################################################
+   334	
+   335	# CLOSE_SESSIONS
+   336	# LOGIN_STRING
+   337	# NO_PASSWORD_CONSOLE
+   338	# QMAIL_DIR
+   339	
+   340	
+   341	
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## useradd命令
+
+**添加新的系统用户**
+
+
+
+命令：
+
+```sh
+useradd [选项] 用户名
+```
+
+
+
+|    选项     |                             含义                             |
+| :---------: | :----------------------------------------------------------: |
+|   -u UID    |    手工指定用户的 UID，注意 UID 的范围（不要小于 500）。     |
+|  -d 主目录  | 手工指定用户的主目录。主目录必须写绝对路径，而且如果需要手工指定主目录，则一定要注意权限； |
+| -c 用户说明 | 手工指定/etc/passwd文件中各用户信息中第 5 个字段的描述性内容，可随意配置； |
+|   -g 组名   | 手工指定用户的初始组。一般以和用户名相同的组作为用户的初始组，在创建用户时会默认建立初始组。一旦手动指定，则系统将不会在创建此默认的初始组目录。 |
+|   -G 组名   |  指定用户的附加组。我们把用户加入其他组，一般都使用附加组；  |
+|  -s shell   |         手工指定用户的登录 Shell，默认是 /bin/bash；         |
+|   -e 曰期   | 指定用户的失效曰期，格式为 "YYYY-MM-DD"。也就是 /etc/shadow 文件的第八个字段； |
+|     -o      | 允许创建的用户的 UID 相同。例如，执行 "useradd -u 0 -o usertest" 命令建立用户 usertest，它的 UID 和 root 用户的 UID 相同，都是 0； |
+|     -m      | 建立用户时强制建立用户的家目录。在建立系统用户时，该选项是默认的； |
+|     -r      | 创建系统用户，也就是 UID 在 1~499 之间，供系统程序使用的用户。由于系统用户主要用于运行系统所需服务的权限配置，因此系统用户的创建默认不会创建主目录。 |
+
+
+
+
+
+创建一个名字为test的普通用户：
+
+```sh
+useradd test
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo useradd test
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ cat /etc/passwd 
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:114::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:115::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:109:116:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+usbmux:x:110:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+rtkit:x:111:117:RealtimeKit,,,:/proc:/usr/sbin/nologin
+dnsmasq:x:112:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+cups-pk-helper:x:113:120:user for cups-pk-helper service,,,:/home/cups-pk-helper:/usr/sbin/nologin
+speech-dispatcher:x:114:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+avahi:x:115:121:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/usr/sbin/nologin
+kernoops:x:116:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+whoopsie:x:120:125::/nonexistent:/bin/false
+colord:x:121:126:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+geoclue:x:122:127::/var/lib/geoclue:/usr/sbin/nologin
+pulse:x:123:128:PulseAudio daemon,,,:/var/run/pulse:/usr/sbin/nologin
+gnome-initial-setup:x:124:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:125:130:Gnome Display Manager:/var/lib/gdm3:/bin/false
+sssd:x:126:131:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+mao:x:1000:1000:linux,,,:/home/mao:/bin/bash
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+test:x:1001:1001::/home/test:/bin/sh
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## /etc/default/useradd 文件
+
+
+
+查看 /etc/default/useradd 文件中包含哪些内容：
+
+```sh
+cat -n /etc/default/useradd
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat -n /etc/default/useradd
+     1	# Default values for useradd(8)
+     2	#
+     3	# The SHELL variable specifies the default login shell on your
+     4	# system.
+     5	# Similar to DSHELL in adduser. However, we use "sh" here because
+     6	# useradd is a low level utility and should be as general
+     7	# as possible
+     8	SHELL=/bin/sh
+     9	#
+    10	# The default group for users
+    11	# 100=users on Debian systems
+    12	# Same as USERS_GID in adduser
+    13	# This argument is used when the -n flag is specified.
+    14	# The default behavior (when -n and -g are not specified) is to create a
+    15	# primary user group with the same name as the user being added to the
+    16	# system.
+    17	# GROUP=100
+    18	#
+    19	# The default home directory. Same as DHOME for adduser
+    20	# HOME=/home
+    21	#
+    22	# The number of days after a password expires until the account 
+    23	# is permanently disabled
+    24	# INACTIVE=-1
+    25	#
+    26	# The default expire date
+    27	# EXPIRE=
+    28	#
+    29	# The SKEL variable specifies the directory containing "skeletal" user
+    30	# files; in other words, files such as a sample .profile that will be
+    31	# copied to the new user's home directory when it is created.
+    32	# SKEL=/etc/skel
+    33	#
+    34	# Defines whether the mail spool should be created while
+    35	# creating the account
+    36	# CREATE_MAIL_SPOOL=yes
+    37	
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+|         参数          |                             含义                             |
+| :-------------------: | :----------------------------------------------------------: |
+|       GR0UP=100       | 这个选项用于建立用户的默认组，也就是说，在添加每个用户时，用户的初始组就是 GID 为 100 的这个用户组。但 CentOS 并不是这样的，而是在添加用户时会自动建立和用户名相同的组作为此用户的初始组。也就是说这个选项并不会生效。  Linux 中默认用户组有两种机制：一种是私有用户组机制，系统会创建一个和用户名相同的用户组作为用户的初始组；另一种是公共用户组机制，系统用 GID 是 100 的用户组作为所有新建用户的初始组。目前我们采用的是私有用户组机制。 |
+|      HOME=/home       | 指的是用户主目录的默认位置，所有新建用户的主目录默认都在 /home/下 |
+|      INACTIVE=-1      | 指的是密码过期后的宽限天数，也就是 /etc/shadow 文件的第七个字段。这里默认值是 -1，代表所有新建立的用户密码永远不会失效。 |
+|        EXPIRE=        | 表示密码失效时间，也就是 /etc/shadow 文件的第八个字段。默认值是空，代表所有新建用户没有失效时间，永久有效。 |
+|    SHELL=/bin/bash    |       表示所有新建立的用户默认 Shell 都是 /bin/bash。        |
+|    SKEL=/etc/skel     | 在创建一个新用户后，你会发现，该用户主目录并不是空目录，而是有 .bash_profile、.bashrc 等文件，这些文件都是从 /etc/skel 目录中自动复制过来的。因此，更改 /etc/skel 目录下的内容就可以改变新建用户默认主目录中的配置文件信息。 |
+| CREATE_MAIL_SPOOL=yes | 指的是给新建用户建立邮箱，默认是创建。也就是说，对于所有的新建用户，系统都会新建一个邮箱，放在 /var/spool/mail/ 目录下，和用户名相同。 |
+
+
+
+
+
+## passwd命令
+
+创建新用户时，并没有设定用户密码，因此还无法用来登陆系统，所以需要使用此命令修改密码
+
+
+
+命令：
+
+```sh
+passwd [选项] 用户名
+```
+
+
+
+选项：
+
+- -S：查询用户密码的状态，也就是 /etc/shadow 文件中此用户密码的内容。仅 root 用户可用；
+- -l：暂时锁定用户，该选项会在 /etc/shadow 文件中指定用户的加密密码串前添加 "!"，使密码失效。仅 root 用户可用；
+- -u：解锁用户，和 -l 选项相对应，也是只能 root 用户使用；
+- --stdin：可以将通过管道符输出的数据作为用户的密码。主要在批量添加用户时使用；
+- -n 天数：设置该用户修改密码后，多长时间不能再次修改密码，也就是修改 /etc/shadow 文件中各行密码的第 4 个字段；
+- -x 天数：设置该用户的密码有效期，对应 /etc/shadow 文件中各行密码的第 5 个字段；
+- -w 天数：设置用户密码过期前的警告天数，对于 /etc/shadow 文件中各行密码的第 6 个字段；
+- -i 日期：设置用户密码失效日期，对应 /etc/shadow 文件中各行密码的第 7 个字段。
+
+
+
+
+
+设置用户test的密码：
+
+```sh
+sudo passwd test
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo passwd test
+新的 密码： 
+重新输入新的 密码： 
+passwd：已成功更新密码
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+验证密码是否创建成功：
+
+```sh
+mao@ubuntu:~/桌面$ sudo cat /etc/shadow
+root:!:18915:0:99999:7:::
+daemon:*:18858:0:99999:7:::
+bin:*:18858:0:99999:7:::
+sys:*:18858:0:99999:7:::
+sync:*:18858:0:99999:7:::
+games:*:18858:0:99999:7:::
+man:*:18858:0:99999:7:::
+lp:*:18858:0:99999:7:::
+mail:*:18858:0:99999:7:::
+news:*:18858:0:99999:7:::
+uucp:*:18858:0:99999:7:::
+proxy:*:18858:0:99999:7:::
+www-data:*:18858:0:99999:7:::
+backup:*:18858:0:99999:7:::
+list:*:18858:0:99999:7:::
+irc:*:18858:0:99999:7:::
+gnats:*:18858:0:99999:7:::
+nobody:*:18858:0:99999:7:::
+systemd-network:*:18858:0:99999:7:::
+systemd-resolve:*:18858:0:99999:7:::
+systemd-timesync:*:18858:0:99999:7:::
+messagebus:*:18858:0:99999:7:::
+syslog:*:18858:0:99999:7:::
+_apt:*:18858:0:99999:7:::
+tss:*:18858:0:99999:7:::
+uuidd:*:18858:0:99999:7:::
+tcpdump:*:18858:0:99999:7:::
+avahi-autoipd:*:18858:0:99999:7:::
+usbmux:*:18858:0:99999:7:::
+rtkit:*:18858:0:99999:7:::
+dnsmasq:*:18858:0:99999:7:::
+cups-pk-helper:*:18858:0:99999:7:::
+speech-dispatcher:!:18858:0:99999:7:::
+avahi:*:18858:0:99999:7:::
+kernoops:*:18858:0:99999:7:::
+saned:*:18858:0:99999:7:::
+nm-openvpn:*:18858:0:99999:7:::
+hplip:*:18858:0:99999:7:::
+whoopsie:*:18858:0:99999:7:::
+colord:*:18858:0:99999:7:::
+geoclue:*:18858:0:99999:7:::
+pulse:*:18858:0:99999:7:::
+gnome-initial-setup:*:18858:0:99999:7:::
+gdm:*:18858:0:99999:7:::
+sssd:*:18858:0:99999:7:::
+mao:$1$dvdYmO70$JMt6qRizm5GFCwQh6dk5/1:18915:0:99999:7:::
+systemd-coredump:!!:18915::::::
+test:$6$..X31U4l0toFPADb$M4JoY10jlmpbfRv70/vMBLSHW.125ncGJIqoC.MYRUQO5cqXGO3X84DYEp7cXEKdyDBGid8BIpwGUWAH7SQH11:19177:0:99999:7:::
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## usermod命令
 
