@@ -5909,3 +5909,543 @@ Description  : The zip program is a compression and file packaging utility.  Zip
 
 ### yum安装命令
 
+
+
+命令：
+
+```sh
+yum -y install 包名
+```
+
+
+
+- install：表示安装软件包。
+- -y：自动回答 yes。如果不加 -y，那么每个安装的软件都需要手工回答 yes；
+
+
+
+安装jdk17：
+
+```sh
+yum -y install java-17-openjdk.x86_64
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# yum -y install java-17-openjdk.x86_64
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 0:16:09 ago on Mon Jul  4 06:25:24 2022.
+Dependencies resolved.
+================================================================================================================================================================ Package                                     Architecture             Version                                                 Repository                   Size
+================================================================================================================================================================Installing:
+ java-17-openjdk                             x86_64                   1:17.0.1.0.12-2.el8_5                                   appstream                   244 k
+Upgrading:
+ crypto-policies                             noarch                   20210617-1.gitc776d3e.el8                               baseos                       63 k
+ lua-libs                                    x86_64                   5.3.4-12.el8                                            baseos                      118 k
+Installing dependencies:
+ adwaita-cursor-theme                        noarch                   3.28.0-2.el8                                            appstream                   647 k
+ adwaita-icon-theme                          noarch                   3.28.0-2.el8                                            appstream                    11 M
+ alsa-lib                                    x86_64                   1.2.5-4.el8                                             appstream                   489 k
+ at-spi2-atk                                 x86_64                   2.26.2-1.el8                                            appstream                    89 k
+ at-spi2-core                                x86_64                   2.28.0-1.el8                                            appstream                   169 k
+ atk                                         x86_64                   2.28.1-1.el8                                            appstream                   272 k
+ avahi-libs                                  x86_64                   0.7-20.el8                                              baseos                       62 k
+ cairo                                       x86_64                   1.15.12-3.el8                                           appstream                   721 k
+ cairo-gobject                               x86_64                   1.15.12-3.el8                                           appstream                    33 k
+ colord-libs                                 x86_64                   1.4.2-1.el8                                             appstream                   236 k
+ copy-jdk-configs                            noarch                   4.0-2.el8                                               appstream                    31 k
+ crypto-policies-scripts                     noarch                   20210617-1.gitc776d3e.el8                               baseos                       83 k
+ cups-libs                                   x86_64                   1:2.2.6-40.el8                                          baseos                      433 k
+ dejavu-fonts-common                         noarch                   2.35-7.el8                                              baseos                       74 k
+ dejavu-sans-mono-fonts                      noarch                   2.35-7.el8                                              baseos                      447 k
+ fontconfig                                  x86_64                   2.13.1-4.el8                                            baseos                      274 k
+ fontpackages-filesystem                     noarch                   1.44-22.el8                                             baseos                       16 k
+ freetype                                    x86_64                   2.9.1-4.el8_3.1                                         baseos                      394 k
+ fribidi                                     x86_64                   1.0.4-8.el8                                             appstream                    89 k
+ gdk-pixbuf2                                 x86_64                   2.36.12-5.el8                                           baseos                      467 k
+ gdk-pixbuf2-modules                         x86_64                   2.36.12-5.el8                                           appstream                   109 k
+ giflib                                      x86_64                   5.1.4-3.el8                                             appstream                    51 k
+ glib-networking                             x86_64                   2.56.1-1.1.el8                                          baseos                      155 k
+ graphite2                                   x86_64                   1.3.10-10.el8                                           appstream                   122 k
+ gsettings-desktop-schemas                   x86_64                   3.32.0-6.el8                                            baseos                      633 k
+ gtk-update-icon-cache                       x86_64                   3.22.30-8.el8                                           appstream                    32 k
+ harfbuzz                                    x86_64                   1.7.5-3.el8                                             appstream                   295 k
+ hicolor-icon-theme                          noarch                   0.17-2.el8                                              appstream                    49 k
+ jasper-libs                                 x86_64                   2.0.14-5.el8                                            appstream                   167 k
+ java-17-openjdk-headless                    x86_64                   1:17.0.1.0.12-2.el8_5                                   appstream                    41 M
+ javapackages-filesystem                     noarch                   5.3.0-1.module_el8.0.0+11+5b8c10bd                      appstream                    30 k
+ jbigkit-libs                                x86_64                   2.1-14.el8                                              appstream                    55 k
+ json-glib                                   x86_64                   1.4.4-1.el8                                             baseos                      144 k
+ lcms2                                       x86_64                   2.9-2.el8                                               appstream                   165 k
+ libX11                                      x86_64                   1.6.8-5.el8                                             appstream                   611 k
+ libX11-common                               noarch                   1.6.8-5.el8                                             appstream                   158 k
+ libXau                                      x86_64                   1.0.9-3.el8                                             appstream                    37 k
+ libXcomposite                               x86_64                   0.4.4-14.el8                                            appstream                    28 k
+ libXcursor                                  x86_64                   1.1.15-3.el8                                            appstream                    36 k
+ libXdamage                                  x86_64                   1.1.4-14.el8                                            appstream                    27 k
+ libXext                                     x86_64                   1.3.4-1.el8                                             appstream                    45 k
+ libXfixes                                   x86_64                   5.0.3-7.el8                                             appstream                    25 k
+ libXft                                      x86_64                   2.3.3-1.el8                                             appstream                    67 k
+ libXi                                       x86_64                   1.7.10-1.el8                                            appstream                    49 k
+ libXinerama                                 x86_64                   1.1.4-1.el8                                             appstream                    16 k
+ libXrandr                                   x86_64                   1.5.2-1.el8                                             appstream                    34 k
+ libXrender                                  x86_64                   0.9.10-7.el8                                            appstream                    33 k
+ libXtst                                     x86_64                   1.2.3-7.el8                                             appstream                    22 k
+ libdatrie                                   x86_64                   0.2.9-7.el8                                             appstream                    33 k
+ libepoxy                                    x86_64                   1.5.8-1.el8                                             appstream                   225 k
+ libfontenc                                  x86_64                   1.1.3-8.el8                                             appstream                    37 k
+ libgusb                                     x86_64                   0.3.0-1.el8                                             baseos                       49 k
+ libjpeg-turbo                               x86_64                   1.5.3-12.el8                                            appstream                   157 k
+ libmodman                                   x86_64                   2.0.1-17.el8                                            baseos                       36 k
+ libpkgconf                                  x86_64                   1.4.2-1.el8                                             baseos                       35 k
+ libpng                                      x86_64                   2:1.6.34-5.el8                                          baseos                      126 k
+ libproxy                                    x86_64                   0.4.15-5.2.el8                                          baseos                       75 k
+ libsoup                                     x86_64                   2.62.3-2.el8                                            baseos                      424 k
+ libthai                                     x86_64                   0.1.27-2.el8                                            appstream                   203 k
+ libtiff                                     x86_64                   4.0.9-20.el8                                            appstream                   188 k
+ libwayland-client                           x86_64                   1.19.0-1.el8                                            appstream                    39 k
+ libwayland-cursor                           x86_64                   1.19.0-1.el8                                            appstream                    26 k
+ libwayland-egl                              x86_64                   1.19.0-1.el8                                            appstream                    19 k
+ libxcb                                      x86_64                   1.13.1-1.el8                                            appstream                   229 k
+ libxkbcommon                                x86_64                   0.9.1-1.el8                                             appstream                   116 k
+ lksctp-tools                                x86_64                   1.0.18-3.el8                                            baseos                      100 k
+ lua                                         x86_64                   5.3.4-12.el8                                            appstream                   192 k
+ nspr                                        x86_64                   4.32.0-1.el8_4                                          appstream                   142 k
+ nss                                         x86_64                   3.67.0-7.el8_5                                          appstream                   741 k
+ nss-softokn                                 x86_64                   3.67.0-7.el8_5                                          appstream                   487 k
+ nss-softokn-freebl                          x86_64                   3.67.0-7.el8_5                                          appstream                   395 k
+ nss-sysinit                                 x86_64                   3.67.0-7.el8_5                                          appstream                    73 k
+ nss-util                                    x86_64                   3.67.0-7.el8_5                                          appstream                   137 k
+ pango                                       x86_64                   1.42.4-8.el8                                            appstream                   297 k
+ pixman                                      x86_64                   0.38.4-1.el8                                            appstream                   257 k
+ pkgconf                                     x86_64                   1.4.2-1.el8                                             baseos                       38 k
+ pkgconf-m4                                  noarch                   1.4.2-1.el8                                             baseos                       17 k
+ pkgconf-pkg-config                          x86_64                   1.4.2-1.el8                                             baseos                       15 k
+ rest                                        x86_64                   0.8.1-2.el8                                             appstream                    70 k
+ shared-mime-info                            x86_64                   1.9-3.el8                                               baseos                      329 k
+ ttmkfdir                                    x86_64                   3.0.9-54.el8                                            appstream                    62 k
+ tzdata-java                                 noarch                   2021e-1.el8                                             appstream                   191 k
+ xkeyboard-config                            noarch                   2.28-1.el8                                              appstream                   782 k
+ xorg-x11-font-utils                         x86_64                   1:7.5-41.el8                                            appstream                   104 k
+ xorg-x11-fonts-Type1                        noarch                   7.5-19.el8                                              appstream                   522 k
+Installing weak dependencies:
+ abattis-cantarell-fonts                     noarch                   0.0.25-6.el8                                            appstream                   156 k
+ dconf                                       x86_64                   0.28.0-4.el8                                            appstream                   108 k
+ gtk3                                        x86_64                   3.22.30-8.el8                                           appstream                   4.5 M
+Enabling module streams:
+ javapackages-runtime                                                 201801
+
+Transaction Summary
+================================================================================================================================================================Install  89 Packages
+Upgrade   2 Packages
+
+Total download size: 72 M
+Downloading Packages:
+(1/91): abattis-cantarell-fonts-0.0.25-6.el8.noarch.rpm                                                                          38 kB/s | 156 kB     00:04
+(2/91): adwaita-cursor-theme-3.28.0-2.el8.noarch.rpm                                                                            146 kB/s | 647 kB     00:04
+(3/91): at-spi2-atk-2.26.2-1.el8.x86_64.rpm                                                                                     186 kB/s |  89 kB     00:00
+(4/91): at-spi2-core-2.28.0-1.el8.x86_64.rpm                                                                                    221 kB/s | 169 kB     00:00
+(5/91): adwaita-icon-theme-3.28.0-2.el8.noarch.rpm                                                                              1.8 MB/s |  11 MB     00:06
+(6/91): alsa-lib-1.2.5-4.el8.x86_64.rpm                                                                                         209 kB/s | 489 kB     00:02
+(7/91): atk-2.28.1-1.el8.x86_64.rpm                                                                                             310 kB/s | 272 kB     00:00
+(8/91): colord-libs-1.4.2-1.el8.x86_64.rpm                                                                                      351 kB/s | 236 kB     00:00
+(9/91): cairo-gobject-1.15.12-3.el8.x86_64.rpm                                                                                   36 kB/s |  33 kB     00:00
+(10/91): copy-jdk-configs-4.0-2.el8.noarch.rpm                                                                                   73 kB/s |  31 kB     00:00
+(11/91): dconf-0.28.0-4.el8.x86_64.rpm                                                                                          157 kB/s | 108 kB     00:00
+(12/91): gdk-pixbuf2-modules-2.36.12-5.el8.x86_64.rpm                                                                           164 kB/s | 109 kB     00:00
+(13/91): cairo-1.15.12-3.el8.x86_64.rpm                                                                                         305 kB/s | 721 kB     00:02
+(14/91): fribidi-1.0.4-8.el8.x86_64.rpm                                                                                          76 kB/s |  89 kB     00:01
+(15/91): gtk-update-icon-cache-3.22.30-8.el8.x86_64.rpm                                                                          82 kB/s |  32 kB     00:00
+(16/91): graphite2-1.3.10-10.el8.x86_64.rpm                                                                                     192 kB/s | 122 kB     00:00
+(17/91): giflib-5.1.4-3.el8.x86_64.rpm                                                                                           69 kB/s |  51 kB     00:00
+(18/91): hicolor-icon-theme-0.17-2.el8.noarch.rpm                                                                               120 kB/s |  49 kB     00:00
+(19/91): jasper-libs-2.0.14-5.el8.x86_64.rpm                                                                                    251 kB/s | 167 kB     00:00
+(20/91): harfbuzz-1.7.5-3.el8.x86_64.rpm                                                                                        177 kB/s | 295 kB     00:01
+(21/91): java-17-openjdk-17.0.1.0.12-2.el8_5.x86_64.rpm                                                                         348 kB/s | 244 kB     00:00
+(22/91): javapackages-filesystem-5.3.0-1.module_el8.0.0+11+5b8c10bd.noarch.rpm                                                   75 kB/s |  30 kB     00:00
+(23/91): jbigkit-libs-2.1-14.el8.x86_64.rpm                                                                                     135 kB/s |  55 kB     00:00
+(24/91): lcms2-2.9-2.el8.x86_64.rpm                                                                                             245 kB/s | 165 kB     00:00
+(25/91): gtk3-3.22.30-8.el8.x86_64.rpm                                                                                          1.1 MB/s | 4.5 MB     00:04
+(26/91): libX11-common-1.6.8-5.el8.noarch.rpm                                                                                   245 kB/s | 158 kB     00:00
+(27/91): libXau-1.0.9-3.el8.x86_64.rpm                                                                                           95 kB/s |  37 kB     00:00
+(28/91): libXcomposite-0.4.4-14.el8.x86_64.rpm                                                                                   57 kB/s |  28 kB     00:00
+(29/91): libXcursor-1.1.15-3.el8.x86_64.rpm                                                                                      56 kB/s |  36 kB     00:00
+(30/91): libXdamage-1.1.4-14.el8.x86_64.rpm                                                                                      70 kB/s |  27 kB     00:00
+(31/91): libXext-1.3.4-1.el8.x86_64.rpm                                                                                         116 kB/s |  45 kB     00:00
+(32/91): libXfixes-5.0.3-7.el8.x86_64.rpm                                                                                        59 kB/s |  25 kB     00:00
+(33/91): libXft-2.3.3-1.el8.x86_64.rpm                                                                                          163 kB/s |  67 kB     00:00
+(34/91): libXi-1.7.10-1.el8.x86_64.rpm                                                                                          123 kB/s |  49 kB     00:00
+(35/91): libXinerama-1.1.4-1.el8.x86_64.rpm                                                                                      41 kB/s |  16 kB     00:00
+(36/91): libX11-1.6.8-5.el8.x86_64.rpm                                                                                          108 kB/s | 611 kB     00:05
+(37/91): libXrandr-1.5.2-1.el8.x86_64.rpm                                                                                        52 kB/s |  34 kB     00:00
+(38/91): libXrender-0.9.10-7.el8.x86_64.rpm                                                                                      27 kB/s |  33 kB     00:01
+(39/91): libXtst-1.2.3-7.el8.x86_64.rpm                                                                                          16 kB/s |  22 kB     00:01
+(40/91): libdatrie-0.2.9-7.el8.x86_64.rpm                                                                                        31 kB/s |  33 kB     00:01
+(41/91): libepoxy-1.5.8-1.el8.x86_64.rpm                                                                                        127 kB/s | 225 kB     00:01
+(42/91): libfontenc-1.1.3-8.el8.x86_64.rpm                                                                                       37 kB/s |  37 kB     00:01
+(43/91): libthai-0.1.27-2.el8.x86_64.rpm                                                                                        155 kB/s | 203 kB     00:01
+(44/91): libjpeg-turbo-1.5.3-12.el8.x86_64.rpm                                                                                   75 kB/s | 157 kB     00:02
+(45/91): libtiff-4.0.9-20.el8.x86_64.rpm                                                                                        154 kB/s | 188 kB     00:01
+(46/91): libwayland-client-1.19.0-1.el8.x86_64.rpm                                                                               56 kB/s |  39 kB     00:00
+(47/91): libwayland-egl-1.19.0-1.el8.x86_64.rpm                                                                                  33 kB/s |  19 kB     00:00
+(48/91): libwayland-cursor-1.19.0-1.el8.x86_64.rpm                                                                               30 kB/s |  26 kB     00:00
+(49/91): libxkbcommon-0.9.1-1.el8.x86_64.rpm                                                                                    133 kB/s | 116 kB     00:00
+(50/91): lua-5.3.4-12.el8.x86_64.rpm                                                                                            160 kB/s | 192 kB     00:01
+(51/91): libxcb-1.13.1-1.el8.x86_64.rpm                                                                                         104 kB/s | 229 kB     00:02
+(52/91): nspr-4.32.0-1.el8_4.x86_64.rpm                                                                                          87 kB/s | 142 kB     00:01
+(53/91): nss-3.67.0-7.el8_5.x86_64.rpm                                                                                          218 kB/s | 741 kB     00:03
+(54/91): nss-softokn-freebl-3.67.0-7.el8_5.x86_64.rpm                                                                           265 kB/s | 395 kB     00:01
+(55/91): nss-softokn-3.67.0-7.el8_5.x86_64.rpm                                                                                  140 kB/s | 487 kB     00:03
+(56/91): nss-sysinit-3.67.0-7.el8_5.x86_64.rpm                                                                                  100 kB/s |  73 kB     00:00
+(57/91): nss-util-3.67.0-7.el8_5.x86_64.rpm                                                                                     171 kB/s | 137 kB     00:00
+(58/91): pixman-0.38.4-1.el8.x86_64.rpm                                                                                         198 kB/s | 257 kB     00:01
+(59/91): pango-1.42.4-8.el8.x86_64.rpm                                                                                          137 kB/s | 297 kB     00:02
+(60/91): rest-0.8.1-2.el8.x86_64.rpm                                                                                             88 kB/s |  70 kB     00:00
+(61/91): ttmkfdir-3.0.9-54.el8.x86_64.rpm                                                                                        73 kB/s |  62 kB     00:00
+(62/91): tzdata-java-2021e-1.el8.noarch.rpm                                                                                     200 kB/s | 191 kB     00:00
+(63/91): xorg-x11-font-utils-7.5-41.el8.x86_64.rpm                                                                              130 kB/s | 104 kB     00:00
+(64/91): xkeyboard-config-2.28-1.el8.noarch.rpm                                                                                 243 kB/s | 782 kB     00:03
+(65/91): xorg-x11-fonts-Type1-7.5-19.el8.noarch.rpm                                                                             233 kB/s | 522 kB     00:02
+(66/91): avahi-libs-0.7-20.el8.x86_64.rpm                                                                                       111 kB/s |  62 kB     00:00
+(67/91): crypto-policies-scripts-20210617-1.gitc776d3e.el8.noarch.rpm                                                            99 kB/s |  83 kB     00:00
+(68/91): dejavu-fonts-common-2.35-7.el8.noarch.rpm                                                                               88 kB/s |  74 kB     00:00
+(69/91): cups-libs-2.2.6-40.el8.x86_64.rpm                                                                                      239 kB/s | 433 kB     00:01
+(70/91): fontconfig-2.13.1-4.el8.x86_64.rpm                                                                                     287 kB/s | 274 kB     00:00
+(71/91): dejavu-sans-mono-fonts-2.35-7.el8.noarch.rpm                                                                           277 kB/s | 447 kB     00:01
+(72/91): fontpackages-filesystem-1.44-22.el8.noarch.rpm                                                                          40 kB/s |  16 kB     00:00
+(73/91): freetype-2.9.1-4.el8_3.1.x86_64.rpm                                                                                    252 kB/s | 394 kB     00:01
+(74/91): gdk-pixbuf2-2.36.12-5.el8.x86_64.rpm                                                                                   369 kB/s | 467 kB     00:01
+(75/91): glib-networking-2.56.1-1.1.el8.x86_64.rpm                                                                              230 kB/s | 155 kB     00:00
+(76/91): json-glib-1.4.4-1.el8.x86_64.rpm                                                                                       227 kB/s | 144 kB     00:00
+(77/91): gsettings-desktop-schemas-3.32.0-6.el8.x86_64.rpm                                                                      356 kB/s | 633 kB     00:01
+(78/91): libgusb-0.3.0-1.el8.x86_64.rpm                                                                                          57 kB/s |  49 kB     00:00
+(79/91): libmodman-2.0.1-17.el8.x86_64.rpm                                                                                       50 kB/s |  36 kB     00:00
+(80/91): libpkgconf-1.4.2-1.el8.x86_64.rpm                                                                                       41 kB/s |  35 kB     00:00
+(81/91): libpng-1.6.34-5.el8.x86_64.rpm                                                                                         162 kB/s | 126 kB     00:00
+(82/91): libproxy-0.4.15-5.2.el8.x86_64.rpm                                                                                     101 kB/s |  75 kB     00:00
+(83/91): lksctp-tools-1.0.18-3.el8.x86_64.rpm                                                                                   129 kB/s | 100 kB     00:00
+(84/91): libsoup-2.62.3-2.el8.x86_64.rpm                                                                                        287 kB/s | 424 kB     00:01
+(85/91): pkgconf-1.4.2-1.el8.x86_64.rpm                                                                                          54 kB/s |  38 kB     00:00
+(86/91): pkgconf-m4-1.4.2-1.el8.noarch.rpm                                                                                       26 kB/s |  17 kB     00:00
+(87/91): pkgconf-pkg-config-1.4.2-1.el8.x86_64.rpm                                                                               37 kB/s |  15 kB     00:00
+(88/91): crypto-policies-20210617-1.gitc776d3e.el8.noarch.rpm                                                                    84 kB/s |  63 kB     00:00
+(89/91): shared-mime-info-1.9-3.el8.x86_64.rpm                                                                                  232 kB/s | 329 kB     00:01
+(90/91): lua-libs-5.3.4-12.el8.x86_64.rpm                                                                                       127 kB/s | 118 kB     00:00
+(91/91): java-17-openjdk-headless-17.0.1.0.12-2.el8_5.x86_64.rpm                                                                163 kB/s |  41 MB     04:17
+----------------------------------------------------------------------------------------------------------------------------------------------------------------Total                                                                                                                           276 kB/s |  72 MB     04:28
+warning: /var/cache/dnf/appstream-d7987f026ef99c82/packages/abattis-cantarell-fonts-0.0.25-6.el8.noarch.rpm: Header V3 RSA/SHA256 Signature, key ID 8483c65d: NOKEY
+CentOS Linux 8 - AppStream                                                                                                      1.6 MB/s | 1.6 kB     00:00
+Importing GPG key 0x8483C65D:
+ Userid     : "CentOS (CentOS Official Signing Key) <security@centos.org>"
+ Fingerprint: 99DB 70FA E1D7 CE22 7FB6 4882 05B5 55B3 8483 C65D
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Running scriptlet: copy-jdk-configs-4.0-2.el8.noarch                                                                                                      1/1
+  Running scriptlet: java-17-openjdk-headless-1:17.0.1.0.12-2.el8_5.x86_64                                                                                  1/1
+  Preparing        :                                                                                                                                        1/1
+  Installing       : libpng-2:1.6.34-5.el8.x86_64                                                                                                          1/93
+  Installing       : freetype-2.9.1-4.el8_3.1.x86_64                                                                                                       2/93
+  Installing       : nspr-4.32.0-1.el8_4.x86_64                                                                                                            3/93
+  Running scriptlet: nspr-4.32.0-1.el8_4.x86_64                                                                                                            3/93
+  Installing       : nss-util-3.67.0-7.el8_5.x86_64                                                                                                        4/93
+  Installing       : libjpeg-turbo-1.5.3-12.el8.x86_64                                                                                                     5/93
+  Installing       : fontpackages-filesystem-1.44-22.el8.noarch                                                                                            6/93
+  Installing       : abattis-cantarell-fonts-0.0.25-6.el8.noarch                                                                                           7/93
+  Installing       : fontconfig-2.13.1-4.el8.x86_64                                                                                                        8/93
+  Running scriptlet: fontconfig-2.13.1-4.el8.x86_64                                                                                                        8/93
+  Upgrading        : crypto-policies-20210617-1.gitc776d3e.el8.noarch                                                                                      9/93
+  Running scriptlet: crypto-policies-20210617-1.gitc776d3e.el8.noarch                                                                                      9/93
+  Installing       : crypto-policies-scripts-20210617-1.gitc776d3e.el8.noarch                                                                             10/93
+  Installing       : pixman-0.38.4-1.el8.x86_64                                                                                                           11/93
+  Installing       : libwayland-client-1.19.0-1.el8.x86_64                                                                                                12/93
+  Installing       : lcms2-2.9-2.el8.x86_64                                                                                                               13/93
+  Running scriptlet: lcms2-2.9-2.el8.x86_64                                                                                                               13/93
+  Installing       : atk-2.28.1-1.el8.x86_64                                                                                                              14/93
+  Installing       : libwayland-cursor-1.19.0-1.el8.x86_64                                                                                                15/93
+  Installing       : dejavu-fonts-common-2.35-7.el8.noarch                                                                                                16/93
+  Installing       : dejavu-sans-mono-fonts-2.35-7.el8.noarch                                                                                             17/93
+  Installing       : gsettings-desktop-schemas-3.32.0-6.el8.x86_64                                                                                        18/93
+  Installing       : jasper-libs-2.0.14-5.el8.x86_64                                                                                                      19/93
+  Installing       : nss-softokn-freebl-3.67.0-7.el8_5.x86_64                                                                                             20/93
+  Installing       : nss-softokn-3.67.0-7.el8_5.x86_64                                                                                                    21/93
+  Installing       : nss-3.67.0-7.el8_5.x86_64                                                                                                            22/93
+  Installing       : nss-sysinit-3.67.0-7.el8_5.x86_64                                                                                                    23/93
+  Installing       : ttmkfdir-3.0.9-54.el8.x86_64                                                                                                         24/93
+  Upgrading        : lua-libs-5.3.4-12.el8.x86_64                                                                                                         25/93
+  Installing       : lua-5.3.4-12.el8.x86_64                                                                                                              26/93
+  Installing       : copy-jdk-configs-4.0-2.el8.noarch                                                                                                    27/93
+  Installing       : shared-mime-info-1.9-3.el8.x86_64                                                                                                    28/93
+  Running scriptlet: shared-mime-info-1.9-3.el8.x86_64                                                                                                    28/93
+  Installing       : gdk-pixbuf2-2.36.12-5.el8.x86_64                                                                                                     29/93
+  Running scriptlet: gdk-pixbuf2-2.36.12-5.el8.x86_64                                                                                                     29/93
+  Installing       : gtk-update-icon-cache-3.22.30-8.el8.x86_64                                                                                           30/93
+  Installing       : pkgconf-m4-1.4.2-1.el8.noarch                                                                                                        31/93
+  Installing       : lksctp-tools-1.0.18-3.el8.x86_64                                                                                                     32/93
+  Running scriptlet: lksctp-tools-1.0.18-3.el8.x86_64                                                                                                     32/93
+  Installing       : libpkgconf-1.4.2-1.el8.x86_64                                                                                                        33/93
+  Installing       : pkgconf-1.4.2-1.el8.x86_64                                                                                                           34/93
+  Installing       : pkgconf-pkg-config-1.4.2-1.el8.x86_64                                                                                                35/93
+  Installing       : libmodman-2.0.1-17.el8.x86_64                                                                                                        36/93
+  Running scriptlet: libmodman-2.0.1-17.el8.x86_64                                                                                                        36/93
+  Installing       : libproxy-0.4.15-5.2.el8.x86_64                                                                                                       37/93
+  Running scriptlet: libproxy-0.4.15-5.2.el8.x86_64                                                                                                       37/93
+  Installing       : glib-networking-2.56.1-1.1.el8.x86_64                                                                                                38/93
+  Installing       : libsoup-2.62.3-2.el8.x86_64                                                                                                          39/93
+  Installing       : rest-0.8.1-2.el8.x86_64                                                                                                              40/93
+  Running scriptlet: rest-0.8.1-2.el8.x86_64                                                                                                              40/93
+  Installing       : libgusb-0.3.0-1.el8.x86_64                                                                                                           41/93
+  Installing       : colord-libs-1.4.2-1.el8.x86_64                                                                                                       42/93
+  Installing       : json-glib-1.4.4-1.el8.x86_64                                                                                                         43/93
+  Installing       : avahi-libs-0.7-20.el8.x86_64                                                                                                         44/93
+  Installing       : cups-libs-1:2.2.6-40.el8.x86_64                                                                                                      45/93
+  Installing       : xkeyboard-config-2.28-1.el8.noarch                                                                                                   46/93
+  Installing       : libxkbcommon-0.9.1-1.el8.x86_64                                                                                                      47/93
+  Installing       : tzdata-java-2021e-1.el8.noarch                                                                                                       48/93
+  Installing       : libwayland-egl-1.19.0-1.el8.x86_64                                                                                                   49/93
+  Installing       : libfontenc-1.1.3-8.el8.x86_64                                                                                                        50/93
+  Installing       : xorg-x11-font-utils-1:7.5-41.el8.x86_64                                                                                              51/93
+  Installing       : xorg-x11-fonts-Type1-7.5-19.el8.noarch                                                                                               52/93
+  Running scriptlet: xorg-x11-fonts-Type1-7.5-19.el8.noarch                                                                                               52/93
+  Installing       : libepoxy-1.5.8-1.el8.x86_64                                                                                                          53/93
+  Installing       : libdatrie-0.2.9-7.el8.x86_64                                                                                                         54/93
+  Running scriptlet: libdatrie-0.2.9-7.el8.x86_64                                                                                                         54/93
+  Installing       : libthai-0.1.27-2.el8.x86_64                                                                                                          55/93
+  Running scriptlet: libthai-0.1.27-2.el8.x86_64                                                                                                          55/93
+  Installing       : libXau-1.0.9-3.el8.x86_64                                                                                                            56/93
+  Installing       : libxcb-1.13.1-1.el8.x86_64                                                                                                           57/93
+  Installing       : libX11-common-1.6.8-5.el8.noarch                                                                                                     58/93
+  Installing       : libX11-1.6.8-5.el8.x86_64                                                                                                            59/93
+  Installing       : libXext-1.3.4-1.el8.x86_64                                                                                                           60/93
+  Installing       : libXrender-0.9.10-7.el8.x86_64                                                                                                       61/93
+  Installing       : cairo-1.15.12-3.el8.x86_64                                                                                                           62/93
+  Installing       : libXi-1.7.10-1.el8.x86_64                                                                                                            63/93
+  Installing       : libXfixes-5.0.3-7.el8.x86_64                                                                                                         64/93
+  Installing       : libXtst-1.2.3-7.el8.x86_64                                                                                                           65/93
+  Installing       : libXcomposite-0.4.4-14.el8.x86_64                                                                                                    66/93
+  Installing       : at-spi2-core-2.28.0-1.el8.x86_64                                                                                                     67/93
+  Running scriptlet: at-spi2-core-2.28.0-1.el8.x86_64                                                                                                     67/93
+  Installing       : at-spi2-atk-2.26.2-1.el8.x86_64                                                                                                      68/93
+  Running scriptlet: at-spi2-atk-2.26.2-1.el8.x86_64                                                                                                      68/93
+  Installing       : libXcursor-1.1.15-3.el8.x86_64                                                                                                       69/93
+  Installing       : libXdamage-1.1.4-14.el8.x86_64                                                                                                       70/93
+  Installing       : cairo-gobject-1.15.12-3.el8.x86_64                                                                                                   71/93
+  Installing       : libXft-2.3.3-1.el8.x86_64                                                                                                            72/93
+  Installing       : libXrandr-1.5.2-1.el8.x86_64                                                                                                         73/93
+  Installing       : libXinerama-1.1.4-1.el8.x86_64                                                                                                       74/93
+  Installing       : jbigkit-libs-2.1-14.el8.x86_64                                                                                                       75/93
+  Running scriptlet: jbigkit-libs-2.1-14.el8.x86_64                                                                                                       75/93
+  Installing       : libtiff-4.0.9-20.el8.x86_64                                                                                                          76/93
+  Installing       : gdk-pixbuf2-modules-2.36.12-5.el8.x86_64                                                                                             77/93
+  Installing       : javapackages-filesystem-5.3.0-1.module_el8.0.0+11+5b8c10bd.noarch                                                                    78/93
+  Installing       : hicolor-icon-theme-0.17-2.el8.noarch                                                                                                 79/93
+  Installing       : graphite2-1.3.10-10.el8.x86_64                                                                                                       80/93
+  Installing       : harfbuzz-1.7.5-3.el8.x86_64                                                                                                          81/93
+  Running scriptlet: harfbuzz-1.7.5-3.el8.x86_64                                                                                                          81/93
+  Installing       : giflib-5.1.4-3.el8.x86_64                                                                                                            82/93
+  Installing       : fribidi-1.0.4-8.el8.x86_64                                                                                                           83/93
+  Installing       : pango-1.42.4-8.el8.x86_64                                                                                                            84/93
+  Running scriptlet: pango-1.42.4-8.el8.x86_64                                                                                                            84/93
+  Installing       : dconf-0.28.0-4.el8.x86_64                                                                                                            85/93
+  Installing       : alsa-lib-1.2.5-4.el8.x86_64                                                                                                          86/93
+  Running scriptlet: alsa-lib-1.2.5-4.el8.x86_64                                                                                                          86/93
+  Installing       : java-17-openjdk-headless-1:17.0.1.0.12-2.el8_5.x86_64                                                                                87/93
+  Running scriptlet: java-17-openjdk-headless-1:17.0.1.0.12-2.el8_5.x86_64                                                                                87/93
+  Installing       : adwaita-cursor-theme-3.28.0-2.el8.noarch                                                                                             88/93
+  Installing       : adwaita-icon-theme-3.28.0-2.el8.noarch                                                                                               89/93
+  Installing       : gtk3-3.22.30-8.el8.x86_64                                                                                                            90/93
+  Installing       : java-17-openjdk-1:17.0.1.0.12-2.el8_5.x86_64                                                                                         91/93
+  Running scriptlet: java-17-openjdk-1:17.0.1.0.12-2.el8_5.x86_64                                                                                         91/93
+  Cleanup          : crypto-policies-20210209-1.gitbfb6bed.el8_3.noarch                                                                                   92/93
+  Cleanup          : lua-libs-5.3.4-11.el8.x86_64                                                                                                         93/93
+  Running scriptlet: crypto-policies-scripts-20210617-1.gitc776d3e.el8.noarch                                                                             93/93
+  Running scriptlet: nss-3.67.0-7.el8_5.x86_64                                                                                                            93/93
+  Running scriptlet: copy-jdk-configs-4.0-2.el8.noarch                                                                                                    93/93
+  Running scriptlet: dconf-0.28.0-4.el8.x86_64                                                                                                            93/93
+  Running scriptlet: java-17-openjdk-1:17.0.1.0.12-2.el8_5.x86_64                                                                                         93/93
+  Running scriptlet: lua-libs-5.3.4-11.el8.x86_64                                                                                                         93/93
+  Running scriptlet: fontconfig-2.13.1-4.el8.x86_64                                                                                                       93/93
+  Running scriptlet: shared-mime-info-1.9-3.el8.x86_64                                                                                                    93/93
+  Running scriptlet: gdk-pixbuf2-2.36.12-5.el8.x86_64                                                                                                     93/93
+  Running scriptlet: hicolor-icon-theme-0.17-2.el8.noarch                                                                                                 93/93
+  Running scriptlet: adwaita-icon-theme-3.28.0-2.el8.noarch                                                                                               93/93
+  Verifying        : abattis-cantarell-fonts-0.0.25-6.el8.noarch                                                                                           1/93
+  Verifying        : adwaita-cursor-theme-3.28.0-2.el8.noarch                                                                                              2/93
+  Verifying        : adwaita-icon-theme-3.28.0-2.el8.noarch                                                                                                3/93
+  Verifying        : alsa-lib-1.2.5-4.el8.x86_64                                                                                                           4/93
+  Verifying        : at-spi2-atk-2.26.2-1.el8.x86_64                                                                                                       5/93
+  Verifying        : at-spi2-core-2.28.0-1.el8.x86_64                                                                                                      6/93
+  Verifying        : atk-2.28.1-1.el8.x86_64                                                                                                               7/93
+  Verifying        : cairo-1.15.12-3.el8.x86_64                                                                                                            8/93
+  Verifying        : cairo-gobject-1.15.12-3.el8.x86_64                                                                                                    9/93
+  Verifying        : colord-libs-1.4.2-1.el8.x86_64                                                                                                       10/93
+  Verifying        : copy-jdk-configs-4.0-2.el8.noarch                                                                                                    11/93
+  Verifying        : dconf-0.28.0-4.el8.x86_64                                                                                                            12/93
+  Verifying        : fribidi-1.0.4-8.el8.x86_64                                                                                                           13/93
+  Verifying        : gdk-pixbuf2-modules-2.36.12-5.el8.x86_64                                                                                             14/93
+  Verifying        : giflib-5.1.4-3.el8.x86_64                                                                                                            15/93
+  Verifying        : graphite2-1.3.10-10.el8.x86_64                                                                                                       16/93
+  Verifying        : gtk-update-icon-cache-3.22.30-8.el8.x86_64                                                                                           17/93
+  Verifying        : gtk3-3.22.30-8.el8.x86_64                                                                                                            18/93
+  Verifying        : harfbuzz-1.7.5-3.el8.x86_64                                                                                                          19/93
+  Verifying        : hicolor-icon-theme-0.17-2.el8.noarch                                                                                                 20/93
+  Verifying        : jasper-libs-2.0.14-5.el8.x86_64                                                                                                      21/93
+  Verifying        : java-17-openjdk-1:17.0.1.0.12-2.el8_5.x86_64                                                                                         22/93
+  Verifying        : java-17-openjdk-headless-1:17.0.1.0.12-2.el8_5.x86_64                                                                                23/93
+  Verifying        : javapackages-filesystem-5.3.0-1.module_el8.0.0+11+5b8c10bd.noarch                                                                    24/93
+  Verifying        : jbigkit-libs-2.1-14.el8.x86_64                                                                                                       25/93
+  Verifying        : lcms2-2.9-2.el8.x86_64                                                                                                               26/93
+  Verifying        : libX11-1.6.8-5.el8.x86_64                                                                                                            27/93
+  Verifying        : libX11-common-1.6.8-5.el8.noarch                                                                                                     28/93
+  Verifying        : libXau-1.0.9-3.el8.x86_64                                                                                                            29/93
+  Verifying        : libXcomposite-0.4.4-14.el8.x86_64                                                                                                    30/93
+  Verifying        : libXcursor-1.1.15-3.el8.x86_64                                                                                                       31/93
+  Verifying        : libXdamage-1.1.4-14.el8.x86_64                                                                                                       32/93
+  Verifying        : libXext-1.3.4-1.el8.x86_64                                                                                                           33/93
+  Verifying        : libXfixes-5.0.3-7.el8.x86_64                                                                                                         34/93
+  Verifying        : libXft-2.3.3-1.el8.x86_64                                                                                                            35/93
+  Verifying        : libXi-1.7.10-1.el8.x86_64                                                                                                            36/93
+  Verifying        : libXinerama-1.1.4-1.el8.x86_64                                                                                                       37/93
+  Verifying        : libXrandr-1.5.2-1.el8.x86_64                                                                                                         38/93
+  Verifying        : libXrender-0.9.10-7.el8.x86_64                                                                                                       39/93
+  Verifying        : libXtst-1.2.3-7.el8.x86_64                                                                                                           40/93
+  Verifying        : libdatrie-0.2.9-7.el8.x86_64                                                                                                         41/93
+  Verifying        : libepoxy-1.5.8-1.el8.x86_64                                                                                                          42/93
+  Verifying        : libfontenc-1.1.3-8.el8.x86_64                                                                                                        43/93
+  Verifying        : libjpeg-turbo-1.5.3-12.el8.x86_64                                                                                                    44/93
+  Verifying        : libthai-0.1.27-2.el8.x86_64                                                                                                          45/93
+  Verifying        : libtiff-4.0.9-20.el8.x86_64                                                                                                          46/93
+  Verifying        : libwayland-client-1.19.0-1.el8.x86_64                                                                                                47/93
+  Verifying        : libwayland-cursor-1.19.0-1.el8.x86_64                                                                                                48/93
+  Verifying        : libwayland-egl-1.19.0-1.el8.x86_64                                                                                                   49/93
+  Verifying        : libxcb-1.13.1-1.el8.x86_64                                                                                                           50/93
+  Verifying        : libxkbcommon-0.9.1-1.el8.x86_64                                                                                                      51/93
+  Verifying        : lua-5.3.4-12.el8.x86_64                                                                                                              52/93
+  Verifying        : nspr-4.32.0-1.el8_4.x86_64                                                                                                           53/93
+  Verifying        : nss-3.67.0-7.el8_5.x86_64                                                                                                            54/93
+  Verifying        : nss-softokn-3.67.0-7.el8_5.x86_64                                                                                                    55/93
+  Verifying        : nss-softokn-freebl-3.67.0-7.el8_5.x86_64                                                                                             56/93
+  Verifying        : nss-sysinit-3.67.0-7.el8_5.x86_64                                                                                                    57/93
+  Verifying        : nss-util-3.67.0-7.el8_5.x86_64                                                                                                       58/93
+  Verifying        : pango-1.42.4-8.el8.x86_64                                                                                                            59/93
+  Verifying        : pixman-0.38.4-1.el8.x86_64                                                                                                           60/93
+  Verifying        : rest-0.8.1-2.el8.x86_64                                                                                                              61/93
+  Verifying        : ttmkfdir-3.0.9-54.el8.x86_64                                                                                                         62/93
+  Verifying        : tzdata-java-2021e-1.el8.noarch                                                                                                       63/93
+  Verifying        : xkeyboard-config-2.28-1.el8.noarch                                                                                                   64/93
+  Verifying        : xorg-x11-font-utils-1:7.5-41.el8.x86_64                                                                                              65/93
+  Verifying        : xorg-x11-fonts-Type1-7.5-19.el8.noarch                                                                                               66/93
+  Verifying        : avahi-libs-0.7-20.el8.x86_64                                                                                                         67/93
+  Verifying        : crypto-policies-scripts-20210617-1.gitc776d3e.el8.noarch                                                                             68/93
+  Verifying        : cups-libs-1:2.2.6-40.el8.x86_64                                                                                                      69/93
+  Verifying        : dejavu-fonts-common-2.35-7.el8.noarch                                                                                                70/93
+  Verifying        : dejavu-sans-mono-fonts-2.35-7.el8.noarch                                                                                             71/93
+  Verifying        : fontconfig-2.13.1-4.el8.x86_64                                                                                                       72/93
+  Verifying        : fontpackages-filesystem-1.44-22.el8.noarch                                                                                           73/93
+  Verifying        : freetype-2.9.1-4.el8_3.1.x86_64                                                                                                      74/93
+  Verifying        : gdk-pixbuf2-2.36.12-5.el8.x86_64                                                                                                     75/93
+  Verifying        : glib-networking-2.56.1-1.1.el8.x86_64                                                                                                76/93
+  Verifying        : gsettings-desktop-schemas-3.32.0-6.el8.x86_64                                                                                        77/93
+  Verifying        : json-glib-1.4.4-1.el8.x86_64                                                                                                         78/93
+  Verifying        : libgusb-0.3.0-1.el8.x86_64                                                                                                           79/93
+  Verifying        : libmodman-2.0.1-17.el8.x86_64                                                                                                        80/93
+  Verifying        : libpkgconf-1.4.2-1.el8.x86_64                                                                                                        81/93
+  Verifying        : libpng-2:1.6.34-5.el8.x86_64                                                                                                         82/93
+  Verifying        : libproxy-0.4.15-5.2.el8.x86_64                                                                                                       83/93
+  Verifying        : libsoup-2.62.3-2.el8.x86_64                                                                                                          84/93
+  Verifying        : lksctp-tools-1.0.18-3.el8.x86_64                                                                                                     85/93
+  Verifying        : pkgconf-1.4.2-1.el8.x86_64                                                                                                           86/93
+  Verifying        : pkgconf-m4-1.4.2-1.el8.noarch                                                                                                        87/93
+  Verifying        : pkgconf-pkg-config-1.4.2-1.el8.x86_64                                                                                                88/93
+  Verifying        : shared-mime-info-1.9-3.el8.x86_64                                                                                                    89/93
+  Verifying        : crypto-policies-20210617-1.gitc776d3e.el8.noarch                                                                                     90/93
+  Verifying        : crypto-policies-20210209-1.gitbfb6bed.el8_3.noarch                                                                                   91/93
+  Verifying        : lua-libs-5.3.4-12.el8.x86_64                                                                                                         92/93
+  Verifying        : lua-libs-5.3.4-11.el8.x86_64                                                                                                         93/93
+
+Upgraded:
+  crypto-policies-20210617-1.gitc776d3e.el8.noarch                                         lua-libs-5.3.4-12.el8.x86_64
+Installed:
+  abattis-cantarell-fonts-0.0.25-6.el8.noarch                                          adwaita-cursor-theme-3.28.0-2.el8.noarch
+  adwaita-icon-theme-3.28.0-2.el8.noarch                                               alsa-lib-1.2.5-4.el8.x86_64
+  at-spi2-atk-2.26.2-1.el8.x86_64                                                      at-spi2-core-2.28.0-1.el8.x86_64
+  atk-2.28.1-1.el8.x86_64                                                              avahi-libs-0.7-20.el8.x86_64
+  cairo-1.15.12-3.el8.x86_64                                                           cairo-gobject-1.15.12-3.el8.x86_64
+  colord-libs-1.4.2-1.el8.x86_64                                                       copy-jdk-configs-4.0-2.el8.noarch
+  crypto-policies-scripts-20210617-1.gitc776d3e.el8.noarch                             cups-libs-1:2.2.6-40.el8.x86_64
+  dconf-0.28.0-4.el8.x86_64                                                            dejavu-fonts-common-2.35-7.el8.noarch
+  dejavu-sans-mono-fonts-2.35-7.el8.noarch                                             fontconfig-2.13.1-4.el8.x86_64
+  fontpackages-filesystem-1.44-22.el8.noarch                                           freetype-2.9.1-4.el8_3.1.x86_64
+  fribidi-1.0.4-8.el8.x86_64                                                           gdk-pixbuf2-2.36.12-5.el8.x86_64
+  gdk-pixbuf2-modules-2.36.12-5.el8.x86_64                                             giflib-5.1.4-3.el8.x86_64
+  glib-networking-2.56.1-1.1.el8.x86_64                                                graphite2-1.3.10-10.el8.x86_64
+  gsettings-desktop-schemas-3.32.0-6.el8.x86_64                                        gtk-update-icon-cache-3.22.30-8.el8.x86_64
+  gtk3-3.22.30-8.el8.x86_64                                                            harfbuzz-1.7.5-3.el8.x86_64
+  hicolor-icon-theme-0.17-2.el8.noarch                                                 jasper-libs-2.0.14-5.el8.x86_64
+  java-17-openjdk-1:17.0.1.0.12-2.el8_5.x86_64                                         java-17-openjdk-headless-1:17.0.1.0.12-2.el8_5.x86_64
+  javapackages-filesystem-5.3.0-1.module_el8.0.0+11+5b8c10bd.noarch                    jbigkit-libs-2.1-14.el8.x86_64
+  json-glib-1.4.4-1.el8.x86_64                                                         lcms2-2.9-2.el8.x86_64
+  libX11-1.6.8-5.el8.x86_64                                                            libX11-common-1.6.8-5.el8.noarch
+  libXau-1.0.9-3.el8.x86_64                                                            libXcomposite-0.4.4-14.el8.x86_64
+  libXcursor-1.1.15-3.el8.x86_64                                                       libXdamage-1.1.4-14.el8.x86_64
+  libXext-1.3.4-1.el8.x86_64                                                           libXfixes-5.0.3-7.el8.x86_64
+  libXft-2.3.3-1.el8.x86_64                                                            libXi-1.7.10-1.el8.x86_64
+  libXinerama-1.1.4-1.el8.x86_64                                                       libXrandr-1.5.2-1.el8.x86_64
+  libXrender-0.9.10-7.el8.x86_64                                                       libXtst-1.2.3-7.el8.x86_64
+  libdatrie-0.2.9-7.el8.x86_64                                                         libepoxy-1.5.8-1.el8.x86_64
+  libfontenc-1.1.3-8.el8.x86_64                                                        libgusb-0.3.0-1.el8.x86_64
+  libjpeg-turbo-1.5.3-12.el8.x86_64                                                    libmodman-2.0.1-17.el8.x86_64
+  libpkgconf-1.4.2-1.el8.x86_64                                                        libpng-2:1.6.34-5.el8.x86_64
+  libproxy-0.4.15-5.2.el8.x86_64                                                       libsoup-2.62.3-2.el8.x86_64
+  libthai-0.1.27-2.el8.x86_64                                                          libtiff-4.0.9-20.el8.x86_64
+  libwayland-client-1.19.0-1.el8.x86_64                                                libwayland-cursor-1.19.0-1.el8.x86_64
+  libwayland-egl-1.19.0-1.el8.x86_64                                                   libxcb-1.13.1-1.el8.x86_64
+  libxkbcommon-0.9.1-1.el8.x86_64                                                      lksctp-tools-1.0.18-3.el8.x86_64
+  lua-5.3.4-12.el8.x86_64                                                              nspr-4.32.0-1.el8_4.x86_64
+  nss-3.67.0-7.el8_5.x86_64                                                            nss-softokn-3.67.0-7.el8_5.x86_64
+  nss-softokn-freebl-3.67.0-7.el8_5.x86_64                                             nss-sysinit-3.67.0-7.el8_5.x86_64
+  nss-util-3.67.0-7.el8_5.x86_64                                                       pango-1.42.4-8.el8.x86_64
+  pixman-0.38.4-1.el8.x86_64                                                           pkgconf-1.4.2-1.el8.x86_64
+  pkgconf-m4-1.4.2-1.el8.noarch                                                        pkgconf-pkg-config-1.4.2-1.el8.x86_64
+  rest-0.8.1-2.el8.x86_64                                                              shared-mime-info-1.9-3.el8.x86_64
+  ttmkfdir-3.0.9-54.el8.x86_64                                                         tzdata-java-2021e-1.el8.noarch
+  xkeyboard-config-2.28-1.el8.noarch                                                   xorg-x11-font-utils-1:7.5-41.el8.x86_64
+  xorg-x11-fonts-Type1-7.5-19.el8.noarch
+
+Complete!
+[root@889e0484bdd2 /]#
+```
+
+
+
+验证是否安装成功：
+
+```sh
+java -version
+```
+
+
+
+```sh
+[root@889e0484bdd2 /]# java -version
+openjdk version "17.0.1" 2021-10-19 LTS
+OpenJDK Runtime Environment 21.9 (build 17.0.1+12-LTS)
+OpenJDK 64-Bit Server VM 21.9 (build 17.0.1+12-LTS, mixed mode, sharing)
+[root@889e0484bdd2 /]#
+```
+
+
+
+安装成功
+
+
+
+
+
+### yum 升级命令
+
