@@ -9300,3 +9300,186 @@ mao@ubuntu:~/桌面$
 
 ## ACL权限
 
+
+
+说明：
+
+1. 有一个 /project 目录，这是班级的项目目录。班级中的每个学员都可以访问和修改这个目录，老师需要拥有对该目录的最高权限，其他班级的学员当然不能访问这个目录
+
+2. 老师使用 root 用户，作为这个目录的属主，权限为 rwx；班级所有的学员都加入 tgroup 组，使 tgroup 组作为 /project 目录的属组，权限是 rwx；其他人的权限设定为 0（也就是 ---）。这样一来，访问此目录的权限就符合我们的要求了。
+
+3. 有一天，班里来了一位试听的学员 st，她必须能够访问 /project 目录，所以必须对这个目录拥有 r 和 x 权限；但是她又没有学习过以前的课程，所以不能赋予她 w 权限，怕她改错了目录中的内容，所以学员 st 的权限就是 r-x。可是如何分配她的身份呢？变为属主？当然不行，要不 root 该放哪里？加入 tgroup 组？也不行，因为 tgroup 组的权限是 rwx，而我们要求学员 st 的权限是 r-x。如果把其他人的权限改为 r-x 呢？这样一来，其他班级的所有学员都可以访问 /project 目录了。
+
+4. 显然，普通权限的三种身份不够用了，无法实现对某个单独的用户设定访问权限，这种情况下，就需要使用 ACL 访问控制权限。
+
+
+
+ACL，是 Access Control List（访问控制列表）的缩写，在 Linux 系统中， ACL 可实现对单一用户设定访问文件的权限。也可以这么说，设定文件的访问权限，除了用传统方式（3 种身份搭配 3 种权限），还可以使用 ACL 进行设定。拿本例中的 st 学员来说，既然赋予它传统的 3 种身份，无法解决问题，就可以考虑使用 ACL 权限控制的方式，直接对 st 用户设定访问文件的 r-x 权限。
+
+
+
+
+
+## ACL权限设置
+
+设定 ACl 权限，常用命令有 2 个，分别是 setfacl 和 getfacl 命令，前者用于给指定文件或目录设定 ACL 权限，后者用于查看是否配置成功。
+
+
+
+查看文件或目录当前设定的 ACL 权限信息：
+
+```sh
+getfacl 文件名
+```
+
+
+
+设定用户或群组对指定文件的访问权限：
+
+```sh
+setfacl 选项 文件名
+```
+
+
+
+|  选项   |                             功能                             |
+| :-----: | :----------------------------------------------------------: |
+| -m 参数 | 设定 ACL 权限。如果是给予用户 ACL 权限，参数则使用 "u:用户名:权限" 的格式，例如 `setfacl -m u:st:rx /project` 表示设定 st 用户对 project 目录具有 rx 权限；如果是给予组 ACL 权限，参数则使用 "g:组名:权限" 格式，例如 `setfacl -m g:tgroup:rx /project` 表示设定群组 tgroup 对 project 目录具有 rx 权限。 |
+| -x 参数 | 删除指定用户（参数使用 u:用户名）或群组（参数使用 g:群组名）的 ACL 权限，例如 `setfacl -x u:st /project` 表示删除 st 用户对 project 目录的 ACL 权限。 |
+|   -b    | 删除所有的 ACL 权限，例如 `setfacl -b /project` 表示删除有关 project 目录的所有 ACL 权限。 |
+|   -d    | 设定默认 ACL 权限，命令格式为 "setfacl -m d:u:用户名:权限 文件名"（如果是群组，则使用 d:g:群组名:权限），只对目录生效，指目录中新建立的文件拥有此默认权限，例如 `setfacl -m d:u:st:rx /project` 表示 st 用户对 project 目录中新建立的文件拥有 rx 权限。 |
+|   -R    | 递归设定 ACL 权限，指设定的 ACL 权限会对目录下的所有子文件生效，命令格式为 "setfacl -m u:用户名:权限 -R 文件名"（群组使用 g:群组名:权限），例如 `setfacl -m u:st:rx -R /project` 表示 st 用户对已存在于 project 目录中的子文件和子目录拥有 rx 权限。 |
+|   -k    |                     删除默认 ACL 权限。                      |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ getfacl out.txt
+# file: out.txt
+# owner: mao
+# group: mao
+user::rw-
+group::rw-
+other::r--
+```
+
+```sh
+mao@ubuntu:~/桌面$ setfacl -m u:mao:rx out.txt
+```
+
+```sh
+mao@ubuntu:~/桌面$ getfacl out.txt
+# file: out.txt
+# owner: mao
+# group: mao
+user::rw-
+user:mao:r-x
+group::rw-
+mask::rwx
+other::r--
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 96
+-rw-rw-r--  1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x  1 mao  mao     20 7月   2 04:38 2.txt
+-rw-------  1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x  1 mao  mao  16984 12月 29  2021 a.out
+-rw-------  1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw-------  1 mao  mao   2956 11月  4  2021 filea.c
+-rw-------  1 mao  mao     96 10月 23  2021 func1.c
+-rw-------  1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r--  1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r--  1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw-  1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw-------  1 mao  mao    242 10月 23  2021 main.c
+-rw-------  1 mao  mao    206 10月 23  2021 main.h
+-rw-rwxr--+ 1 mao  mao   4682 7月   5 05:17 out.txt
+-rw-rw-r--  1 root root     3 7月   5 04:06 test1.txt
+-rw-rw-r--  1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+删除：
+
+```sh
+mao@ubuntu:~/桌面$ setfacl -b out.txt
+mao@ubuntu:~/桌面$ getfacl out.txt
+# file: out.txt
+# owner: mao
+# group: mao
+user::rw-
+group::rw-
+other::r--
+
+mao@ubuntu:~/桌面$ ls -l
+总用量 96
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   4682 7月   5 05:17 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+-rw-rw-r-- 1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## 文件特殊权限
+
+SetUID，简称 SUID 特殊权限
+
+SUID 特殊权限仅适用于可执行文件，所具有的功能是，只要用户对设有 SUID 的文件有执行权限，那么当用户执行此文件时，会以文件所有者的身份去执行此文件，一旦文件执行结束，身份的切换也随之消失
+
+
+
+当普通用户使用 passwd 命令尝试更改自己的密码时，实际上是在以 root 的身份执行passwd命令，正因为 root 可以将密码写入 /etc/shadow 文件，所以普通用户也能做到。只不过，一旦命令执行完成，普通用户所具有的 root身份也随之消失。
+
+
+
+查看/usr/bin/passwd权限：
+
+```sh
+mao@ubuntu:~/桌面$ ls -l /usr/bin/passwd
+-rwsr-xr-x 1 root root 68208 7月  14  2021 /usr/bin/passwd
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+- 只有可执行文件才能设定 SetUID 权限，对目录设定 SUID，是无效的。
+- 用户要对该文件拥有 x（执行）权限。
+- 用户在执行该文件时，会以文件所有者的身份执行。
+- SetUID 权限只在文件执行过程中有效，一旦执行完毕，身份的切换也随之消失。
+
+
+
+**不要轻易设置SetUID（SUID）权限，否则会带来重大安全隐患**
+
+
+
+
+
+## SetGID
+
