@@ -8894,3 +8894,409 @@ newgrp 组名
 
 ## chgrp命令
 
+**修改文件和目录的所属组**
+
+
+
+命令：
+
+```sh
+chgrp [-R] 所属组 文件名（目录名）
+```
+
+
+
+-R选项常常作用于更改目录的所属组，表示更改连同子目录中所有文件的所属组信息
+
+
+
+创建组group1和文件test1.txt：
+
+```sh
+mao@ubuntu:~/桌面$ sudo groupadd group1
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ touch test1.txt
+```
+
+
+
+更改：
+
+```sh
+mao@ubuntu:~/桌面$ sudo chgrp group1 test1.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao mao        4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao       20 7月   2 04:38 2.txt
+-rw------- 1 mao mao     8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao    16984 12月 29  2021 a.out
+-rw------- 1 mao mao     9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao     2956 11月  4  2021 filea.c
+-rw------- 1 mao mao       96 10月 23  2021 func1.c
+-rw------- 1 mao mao       98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao mao        6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao mao        7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao mao     2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao      242 10月 23  2021 main.c
+-rw------- 1 mao mao      206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 mao group1     3 7月   5 04:06 test1.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## chown命令
+
+该命令主要**用于修改文件（或目录）的所有者，也可以修改文件（或目录）的所属组**
+
+
+
+修改所有者时：
+
+```sh
+chown [-R] 所有者 文件或目录
+```
+
+
+
+更改所有者和所属组：
+
+```sh
+chown [-R] 所有者:所属组 文件或目录
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo chown root test1.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao        4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao       20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao     8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao    16984 12月 29  2021 a.out
+-rw------- 1 mao  mao     9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao     2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao       96 10月 23  2021 func1.c
+-rw------- 1 mao  mao       98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao        6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao        7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao     2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao      242 10月 23  2021 main.c
+-rw------- 1 mao  mao      206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao     1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root group1     3 7月   5 04:06 test1.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo chown root:root test1.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## 权限位
+
+最常见的文件权限有 3 种，即对文件的读（用 r 表示）、写（用 w 表示）和执行（用 x 表示，针对可执行文件或目录）权限
+
+
+
+比如：
+
+```sh
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+```
+
+
+
+每行的第一列表示的就是各文件针对不同用户设定的权限，一共 11 位，但第 1 位用于表示文件的具体类型，最后一位此文件受 SELinux 的安全规则管理
+
+为文件设定不同用户的读、写和执行权限，仅涉及到 9 位字符，即**rw-rw-r--**
+
+Linux 将访问文件的用户分为 3 类，分别是文件的所有者，所属组（也就是文件所属的群组）以及其他人的权限
+
+* 前三位是文件所有者的权限，即rw-
+* 中间三位是所属组的权限，即rw-
+* 最后三位是其他人的权限，即r--
+
+
+
+
+
+## rwx 权限对文件的作用
+
+
+
+|   rwx 权限    |                         对文件的作用                         |
+| :-----------: | :----------------------------------------------------------: |
+|  读权限（r）  | 表示可读取此文件中的实际内容，例如，可以对文件执行 cat、more、less、head、tail 等文件查看命令。 |
+|  写权限（w）  | 表示可以编辑、新增或者修改文件中的内容，例如，可以对文件执行 vim、echo 等修改文件数据的命令。注意，无权限不赋予用户删除文件的权利，除非用户对文件的上级目录拥有写权限才可以。 |
+| 执行权限（x） | 表示该文件具有被系统执行的权限。Window系统中查看一个文件是否为可执行文件，是通过扩展名（.exe、.bat 等），但在 Linux 系统中，文件是否能被执行，是通过看此文件是否具有 x 权限来决定的。也就是说，只要文件拥有 x 权限，则此文件就是可执行文件。但是，文件到底能够正确运行，还要看文件中的代码是否正确。 |
+
+
+
+
+
+## rwx 权限对目录的作用
+
+
+
+|   rwx 权限    |                         对目录的作用                         |
+| :-----------: | :----------------------------------------------------------: |
+|  读权限（r）  | 表示具有读取目录结构列表的权限，也就是说，可以看到目录中有哪些文件和子目录。一旦对目录拥有 r 权限，就可以在此目录下执行 ls 命令，查看目录中的内容。 |
+|  写权限（w）  | 对于目录来说，w 权限是最高权限。对目录拥有 w 权限，表示可以对目录做以下操作：在此目录中建立新的文件或子目录；删除已存在的文件和目录（无论子文件或子目录的权限是怎样的）；对已存在的文件或目录做更名操作；移动此目录下的文件和目录的位置。一旦对目录拥有 w 权限，就可以在目录下执行 touch、rm、cp、mv 等命令。 |
+| 执行权限（x） | 目录是不能直接运行的，对目录赋予 x 权限，代表用户可以进入目录，也就是说，赋予 x 权限的用户或群组可以使用 cd 命令。 |
+
+
+
+对于目录来说，常用来设定目录的权限其实只有 0（---）、5（r-x）、7（rwx）这 3 种
+
+
+
+
+
+
+
+## chmod命令
+
+**用于修改文件或目录的权限**
+
+
+
+linux使用进制位来表示权限，三种权限，一共三位二进制位
+
+关系如下：
+
+10进制：
+
+```sh
+r --> 4
+w --> 2
+x --> 1
+```
+
+二进制：
+
+```sh
+r --> nxx
+w --> xnx
+x --> xxn
+```
+
+n代表0或者1，x代码其它权限
+
+
+
+比如：
+
+```sh
+rwx = 4+2+1 = 7,二机制111
+rw- = 4+2 = 6，二进制110
+r-x = 4+1 = 5，二进制101
+r-- = 4 ，二进制100
+```
+
+
+
+命令：
+
+```sh
+chmod [-R] 权限值 文件名
+```
+
+
+
+-R选项表示连同子目录中的所有文件，也都修改设定的权限。
+
+
+
+```sh
+mao@ubuntu:~/桌面$ touch test2.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+-rw-rw-r-- 1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ chmod 777 test2.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+-rwxrwxrwx 1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ chmod 400 test2.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+-r-------- 1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ chmod 664 test2.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 92
+-rw-rw-r-- 1 mao  mao      4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao  mao     20 7月   2 04:38 2.txt
+-rw------- 1 mao  mao   8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao  16984 12月 29  2021 a.out
+-rw------- 1 mao  mao   9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao   2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao     96 10月 23  2021 func1.c
+-rw------- 1 mao  mao     98 10月 23  2021 func2.c
+-rw-rw-r-- 1 mao  mao      6 7月   2 21:48 in2.txt
+-rw-rw-r-- 1 mao  mao      7 7月   2 21:50 in.txt
+-rwxrw-rw- 1 mao  mao   2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao    242 10月 23  2021 main.c
+-rw------- 1 mao  mao    206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao  mao   1668 7月   2 22:24 out.txt
+-rw-rw-r-- 1 root root     3 7月   5 04:06 test1.txt
+-rw-rw-r-- 1 mao  mao      0 7月   5 04:51 test2.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+还可以使用字母修改文件权限
+
+
+
+
+
+## umask 命令
+
+**令新建文件和目录拥有默认权限**
+
+新建的文件和目录时通过继承上级目录的权限获得的初始权限，而 Linux 不同，它是通过使用 umask 默认权限来给所有新建的文件和目录赋予初始权限的。
+
+
+
+使用：
+
+```sh
+mao@ubuntu:~/桌面$ umask
+0002
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+root用户默认是0022，普通用户默认是 0002
+
+
+
+umask 默认权限确实由 4 个八进制数组成，第 1 个数代表的是文件所具有的特殊权限，后 3 位数字是umask 权限值
+
+
+
+文件和目录的真正初始权限，可通过以下的计算得到：
+
+```sh
+文件（或目录）的初始权限 = 文件（或目录）的最大默认权限 - umask权限
+```
+
+
+
+- 对文件来讲，其可拥有的最大默认权限是 666，即 rw-rw-rw-。也就是说，使用文件的任何用户都没有执行（x）权限。原因很简单，执行权限是文件的最高权限，赋予时绝对要慎重，因此绝不能在新建文件的时候就默认赋予，只能通过用户手工赋予。
+- 对目录来讲，其可拥有的最大默认权限是 777，即 rwxrwxrwx。
+
+
+
+修改权限命令：
+
+```sh
+umask 后三位的权限值
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ umask 022
+mao@ubuntu:~/桌面$ umask
+0022
+mao@ubuntu:~/桌面$ umask 002
+mao@ubuntu:~/桌面$ umask
+0002
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## ACL权限
+
