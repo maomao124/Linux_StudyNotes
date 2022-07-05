@@ -8353,3 +8353,346 @@ mao@ubuntu:~/桌面$
 
 ## usermod命令
 
+**用于修改用户信息**
+
+
+
+命令：
+
+```sh
+usermod [选项] 用户名
+```
+
+
+
+选项：
+
+- -c 用户说明：修改用户的说明信息，即修改 /etc/passwd 文件目标用户信息的第 5 个字段；
+- -d 主目录：修改用户的主目录，即修改 /etc/passwd 文件中目标用户信息的第 6 个字段，需要注意的是，主目录必须写绝对路径；
+- -e 日期：修改用户的失效曰期，格式为 "YYYY-MM-DD"，即修改 /etc/shadow 文件目标用户密码信息的第 8 个字段；
+- -g 组名：修改用户的初始组，即修改 /etc/passwd 文件目标用户信息的第 4 个字段（GID）；
+- -u UID：修改用户的UID，即修改 /etc/passwd 文件目标用户信息的第 3 个字段（UID）；
+- -G 组名：修改用户的附加组，其实就是把用户加入其他用户组，即修改 /etc/group 文件；
+- -l 用户名：修改用户名称；
+- -L：临时锁定用户（Lock）；
+- -U：解锁用户（Unlock），和 -L 对应；
+- -s shell：修改用户的登录 Shell，默认是 /bin/bash。
+
+
+
+锁定用户：
+
+```sh
+mao@ubuntu:~/桌面$ sudo usermod -L test
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ sudo cat /etc/shadow
+root:!:18915:0:99999:7:::
+daemon:*:18858:0:99999:7:::
+bin:*:18858:0:99999:7:::
+sys:*:18858:0:99999:7:::
+sync:*:18858:0:99999:7:::
+games:*:18858:0:99999:7:::
+man:*:18858:0:99999:7:::
+lp:*:18858:0:99999:7:::
+mail:*:18858:0:99999:7:::
+news:*:18858:0:99999:7:::
+uucp:*:18858:0:99999:7:::
+proxy:*:18858:0:99999:7:::
+www-data:*:18858:0:99999:7:::
+backup:*:18858:0:99999:7:::
+list:*:18858:0:99999:7:::
+irc:*:18858:0:99999:7:::
+gnats:*:18858:0:99999:7:::
+nobody:*:18858:0:99999:7:::
+systemd-network:*:18858:0:99999:7:::
+systemd-resolve:*:18858:0:99999:7:::
+systemd-timesync:*:18858:0:99999:7:::
+messagebus:*:18858:0:99999:7:::
+syslog:*:18858:0:99999:7:::
+_apt:*:18858:0:99999:7:::
+tss:*:18858:0:99999:7:::
+uuidd:*:18858:0:99999:7:::
+tcpdump:*:18858:0:99999:7:::
+avahi-autoipd:*:18858:0:99999:7:::
+usbmux:*:18858:0:99999:7:::
+rtkit:*:18858:0:99999:7:::
+dnsmasq:*:18858:0:99999:7:::
+cups-pk-helper:*:18858:0:99999:7:::
+speech-dispatcher:!:18858:0:99999:7:::
+avahi:*:18858:0:99999:7:::
+kernoops:*:18858:0:99999:7:::
+saned:*:18858:0:99999:7:::
+nm-openvpn:*:18858:0:99999:7:::
+hplip:*:18858:0:99999:7:::
+whoopsie:*:18858:0:99999:7:::
+colord:*:18858:0:99999:7:::
+geoclue:*:18858:0:99999:7:::
+pulse:*:18858:0:99999:7:::
+gnome-initial-setup:*:18858:0:99999:7:::
+gdm:*:18858:0:99999:7:::
+sssd:*:18858:0:99999:7:::
+mao:$1$dvdYmO70$JMt6qRizm5GFCwQh6dk5/1:18915:0:99999:7:::
+systemd-coredump:!!:18915::::::
+test:!$6$..X31U4l0toFPADb$M4JoY10jlmpbfRv70/vMBLSHW.125ncGJIqoC.MYRUQO5cqXGO3X84DYEp7cXEKdyDBGid8BIpwGUWAH7SQH11:19177:0:99999:7:::
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+test账户密码的的最前面加了！
+
+
+
+解锁用户：
+
+```sh
+mao@ubuntu:~/桌面$ sudo usermod -U test
+mao@ubuntu:~/桌面$ 
+mao@ubuntu:~/桌面$ sudo cat /etc/shadow
+root:!:18915:0:99999:7:::
+daemon:*:18858:0:99999:7:::
+bin:*:18858:0:99999:7:::
+sys:*:18858:0:99999:7:::
+sync:*:18858:0:99999:7:::
+games:*:18858:0:99999:7:::
+man:*:18858:0:99999:7:::
+lp:*:18858:0:99999:7:::
+mail:*:18858:0:99999:7:::
+news:*:18858:0:99999:7:::
+uucp:*:18858:0:99999:7:::
+proxy:*:18858:0:99999:7:::
+www-data:*:18858:0:99999:7:::
+backup:*:18858:0:99999:7:::
+list:*:18858:0:99999:7:::
+irc:*:18858:0:99999:7:::
+gnats:*:18858:0:99999:7:::
+nobody:*:18858:0:99999:7:::
+systemd-network:*:18858:0:99999:7:::
+systemd-resolve:*:18858:0:99999:7:::
+systemd-timesync:*:18858:0:99999:7:::
+messagebus:*:18858:0:99999:7:::
+syslog:*:18858:0:99999:7:::
+_apt:*:18858:0:99999:7:::
+tss:*:18858:0:99999:7:::
+uuidd:*:18858:0:99999:7:::
+tcpdump:*:18858:0:99999:7:::
+avahi-autoipd:*:18858:0:99999:7:::
+usbmux:*:18858:0:99999:7:::
+rtkit:*:18858:0:99999:7:::
+dnsmasq:*:18858:0:99999:7:::
+cups-pk-helper:*:18858:0:99999:7:::
+speech-dispatcher:!:18858:0:99999:7:::
+avahi:*:18858:0:99999:7:::
+kernoops:*:18858:0:99999:7:::
+saned:*:18858:0:99999:7:::
+nm-openvpn:*:18858:0:99999:7:::
+hplip:*:18858:0:99999:7:::
+whoopsie:*:18858:0:99999:7:::
+colord:*:18858:0:99999:7:::
+geoclue:*:18858:0:99999:7:::
+pulse:*:18858:0:99999:7:::
+gnome-initial-setup:*:18858:0:99999:7:::
+gdm:*:18858:0:99999:7:::
+sssd:*:18858:0:99999:7:::
+mao:$1$dvdYmO70$JMt6qRizm5GFCwQh6dk5/1:18915:0:99999:7:::
+systemd-coredump:!!:18915::::::
+test:$6$..X31U4l0toFPADb$M4JoY10jlmpbfRv70/vMBLSHW.125ncGJIqoC.MYRUQO5cqXGO3X84DYEp7cXEKdyDBGid8BIpwGUWAH7SQH11:19177:0:99999:7:::
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+修改用户说明：
+
+```sh
+ao@ubuntu:~/桌面$ sudo usermod -c "test user" test
+mao@ubuntu:~/桌面$ sudo cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:114::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:115::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:109:116:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+usbmux:x:110:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+rtkit:x:111:117:RealtimeKit,,,:/proc:/usr/sbin/nologin
+dnsmasq:x:112:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+cups-pk-helper:x:113:120:user for cups-pk-helper service,,,:/home/cups-pk-helper:/usr/sbin/nologin
+speech-dispatcher:x:114:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+avahi:x:115:121:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/usr/sbin/nologin
+kernoops:x:116:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+whoopsie:x:120:125::/nonexistent:/bin/false
+colord:x:121:126:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+geoclue:x:122:127::/var/lib/geoclue:/usr/sbin/nologin
+pulse:x:123:128:PulseAudio daemon,,,:/var/run/pulse:/usr/sbin/nologin
+gnome-initial-setup:x:124:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:125:130:Gnome Display Manager:/var/lib/gdm3:/bin/false
+sssd:x:126:131:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+mao:x:1000:1000:linux,,,:/home/mao:/bin/bash
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+test:x:1001:1001:test user:/home/test:/bin/sh
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## chage命令
+
+chage 命令可以显示更加详细的用户密码信息，并且和 passwd 命令一样，提供了修改用户密码信息的功能
+
+
+
+命令：
+
+```sh
+chage [选项] 用户名
+```
+
+
+
+- -l：列出用户的详细密码状态;
+- -d 日期：修改 /etc/shadow 文件中指定用户密码信息的第 3 个字段，也就是最后一次修改密码的日期，格式为 YYYY-MM-DD；
+- -m 天数：修改密码最短保留的天数，也就是 /etc/shadow 文件中的第 4 个字段；
+- -M 天数：修改密码的有效期，也就是 /etc/shadow 文件中的第 5 个字段；
+- -W 天数：修改密码到期前的警告天数，也就是 /etc/shadow 文件中的第 6 个字段；
+- -i 天数：修改密码过期后的宽限天数，也就是 /etc/shadow 文件中的第 7 个字段；
+- -E 日期：修改账号失效日期，格式为 YYYY-MM-DD，也就是 /etc/shadow 文件中的第 8 个字段。
+
+
+
+
+
+查看用户密码状态：
+
+```sh
+mao@ubuntu:~/桌面$ sudo chage -l test
+最近一次密码修改时间					： 7月 04, 2022
+密码过期时间					： 从不
+密码失效时间					： 从不
+帐户过期时间						： 从不
+两次改变密码之间相距的最小天数		：0
+两次改变密码之间相距的最大天数		：99999
+在密码过期之前警告的天数	：7
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## userdel命令
+
+**删除用户的相关数据**
+
+
+
+命令：
+
+```sh
+userdel -r 用户名
+```
+
+
+
+-r 选项表示在删除用户的同时删除用户的家目录。
+
+
+
+删除用户test：
+
+```sh
+mao@ubuntu:~/桌面$ sudo userdel test
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+验证：
+
+```sh
+mao@ubuntu:~/桌面$ cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:114::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:115::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:109:116:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+usbmux:x:110:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+rtkit:x:111:117:RealtimeKit,,,:/proc:/usr/sbin/nologin
+dnsmasq:x:112:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+cups-pk-helper:x:113:120:user for cups-pk-helper service,,,:/home/cups-pk-helper:/usr/sbin/nologin
+speech-dispatcher:x:114:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+avahi:x:115:121:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/usr/sbin/nologin
+kernoops:x:116:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+whoopsie:x:120:125::/nonexistent:/bin/false
+colord:x:121:126:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+geoclue:x:122:127::/var/lib/geoclue:/usr/sbin/nologin
+pulse:x:123:128:PulseAudio daemon,,,:/var/run/pulse:/usr/sbin/nologin
+gnome-initial-setup:x:124:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:125:130:Gnome Display Manager:/var/lib/gdm3:/bin/false
+sssd:x:126:131:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+mao:x:1000:1000:linux,,,:/home/mao:/bin/bash
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## id命令
+
