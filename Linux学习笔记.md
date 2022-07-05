@@ -9564,5 +9564,191 @@ mao@ubuntu:~/桌面$
 
 ## chattr命令
 
+chattr 命令，专门用来修改文件或目录的隐藏属性，只有 root 用户可以使用
 
+
+
+命令：
+
+```sh
+chattr [+-=] [属性] 文件或目录名
+```
+
+
+
+\+ 表示给文件或目录添加属性，- 表示移除文件或目录拥有的某些属性，= 表示给文件或目录设定一些属性。
+
+
+
+| 属性选项 |                             功能                             |
+| :------: | :----------------------------------------------------------: |
+|    i     | 如果对文件设置 i 属性，那么不允许对文件进行删除、改名，也不能添加和修改数据； 如果对目录设置 i 属性，那么只能修改目录下文件中的数据，但不允许建立和删除文件； |
+|    a     | 如果对文件设置 a 属性，那么只能在文件中増加数据，但是不能删除和修改数据； 如果对目录设置 a 属性，那么只允许在目录中建立和修改文件，但是不允许删除文件； |
+|    u     | 设置此属性的文件或目录，在删除时，其内容会被保存，以保证后期能够恢复，常用来防止意外删除文件或目录。 |
+|    s     | 和 u 相反，删除文件或目录时，会被彻底删除（直接从硬盘上删除，然后用 0 填充所占用的区域），不可恢复。 |
+
+
+
+
+
+给文件赋予 i 属性：
+
+```sh
+mao@ubuntu:~/桌面$ touch test.txt
+mao@ubuntu:~/桌面$ ls -l
+总用量 76
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   5 06:11 test.txt
+mao@ubuntu:~/桌面$ sudo chattr +i test.txt
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ ls -l
+总用量 76
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rwxrwxr-x 1 mao mao    20 7月   2 04:38 2.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao     0 7月   5 06:11 test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+修改：
+
+```sh
+mao@ubuntu:~/桌面$ echo 123 >> test.txt
+bash: test.txt: 不允许的操作
+mao@ubuntu:~/桌面$ sudo echo 123 >> test.txt
+bash: test.txt: 不允许的操作
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+删除：
+
+```sh
+mao@ubuntu:~/桌面$ rm -rf test.txt
+rm: 无法删除 'test.txt': 不允许的操作
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+移除：
+
+```sh
+sudo chattr -i test.txt
+```
+
+```sh
+mao@ubuntu:~/桌面$ sudo chattr -i test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+修改：
+
+```sh
+ao@ubuntu:~/桌面$ echo 123 >> test.txt
+mao@ubuntu:~/桌面$ cat test.txt
+123
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## lsattr命令
+
+**lsattr 命令，用于显示文件或目录的隐藏属性**
+
+
+
+命令：
+
+```sh
+lsattr [选项] 文件或目录名
+```
+
+
+
+选项：
+
+- -a：后面不带文件或目录名，表示显示所有文件和目录（包括隐藏文件和目录）
+- -d：如果目标是目录，只会列出目录本身的隐藏属性，而不会列出所含文件或子目录的隐藏属性信息；
+- -R：和 -d 恰好相反，作用于目录时，会连同子目录的隐藏信息数据也一并显示出来。
+
+
+
+
+
+查看刚才的文件：
+
+```sh
+mao@ubuntu:~/桌面$ lsattr test.txt
+--------------e----- test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+添加权限：
+
+```sh
+mao@ubuntu:~/桌面$ sudo chattr +i test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+再次查看：
+
+```sh
+mao@ubuntu:~/桌面$ lsattr test.txt
+----i---------e----- test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+查看目录：
+
+```sh
+mao@ubuntu:~/桌面$ lsattr ./
+--------------e----- ./linux_file.c
+--------------e----- ./filea.c
+--------------e----- ./main.c
+--------------e----- ./main.h
+--------------e----- ./English_early_education_machine_input.c
+--------------e----- ./a.c
+--------------e----- ./1.txt
+--------------e----- ./a.out
+--------------e----- ./func1.c
+--------------e----- ./func2.c
+----i---------e----- ./test.txt
+--------------e----- ./2.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## sudo命令
 
