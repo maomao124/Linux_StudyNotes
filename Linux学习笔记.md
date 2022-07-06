@@ -10062,6 +10062,44 @@ du [选项] [目录或文件名]
 
 
 
+```sh
+mao@ubuntu:~/桌面$ du -h -a
+4.0K	./linux_file.c
+12K	./.swk
+12K	./.file.txt.swo
+4.0K	./.modules.order.cmd
+4.0K	./filea.c
+4.0K	./main.c
+12K	./.swn
+4.0K	./main.h
+12K	./English_early_education_machine_input.c
+32K	./.hello.o.cmd
+12K	./a.c
+4.0K	./1.txt
+4.0K	./.hello.mod.cmd
+20K	./a.out
+32K	./.hello.mod.o.cmd
+12K	./.file.txt.swp
+12K	./.swp
+4.0K	./.Module.symvers.cmd
+4.0K	./func1.c
+4.0K	./func2.c
+4.0K	./test.txt
+12K	./.swo
+12K	./.myfile.txt.swp
+12K	./.file.c.swp
+12K	./.swl
+12K	./.swm
+12K	./.swj
+16K	./.a.c.swp
+4.0K	./.hello.ko.cmd
+4.0K	./2.txt
+312K	.
+mao@ubuntu:~/桌面$ 
+```
+
+
+
 
 
 
@@ -10485,4 +10523,426 @@ mao@ubuntu:~/桌面$ o
 
 
 ## dumpe2fs命令
+
+使用 dumpe2fs 命令可以查看文件系统的详细信息
+
+命令：
+
+```sh
+dumpe2fs [-h] 文件名
+```
+
+
+
+-h 选项的含义是仅列出 superblock（超级块）的数据信息
+
+
+
+```sh
+mao@ubuntu:~/桌面$ df
+文件系统          1K-块    已用    可用 已用% 挂载点
+udev            1967912       0 1967912    0% /dev
+tmpfs            399508    1856  397652    1% /run
+/dev/sda5      14897128 9137592 4983088   65% /
+tmpfs           1997540       0 1997540    0% /dev/shm
+tmpfs              5120       4    5116    1% /run/lock
+tmpfs           1997540       0 1997540    0% /sys/fs/cgroup
+/dev/loop1        56832   56832       0  100% /snap/core18/2253
+/dev/loop2        56960   56960       0  100% /snap/core18/2409
+/dev/loop3        63488   63488       0  100% /snap/core20/1518
+/dev/loop4       224256  224256       0  100% /snap/gnome-3-34-1804/72
+/dev/loop0          128     128       0  100% /snap/bare/5
+/dev/loop5        66816   66816       0  100% /snap/gtk-common-themes/1519
+/dev/loop7       410496  410496       0  100% /snap/gnome-3-38-2004/112
+/dev/loop6        93952   93952       0  100% /snap/gtk-common-themes/1535
+/dev/loop9        48128   48128       0  100% /snap/snapd/16010
+/dev/loop10       52224   52224       0  100% /snap/snap-store/547
+/dev/loop8        63488   63488       0  100% /snap/core20/1270
+/dev/loop11      253952  253952       0  100% /snap/gnome-3-38-2004/87
+/dev/loop12      224256  224256       0  100% /snap/gnome-3-34-1804/77
+/dev/loop13       55552   55552       0  100% /snap/snap-store/558
+/dev/sda1        523248       4  523244    1% /boot/efi
+tmpfs            399508      24  399484    1% /run/user/1000
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ sudo dumpe2fs -h /dev/sda5
+dumpe2fs 1.45.5 (07-Jan-2020)
+Filesystem volume name:   <none>
+Last mounted on:          /
+Filesystem UUID:          f016fec7-baa2-4d84-99bb-4b8bde2ff82c
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype needs_recovery extent 64bit flex_bg sparse_super large_file huge_file dir_nlink extra_isize metadata_csum
+Filesystem flags:         signed_directory_hash 
+Default mount options:    user_xattr acl
+Filesystem state:         clean
+Errors behavior:          Continue
+Filesystem OS type:       Linux
+Inode count:              950272
+Block count:              3800320
+Reserved block count:     190016
+Free blocks:              1439838
+Free inodes:              736751
+First block:              0
+Block size:               4096
+Fragment size:            4096
+Group descriptor size:    64
+Reserved GDT blocks:      1024
+Blocks per group:         32768
+Fragments per group:      32768
+Inodes per group:         8192
+Inode blocks per group:   512
+Flex block group size:    16
+Filesystem created:       Fri Oct 15 04:10:36 2021
+Last mount time:          Wed Jul  6 04:43:56 2022
+Last write time:          Wed Jul  6 04:43:56 2022
+Mount count:              25
+Maximum mount count:      -1
+Last checked:             Fri Oct 15 04:10:36 2021
+Check interval:           0 (<none>)
+Lifetime writes:          12 GB
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+First inode:              11
+Inode size:	          256
+Required extra isize:     32
+Desired extra isize:      32
+Journal inode:            8
+First orphan inode:       266120
+Default directory hash:   half_md4
+Directory Hash Seed:      321309c4-e1c0-4497-8c62-6b72524951b4
+Journal backup:           inode blocks
+Checksum type:            crc32c
+Checksum:                 0x048c4aba
+Journal features:         journal_incompat_revoke journal_64bit journal_checksum_v3
+Journal size:             64M
+Journal length:           16384
+Journal sequence:         0x000059e5
+Journal start:            1
+Journal checksum type:    crc32c
+Journal checksum:         0x16c0ab38
+
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ sudo dumpe2fs /dev/sda5
+dumpe2fs 1.45.5 (07-Jan-2020)
+Filesystem volume name:   <none>
+Last mounted on:          /
+Filesystem UUID:          f016fec7-baa2-4d84-99bb-4b8bde2ff82c
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype needs_recovery extent 64bit flex_bg sparse_super large_file huge_file dir_nlink extra_isize metadata_csum
+Filesystem flags:         signed_directory_hash 
+Default mount options:    user_xattr acl
+Filesystem state:         clean
+Errors behavior:          Continue
+Filesystem OS type:       Linux
+Inode count:              950272
+Block count:              3800320
+Reserved block count:     190016
+Free blocks:              1439838
+Free inodes:              736751
+First block:              0
+Block size:               4096
+Fragment size:            4096
+Group descriptor size:    64
+Reserved GDT blocks:      1024
+Blocks per group:         32768
+Fragments per group:      32768
+Inodes per group:         8192
+Inode blocks per group:   512
+Flex block group size:    16
+Filesystem created:       Fri Oct 15 04:10:36 2021
+Last mount time:          Wed Jul  6 04:43:56 2022
+Last write time:          Wed Jul  6 04:43:56 2022
+Mount count:              25
+Maximum mount count:      -1
+Last checked:             Fri Oct 15 04:10:36 2021
+Check interval:           0 (<none>)
+Lifetime writes:          12 GB
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+First inode:              11
+Inode size:	          256
+Required extra isize:     32
+Desired extra isize:      32
+Journal inode:            8
+First orphan inode:       266120
+Default directory hash:   half_md4
+Directory Hash Seed:      321309c4-e1c0-4497-8c62-6b72524951b4
+Journal backup:           inode blocks
+Checksum type:            crc32c
+Checksum:                 0x048c4aba
+Journal features:         journal_incompat_revoke journal_64bit journal_checksum_v3
+Journal size:             64M
+Journal length:           16384
+Journal sequence:         0x000059e5
+Journal start:            1
+Journal checksum type:    crc32c
+Journal checksum:         0x16c0ab38
+
+
+组 0：(块 0-32767) 校验值 0xcee9 [ITABLE_ZEROED]
+  主 超级块位于 0，组描述符位于 1-2
+  保留的GDT块位于 3-1026
+  块位图位于 1027 (+1027)，校验值 0x547afb22
+  Inode 位图位于 1043 (+1043)，校验值 0xddc327b2
+  Inode表位于 1059-1570 (+1059)
+  4709 个可用 块，0 个可用inode，1359 个目录 
+  可用块数： 15092-15491, 20268-24575, 32767
+  可用inode数： 
+组 1：(块 32768-65535) 校验值 0xec00 [ITABLE_ZEROED]
+  备份 超级块位于 32768，组描述符位于 32769-32770
+  保留的GDT块位于 32771-33794
+  块位图位于 1028 (bg #0 + 1028)，校验值 0x3020cafd
+  Inode 位图位于 1044 (bg #0 + 1044)，校验值 0xddc327b2
+  Inode表位于 1571-2082 (bg #0 + 1571)
+  1020 个可用 块，0 个可用inode，1893 个目录 
+  可用块数： 33795-33813, 33815-34815
+  可用inode数： 
+组 2：(块 65536-98303) 校验值 0x673d [ITABLE_ZEROED]
+  块位图位于 1029 (bg #0 + 1029)，校验值 0x3253976a
+  Inode 位图位于 1045 (bg #0 + 1045)，校验值 0x6d6c964e
+  Inode表位于 2083-2594 (bg #0 + 2083)
+  0 个可用 块，5711 个可用inode，535 个目录 ，5708个未使用的inodes
+  可用块数： 
+  可用inode数： 18866-24576
+组 3：(块 98304-131071) 校验值 0xeba3 [INODE_UNINIT, ITABLE_ZEROED]
+  备份 超级块位于 98304，组描述符位于 98305-98306
+  保留的GDT块位于 98307-99330
+  块位图位于 1030 (bg #0 + 1030)，校验值 0x18e68c76
+  Inode 位图位于 1046 (bg #0 + 1046)，校验值 0x00000000
+  Inode表位于 2595-3106 (bg #0 + 2595)
+  1021 个可用 块，8192 个可用inode，0 个目录 ，8192个未使用的inodes
+  可用块数： 99331-100351
+  可用inode数： 24577-32768
+...
+...
+...
+组 32：(块 1048576-1081343) 校验值 0x4240 [ITABLE_ZEROED]
+  块位图位于 1048576 (+0)，校验值 0xca5409f7
+  Inode 位图位于 1048592 (+16)，校验值 0x11f848db
+  Inode表位于 1048608-1049119 (+32)
+  21514 个可用 块，29 个可用inode，1020 个目录 
+  可用块数： 1057319-1057320, 1057323, 1057765, 1057783, 1057857, 1057873, 1057882, 1057896-1057897, 1057998, 1058066, 1058127, 1058144-1058157, 1058160-1058239, 1058256-1058319, 1058574-1058595, 1058597, 1058678-1058703, 1058824-1058913, 1059989-1059991, 1059999, 1060144-1081343
+  可用inode数： 266081-266082, 266139, 267991, 267994-267995, 267997-267998, 268007, 269225, 269634-269639, 269652-269654, 269657, 269686, 269693, 269712-269717, 269726
+组 33：(块 1081344-1114111) 校验值 0x5e26 [ITABLE_ZEROED]
+  块位图位于 1048577 (bg #32 + 1)，校验值 0x9c4a2d8c
+  Inode 位图位于 1048593 (bg #32 + 17)，校验值 0x320510cc
+  Inode表位于 1049120-1049631 (bg #32 + 544)
+  3380 个可用 块，1386 个可用inode，412 个目录 
+  可用块数： 1086942-1086943, 1087360-1087423, 1087454-1087455, 1087584-1087631, 1087674-1087675, 1087744-1087751, 1087837, 1087846-1087847, 1087852-1087855, 1087872-1087903, 1087920-1087922, 1087931-1087939, 1087965-1087967, 1088033-1088037, 1088040-1088047, 1088053, 1088056-1088070, 1088108, 1088110-1088127, 1088164-1088165, 1088176-1088191, 1088218-1088219, 1088246-1088247, 1088252-1088253, 1088270-1088271, 1088284-1088285, 1088308-1088309, 1088312-1088313, 1088327-1088339, 1088346-1088351, 1088354-1088356, 1088364-1088368, 1088374-1088379, 1088395, 1088398-1088399, 1088404-1088417, 1088420-1088423, 1088430-1088436, 1088439-1088451, 1088456-1088472, 1088495-1088500, 1088502-1088511, 1088515-1088517, 1088526-1088532, 1088542-1088545, 1088550-1088560, 1088590-1088619, 1088648-1088701, 1088704-1088729, 1088731, 1088734-1088818, 1088820-1088839, 1088849-1088879, 1088913, 1088916-1088941, 1088950-1088963, 1088965, 1088974-1088975, 1088991-1089008, 1089025-1089037, 1089039, 1089061-1089062, 1089064-1089081, 1089093, 1089099-1089104, 1089106-1089110, 1089112-1089117, 1089134-1089146, 1089148-1089151, 1089169, 1089175-1089182, 1089184-1089195, 1089199, 1089204-1089206, 1089208-1089211, 1089215-1089217, 1089228-1089240, 1089244-1089245, 1089252-1089257, 1089260-1089261, 1089266-1089269, 1089272-1089273, 1089275, 1089278, 1089281, 1089288-1089293, 1089296-1089297, 1089300-1089301, 1089306-1089309, 1089314-1089317, 1089320-1089321, 1089325-1089327, 1089330-1089331, 1089334-1089335, 1089342-1089346, 1089350-1089352, 1089356-1089358, 1089361-1089362, 1089365-1089366, 1089374-1089379, 1089383-1089385, 1089389-1089391, 1089421-1089437, 1089440-1089443, 1089445-1089447, 1089450-1089451, 1089459-1089465, 1089470-1089471, 1089482-1089485, 1089488-1089491, 1089494-1089496, 1089501, 1089508-1089513, 1089517, 1089522-1089527, 1089530-1089531, 1089533, 1089545, 1089548-1089559, 1089563-1089565, 1089572, 1089574-1089577, 1089652-1089655, 1089664-1089690, 1089696-1089731, 1089733-1089803, 1089880-1089941, 1089958-1089974, 1089976, 1089980-1089982, 1089989-1089994, 1089998-1090000, 1090003, 1090010-1090034, 1090036-1090041, 1090075, 1090141-1090157, 1090160-1090193, 1090238-1090239, 1090249-1090278, 1090280-1090289, 1090292-1090298, 1090378-1090379, 1090409-1090438, 1090440-1090476, 1090478-1090488, 1090490-1090495, 1090513, 1090518-1090533, 1090535, 1090542-1090543, 1090568-1090589, 1090725, 1090728-1090827, 1090930-1090931, 1090974-1091085, 1091118-1091138, 1091140-1091146, 1091319, 1091324-1091384, 1091392-1091439, 1091469, 1091472-1091532, 1091538, 1091540-1091543, 1091583-1091613, 1091630-1091644, 1091656-1091663, 1091704-1091711, 1091719-1091725, 1091787-1091819, 1091823-1091845, 1091848-1091851, 1091862-1091863, 1091876-1091881, 1091884-1091893, 1091939-1091941, 1091960-1091991, 1092021, 1092031-1092048, 1092050-1092060, 1092071, 1092082-1092096, 1092105-1092108, 1092110-1092112, 1092114-1092115, 1092117, 1092120, 1092127, 1092139, 1092146-1092162, 1092179, 1092182-1092184, 1092188, 1092190-1092191, 1092194-1092197, 1092200-1092201, 1092211-1092217, 1092241-1092253, 1092256-1092257, 1092310, 1092376-1092413, 1092438-1092450, 1092452-1092453, 1092515-1092546, 1092548-1092556, 1092558-1092559, 1093215, 1093223, 1093242-1093243, 1093254, 1093297-1093300, 1093339, 1093376-1093389, 1093481, 1093500-1093518, 1093529-1093565, 1093567, 1093589-1093591, 1093790-1093791, 1093795, 1093800-1094348, 1094351-1094354, 1094356-1094577, 1094590, 1094592-1094599, 1094776-1094801, 1094968-1094971, 1094974, 1100695, 1101152-1101160, 1101162-1101177, 1101179, 1101184-1101187, 1101196-1101198, 1101200-1101203, 1101251, 1101260-1101300, 1101302-1101305, 1102420-1102423, 1102634-1102635, 1102720-1102768, 1102772-1102783, 1102796-1102799, 1103421-1103423, 1104143, 1104547, 1104671, 1113883-1113893, 1114064-1114071, 1114080-1114103
+  可用inode数： 271429-271430, 271578-271579, 271651-271652, 271848, 271851-271853, 271942, 271948, 271954, 272364-272366, 272648, 272730, 276886, 276951, 277157-278019, 278024-278033, 278035-278040, 278042-278528
+...
+...
+...
+组 115：(块 3768320-3800319) 校验值 0xed16 [INODE_UNINIT, ITABLE_ZEROED]
+  块位图位于 3670019 (bg #112 + 3)，校验值 0xcce1edd2
+  Inode 位图位于 3670023 (bg #112 + 7)，校验值 0x00000000
+  Inode表位于 3671560-3672071 (bg #112 + 1544)
+  32000 个可用 块，8192 个可用inode，0 个目录 ，8192个未使用的inodes
+  可用块数： 3768320-3800319
+  可用inode数： 942081-950272
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## fdisk命令
+
+命令用于**给硬盘分区**
+
+在 Linux 中有专门的分区命令 fdisk 和 parted。其中 fdisk 命令较为常用，但不支持大于 2TB 的分区；如果需要支持大于 2TB 的分区，则需要使用 parted 命令
+
+
+
+列出系统分区：
+
+```sh
+fdisk ~l
+```
+
+
+
+给硬盘分区：
+
+```sh
+fdisk 设备文件名
+```
+
+
+
+千万不要在当前的硬盘上尝试使用 fdisk，这会完整删除整个系统，一定要再找一块硬盘，或者使用虚拟机
+
+
+
+```sh
+[root@localhost ~]# fdisk -l
+#查询本机可以识别的硬盘和分区
+Disk /dev/sda:32.2 GB, 32212254720 bytes
+#硬盘文件名和硬盘大小
+255 heads, 63 sectors/track, 3916 cylinders
+#共255个磁头、63个扇区和3916个柱面
+Units = cylinders of 16065 *512 = 8225280 bytes
+#每个柱面的大小
+Sector size (logical/physical): 512 bytes/512 bytes
+#每个扇区的大小
+I/O size (minimum/optimal): 512 bytes/512 bytes
+Disk identifier: 0x0009e098
+Device Boot Start End Blocks ld System
+/dev/sda1 * 1 26 204800 83 Linux
+Partition 1 does not end on cylinder boundary.
+#分区1没有占满硬盘
+/dev/sda2 26 281 2048000 82 Linux swap / Solaris
+Partition 2 does not end on cylinder boundary
+#分区2没有占满硬盘
+/dev/sda3 281 3917 29203456 83 Linux
+#设备文件名启动分区 起始柱面 终止柱面容量 ID 系统
+Disk /dev/sdb: 21.5 GB, 21474836480 bytes #第二个硬盘识别，这个硬盘的大小
+255 heads, 63 sectors/track, 2610 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes/512 bytes Disk identifier: 0x00000000
+```
+
+
+
+- Device：分区的设备文件名。
+- Boot：是否为启动引导分区，在这里 /dev/sda1 为启动引导分区。
+- Start：起始柱面，代表分区从哪里开始。
+- End：终止柱面，代表分区到哪里结束。
+- Blocks：分区的大小，单位是 KB。
+- id：分区内文件系统的 ID。在 fdisk 命令中，可以 使用 "i" 查看。
+- System：分区内安装的系统是什么。
+
+
+
+fdisk 可以识别的交互命令：
+
+
+
+| 命令 |                            说 明                             |
+| :--: | :----------------------------------------------------------: |
+|  a   |                        设置可引导标记                        |
+|  b   |                      编辑 bsd 磁盘标签                       |
+|  c   |                  设置 DOS 操作系统兼容标记                   |
+|  d   |                         删除一个分区                         |
+|  1   | 显示已知的文件系统类型。82 为 Linux swap 分区，83 为 Linux 分区 |
+|  m   |                         显示帮助菜单                         |
+|  n   |                           新建分区                           |
+|  0   |                     建立空白 DOS 分区表                      |
+|  P   |                         显示分区列表                         |
+|  q   |                          不保存退出                          |
+|  s   |                    新建空白 SUN 磁盘标签                     |
+|  t   |                    改变一个分区的系统 ID                     |
+|  u   |                       改变显示记录单位                       |
+|  V   |                          验证分区表                          |
+|  w   |                           保存退出                           |
+|  X   |                      附加功能（仅专家）                      |
+
+
+
+
+
+
+
+## 创建逻辑分区
+
+扩展分区是不能被格式化和直接使用的，所以还要在扩展分区内部再建立逻辑分区
+
+
+
+```sh
+[root@localhost ~]# fdisk /dev/sdb
+…省略部分输出…
+Command (m for help): n
+#建立新分区
+Command action
+l logical (5 or over)
+p primary partition (1-4)
+l
+#建立逻辑分区
+First cylinder (655-2610, default 655):
+#不用指定分区号，默认会从5开始分配，所以直接选择起始柱面
+#注意：逻辑分区是在扩展分区内部再划分的，所以柱面是和扩展分区重叠的
+Using default value 655
+Last cylinder, +cylinders or +size{K, M, G} (655-2610, default 2610):+2G
+#分配2GB大小
+Command (m for help): n
+#再建立一个逻辑分区
+Command action
+l logical (5 or over)
+p primary partition (1-4)
+l
+First cylinder (917-2610, default 917):
+Using default value 917
+Last cylinder, +cylinders or +size{K, M, G} (917-2610, default 2610):+2G
+Command (m for help): p
+#查看一下已经建立的分区
+Disk /dev/sdb: 21.5GB, 21474836480 bytes
+255 heads, 63 sectors/track, 2610 cylinders
+Units = cylinders of 16065 *512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes Disk identifier: 0xb4b0720c
+Device Boot Start End Blocks id System
+/dev/sdb1 1 654
+5253223+ 83 Linux
+#主分区
+/dev/sdb2 655 2610 15711570
+5 Extended
+#扩展分区
+/dev/sdb5 655 916
+2104483+ 83 Linux
+#逻辑分区 1
+/dev/sdb6 917 1178
+2104483+ 83 Linux
+#逻辑分区2
+Command (m for help): w
+#保存并退出
+The partition table has been altered!
+Calling ioctl。to re-read partition table.
+Syncing disks.
+[root@localhost -]#
+```
+
+
+
+所有的分区立过程中如果不保存并退出是不会生效的，所以建立错了也没有关系，使用 q 命令不保存退出即可。如果使用了 w 命令，就会保存退出。有时因为系统的分区表正忙，所以需要重新启动系统才能使新的分区表生效。命令如下：
+
+```sh
+Command (m for help): w
+#保存并退出
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+WARNING: Re-reading the partition table failed with error 16:
+Device or resource busy.
+The kernel still uses the old table.
+The new table will be used at the next reboot.
+#要求重新启动，才能格式化
+Syncing disks.
+```
+
+
+
+重启启动或者执行以下命令：
+
+```sh
+partprobe
+```
+
+
+
+
+
+
+
+## parted命令
 
