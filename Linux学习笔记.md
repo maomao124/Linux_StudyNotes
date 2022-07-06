@@ -10068,3 +10068,421 @@ du [选项] [目录或文件名]
 
 ## mount命令
 
+**挂载Linux系统外的文件**
+
+
+
+mount 命令的常用格式有以下几种：
+
+```sh
+mount [-l]
+```
+
+-l 选项，会额外显示出卷标名称
+
+
+
+```sh
+mount -a
+```
+
+-a 选项的含义是自动检查 /etc/fstab 文件中有无疏漏被挂载的设备文件，如果有，则进行自动挂载操作。
+
+
+
+```sh
+mount [-t 系统类型] [-L 卷标名] [-o 特殊选项] [-n] 设备文件名 挂载点
+```
+
+
+
+参数：
+
+- -t 系统类型：指定欲挂载的文件系统类型。Linux 常见的支持类型有 EXT2、EXT3、EXT4、iso9660（光盘格式）、vfat、reiserfs 等。如果不指定具体类型，挂载时 Linux 会自动检测。
+- -L 卷标名：除了使用设备文件名之外，还可以利用文件系统的卷标名称进行挂载。
+- -n：在默认情况下，系统会将实际挂载的情况实时写入 /etc/mtab 文件中，但在某些场景下（例如单人维护模式），为了避免出现问题，会刻意不写入，此时就需要使用这个选项；
+- -o 特殊选项：可以指定挂载的额外选项，比如读写权限、同步/异步等，如果不指定，则使用默认值（defaults）
+
+
+
+|    选项     |                             功能                             |
+| :---------: | :----------------------------------------------------------: |
+|    rw/ro    | 是否对挂载的文件系统拥有读写权限，rw 为默认值，表示拥有读写权限；ro 表示只读权限。 |
+| async/sync  | 此文件系统是否使用同步写入（sync）或异步（async）的内存机制，默认为异步 async。 |
+|  dev/nodev  | 是否允许从该文件系统的 block 文件中提取数据，为了保证数据安装，默认是 nodev。 |
+| auto/noauto | 是否允许此文件系统被以 mount -a 的方式进行自动挂载，默认是 auto。 |
+| suid/nosuid |   设定文件系统是否拥有 SetUID 和 SetGID 权限，默认是拥有。   |
+| exec/noexec |     设定在文件系统中是否允许执行可执行文件，默认是允许。     |
+| user/nouser | 设定此文件系统是否允许让普通用户使用 mount 执行实现挂载，默认是不允许（nouser），仅有 root 可以。 |
+|  defaults   | 定义默认值，相当于 rw、suid、dev、exec、auto、nouser、async 这 7 个选项。 |
+|   remount   |     重新挂载已挂载的文件系统，一般用于指定修改特殊权限。     |
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ mount
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,noexec,relatime,size=1967912k,nr_inodes=491978,mode=755,inode64)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=399508k,mode=755,inode64)
+/dev/sda5 on / type ext4 (rw,relatime,errors=remount-ro)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k,inode64)
+tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755,inode64)
+cgroup2 on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)
+cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,name=systemd)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+none on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)
+cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_cls,net_prio)
+cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)
+cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)
+cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)
+cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)
+cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)
+cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)
+cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)
+cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)
+cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=28,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=16034)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+vmware-vmblock on /run/vmblock-fuse type fuse.vmware-vmblock (rw,relatime,user_id=0,group_id=0,default_permissions,allow_other)
+/var/lib/snapd/snaps/core18_2253.snap on /snap/core18/2253 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/core18_2409.snap on /snap/core18/2409 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/core20_1518.snap on /snap/core20/1518 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gnome-3-34-1804_72.snap on /snap/gnome-3-34-1804/72 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/bare_5.snap on /snap/bare/5 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gtk-common-themes_1519.snap on /snap/gtk-common-themes/1519 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gnome-3-38-2004_112.snap on /snap/gnome-3-38-2004/112 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gtk-common-themes_1535.snap on /snap/gtk-common-themes/1535 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/snapd_16010.snap on /snap/snapd/16010 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/snap-store_547.snap on /snap/snap-store/547 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/core20_1270.snap on /snap/core20/1270 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gnome-3-38-2004_87.snap on /snap/gnome-3-38-2004/87 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/gnome-3-34-1804_77.snap on /snap/gnome-3-34-1804/77 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/var/lib/snapd/snaps/snap-store_558.snap on /snap/snap-store/558 type squashfs (ro,nodev,relatime,x-gdu.hide)
+/dev/sda1 on /boot/efi type vfat (rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=399508k,mode=700,uid=1000,gid=1000,inode64)
+gvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## 挂载光盘
+
+在 Windows 中，如果我们想要使用光盘，只需要将光盘放入光驱即可。但在 Linux 系统中，将光盘放入光驱后，还需要将光盘中的文件系统手动挂载到 Linux 系统中
+
+同样，用完光盘后，Windows 系统可以直接弹出光驱并取出光盘，但 Linux 系统不行，必须先卸载才能取出光盘
+
+
+
+建立挂载点：
+
+```sh
+mkdir/mnt/cdrom/
+```
+
+
+
+挂载光盘：
+
+```sh
+mount -t iso9660 /dev/cdrom /mnt/cdrom/
+```
+
+或者：
+
+```sh
+mount /dev/cdrom /mnt/cdrom/
+```
+
+
+
+光盘的文件系统是 iso9660，不过这个文件系统可以省略不写，系统会自动检测
+
+
+
+查看挂载设备：
+
+```sh
+mount
+```
+
+
+
+挂载就是把光驱的设备文件和挂载点连接起来。挂载点 /mnt/cdrom 是我们手工建立的空目录。只要是已经建立的空目录都可以作为挂载点。/dev/cdrom 就是光驱的设备文件名。
+
+
+
+
+
+## 挂载U盘
+
+挂载 U 盘和挂载光盘的方式是一样的，只不过光盘的设备文件名是固定的（/dev/sr0 或 /dev/cdrom），而 U 盘的设备文件名是在插入 U 盘后系统自动分配的。
+
+
+
+通过使用 fdisk 命令，即可查看到 U 盘的设备文件名：
+
+```sh
+fdisk -l
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo fdisk -l
+[sudo] mao 的密码： 
+Disk /dev/loop0：4 KiB，4096 字节，8 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop1：55.5 MiB，58183680 字节，113640 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop2：55.55 MiB，58232832 字节，113736 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop3：61.95 MiB，64933888 字节，126824 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop4：219 MiB，229638144 字节，448512 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop5：65.22 MiB，68378624 字节，133552 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop6：91.7 MiB，96141312 字节，187776 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop7：400.82 MiB，420265984 字节，820832 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/sda：15 GiB，16106127360 字节，31457280 个扇区
+Disk model: VMware Virtual S
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+磁盘标签类型：dos
+磁盘标识符：0x7b05fa2b
+
+设备       启动    起点     末尾     扇区  大小 Id 类型
+/dev/sda1  *       2048  1050623  1048576  512M  b W95 FAT32
+/dev/sda2       1052670 31455231 30402562 14.5G  5 扩展
+/dev/sda5       1052672 31455231 30402560 14.5G 83 Linux
+
+
+
+
+Disk /dev/loop8：61.93 MiB，64913408 字节，126784 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop9：46.98 MiB，49233920 字节，96160 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop10：50.98 MiB，53432320 字节，104360 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop11：247.93 MiB，259948544 字节，507712 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop12：219 MiB，229638144 字节，448512 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+
+
+Disk /dev/loop13：54.24 MiB，56872960 字节，111080 个扇区
+单元：扇区 / 1 * 512 = 512 字节
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+查看到 U 盘的设备文件名，接下来就要创建挂载点：
+
+```sh
+mkdir /mnt/usb
+```
+
+
+
+挂载：
+
+```sh
+mount U盘设备文件名 /mnt/usb/
+```
+
+
+
+访问U盘数据：
+
+```sh
+cd /mnt/usb/
+```
+
+```sh
+ls -l
+```
+
+
+
+
+
+如果出现乱码，是因为 U 盘是 Windows 中保存的数据，而 Windows 中的中文编码格式和 Linux 中的不一致，只需在挂载的时候指定正确的编码格式就可以解决乱码问题：
+
+
+
+挂载U盘，指定中文编码格式为UTF-8：
+
+```sh
+mount -o iocharset=utf8 U盘设备文件名 /mnt/usb/
+```
+
+
+
+再次访问U盘数据：
+
+```sh
+cd /mnt/usb/
+```
+
+```sh
+ls -l
+```
+
+
+
+Linux 默认是不支持 NTFS 文件系统的，所以默认是不能挂载 NTFS 格式的移动硬盘的。要想让 Linux 支持移动硬盘，主要有三种方法：
+
+1. 重新编译内核，加入 ntfs 模块，然后安装 ntfs 模块即可
+2. 不自己编译内核，而是下载已经编译好的内核，直接安装即可
+3. 安装 NTFS 文件系统的第三方插件，也可以支持 NTFS 文件系统
+
+
+
+
+
+## umount命令
+
+umount 命令**用于卸载已经挂载的硬件设备**
+
+
+
+命令：
+
+```sh
+umount 设备文件名或挂载点
+```
+
+
+
+卸载命令后面既可以加设备文件名，也可以加挂载点，不过只能二选一
+
+
+
+
+
+## fsck命令
+
+fsck 命令**用于检查文件系统并尝试修复出现的错误**
+
+
+
+命令：
+
+```sh
+fsck [选项] 分区设备文件名
+```
+
+
+
+|      选项       |                             功能                             |
+| :-------------: | :----------------------------------------------------------: |
+|       -a        |             自动修复文件系统，没有任何提示信息。             |
+|       -r        | 采取互动的修复模式，在修改文件前会进行询问，让用户得以确认并决定处理方式。 |
+|   -A（大写）    | 按照 /etc/fstab 配置文件的内容，检查文件内罗列的全部文件系统。 |
+| -t 文件系统类型 |                  指定要检查的文件系统类型。                  |
+|   -C（大写）    |                    显示检查分区的进度条。                    |
+|       -f        | 强制检测，一般 fsck 命令如果没有发现分区有问题，则是不会检测的。如果强制检测，那么不管是否发现问题，都会检测。 |
+|       -y        |    自动修复，和 -a 作用一致，不过有些文件系统只支持 -y。     |
+
+
+
+在使用 fsck 命令修改某文件系统时，这个文件系统对应的磁盘分区一定要处于卸载状态，磁盘分区在挂载状态下进行修复是非常不安全的，数据可能会遭到破坏，也有可能会损坏磁盘
+
+```sh
+mao@ubuntu:~/桌面$ fsck -r /dev/sda5
+fsck，来自 util-linux 2.34
+e2fsck 1.45.5 (07-Jan-2020)
+/dev/sda5 已挂载。
+
+
+
+警告！！！该文件系统已被挂载。如果你继续操作将会
+使文件系统遭受 *** 严重损坏 ***！
+
+
+你真的想要继续吗<n>? 否
+检查被中止。
+/dev/sda5: status 0, rss 3528, real 18.310207, user 0.003392, sys 0.000000
+mao@ubuntu:~/桌面$ o
+```
+
+
+
+
+
+## dumpe2fs命令
+
