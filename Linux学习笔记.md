@@ -9810,7 +9810,261 @@ mao@ubuntu:~/桌面$
 
 # 文件系统管理
 
+## 文件系统
+
+Windows 98 以前的微软操作系统使用 FAT(FAT16)文件系统，Windows 2000 以后的版本使用 NTFS 文件系统，而 Linux 的正统文件系统是 Ext2。早期的 Linux 使用 Ext2 文件系统格式，CentOS 5.x 默认使用 Ext3，CentOS 6.x 默认使用 Ext4，而目前最新的 CentOS 7.x 默认使用 xfs 格式。
+
+Ext4 是 Ext3(Ext2) 文件系统的升级版，在性能、伸缩性和可靠性方面进行了大量改进，变化可以说是翻天覆地的：
+
+- 向下兼容 Ext3；
+- 最大 1EB 文件系统和 16TB 文件；
+- 无限数量子目录；
+- Extents 连续数据块概念；
+- 多块分配、延迟分配、持久预分配；
+- 快速 FSCK、日志校验、无日志模式、在线碎片整理、inode 增强、默认启用 barrier 等
 
 
 
+Linux 系统能够支持的文件系统非常多，除 Linux 默认文件系统 Ext2、Ext3 和 Ext4 之外，还能支持 fat16、fat32、NTFS(需要重新编译内核)等 Windows 文件系统。也就是说，Linux 可以通过挂载的方式使用 Windows 文件系统中的数据。Linux 所能够支持的文件系统在 "/usr/src/kemels/当前系统版本/fs" 目录中(需要在安装时选择)，该目录中的每个子目录都是一个可以识别的文件系统。
+
+
+
+
+| 文件系统 | 描述 |
+| :-----: | :----------------------------------------------------------: |
+| Ext     | Linux 中最早的文件系统，由于在性能和兼容性上具有很多缺陷，现在已经很少使用 |
+| Ext2    | 是 Ext 文件系统的升级版本，Red Hat Linux 7.2 版本以前的系统默认都是 Ext2 文件系统。于 1993 年发布，支持最大 16TB 的分区和最大 2TB 的文件(1TB=1024GB=1024x1024KB) |
+| Ext3    | 是 Ext2 文件系统的升级版本，最大的区别就是带日志功能，以便在系统突然停止时提高文件系统的可靠性。支持最大 16TB 的分区和最大 2TB 的文件 |
+| Ext4    | 是 Ext3 文件系统的升级版。Ext4 在性能、伸缩性和可靠性方面进行了大量改进。Ext4 的变化可以说是翻天覆地的，比如向下兼容 Ext3、最大 1EB 文件系统和 16TB 文件、无限数量子目录、Extents 连续数据块 概念、多块分配、延迟分配、持久预分配、快速 FSCK、日志校验、无日志模式、在线碎片整理、inode 增强、默认启用 barrier 等。它是 CentOS 6.3 的默认文件系统 |
+| xfs     | 被业界称为最先进、最具有可升级性的文件系统技术，由 SGI 公司设计，目前最新的 CentOS 7 版本默认使用的就是此文件系统。 |
+| swap    | swap 是 Linux 中用于交换分区的文件系统(类似于 Windows 中的虚拟内存)，当内存不够用时，使用交换分区暂时替代内存。一般大小为内存的 2 倍，但是不要超过 2GB。它是 Linux 的必需分区 |
+| NFS     | NFS 是网络文件系统(Network File System)的缩写，是用来实现不同主机之间文件共享的一种网络服务，本地主机可以通过挂载的方式使用远程共享的资源 |
+| iso9660 | 光盘的标准文件系统。Linux 要想使用光盘，必须支持 iso9660 文件系统 |
+| fat     | 就是 Windows 下的 fatl6 文件系统，在 Linux 中识别为 fat      |
+| vfat    | 就是 Windows 下的 fat32 文件系统，在 Linux 中识别为 vfat。支持最大 32GB 的分区和最大 4GB 的文件 |
+| NTFS    | 就是 Windows 下的 NTFS 文件系统，不过 Linux 默认是不能识别 NTFS 文件系统的，如果需要识别，则需要重新编译内核才能支持。它比 fat32 文件系统更加安全，速度更快，支持最大 2TB 的分区和最大 64GB 的文件 |
+| ufs     | Sun 公司的操作系统 Solaris 和 SunOS 所采用的文件系统         |
+| proc    | Linux 中基于内存的虚拟文件系统，用来管理内存存储目录 /proc   |
+| sysfs   | 和 proc —样，也是基于内存的虚拟文件系统，用来管理内存存储目录 /sysfs |
+| tmpfs   | 也是一种基于内存的虚拟文件系统，不过也可以使用 swap 交换分区 |
+
+
+
+
+
+
+
+## 识别硬盘设备和硬盘分区
+
+Linux 系统初始化时，会根据 MBR 来识别硬盘设备。
+
+MBR，全称 Master Boot Record，可译为硬盘主引导记录，占据硬盘 0 磁道的第一个扇区。MBR 中，包括用来载入操作系统的可执行代码，实际上，此可执行代码就是 MBR 中前 446 个字节的 boot loader 程序（引导加载程序），而在 boot loader 程序之后的 64 个（16×4）字节的空间，就是存储的分区表（Partition table）相关信息。
+
+
+
+在分区表（Partition table）中，主要存储的值息包括分区号（Partition id）、分区的起始磁柱和分区的磁柱数量。所以 Linux 操作系统在初始化时就可以根据分区表中以上 3 种信息来识别硬盘设备。其中，常见的分区号如下：
+
+- 0x5（或 0xf）：可扩展分区（Extended partition）。
+- 0x82：Linux 交换区（Swap partition）。
+- 0x83：普通 Linux 分区（Linux partition）。
+- 0x8e：Linux 逻辑卷管理分区（Linux LVM partition）。
+- 0xfd：Linux 的 RAID 分区（Linux RAID auto partition）。
+
+
+
+由于 MBR 留给分区表的磁盘空间只有 64 个字节，而每个分区表的大小为 16 个字节，所以在一个硬盘上最多可以划分出 4 个主分区。如果想要在一个硬盘上划分出 4 个以上的分区时，可以通过在硬盘上先划分出一个可扩展分区的方法来增加额外的分区。
+
+
+
+不过，在 Linux 的 Kernel 中所支持的分区数量有如下限制：
+
+- 一个 IDE 的硬盘最多可以使用 63 个分区；
+- 一个 SCSI 的硬盘最多可以使用 15 个分区。
+
+
+
+为什么要将一个硬盘划分成多个分区，而不是直接使用整个硬盘呢？
+
+1. **方便管理和控制**
+   首先，可以将系统中的数据（也包括程序）按不同的应用分成几类，之后将这些不同类型的数据分别存放在不同的磁盘分区中。由于在每个分区上存放的都是类似的数据或程序，这样管理和维护就简单多了。
+2. **提高系统的效率**
+   给硬盘分区，可以直接缩短系统读写磁盘时磁头移动的距离，也就是说，缩小了磁头搜寻的范围；反之，如果不使用分区，每次在硬盘上搜寻信息时可能要搜寻整个硬盘，所以速度会很慢。另外，硬盘分区也可以减轻碎片（文件不连续存放）所造成的系统效率下降的问题。
+3. **使用磁盘配额的功能限制用户使用的磁盘量**
+   由于限制用户使用磁盘配额的功能，只能在分区一级上使用，所以，为了限制用户使用磁盘的总量，防止用户浪费磁盘空间（甚至将磁盘空间耗光），最好将磁盘先分区，然后在分配给一般用户。
+4. **便于备份和恢复**
+   硬盘分区后，就可以只对所需的分区进行备份和恢复操作，这样的话，备份和恢复的数据量会大大地下降，而且也更简单和方便。
+
+
+
+
+
+## df 命令
+
+df 命令，用于**显示 Linux 系统中各文件系统的硬盘使用情况**，包括文件系统所在硬盘分区的总容量、已使用的容量、剩余容量等
+
+
+
+整个文件系统有关的数据，都保存在 Super block（超级块）中，而 df 命令主要读取的数据几乎都针对的是整个文件系统，所以 df 命令主要是从各文件系统的 Super block 中读取数据
+
+
+
+命令：
+
+```sh
+df [选项] [目录或文件名]
+```
+
+
+
+| 选项 |                             作用                             |
+| :--: | :----------------------------------------------------------: |
+|  -a  | 显示所有文件系统信息，包括系统特有的 /proc、/sysfs 等文件系统； |
+|  -m  |                    以 MB 为单位显示容量；                    |
+|  -k  |           以 KB 为单位显示容量，默认以 KB 为单位；           |
+|  -h  |       使用人们习惯的 KB、MB 或 GB 等单位自行显示容量；       |
+|  -T  |                  显示该分区的文件系统名称；                  |
+|  -i  |      不用硬盘容量显示，而是以含有 inode 的数量来显示。       |
+
+
+
+```sh
+PS C:\Users\mao\Desktop> docker start -i centos
+[root@889e0484bdd2 /]# df
+Filesystem     1K-blocks    Used Available Use% Mounted on
+overlay        263174212 5077344 244658712   3% /
+tmpfs              65536       0     65536   0% /dev
+tmpfs            6514324       0   6514324   0% /sys/fs/cgroup
+shm                65536       0     65536   0% /dev/shm
+/dev/sdc       263174212 5077344 244658712   3% /etc/hosts
+tmpfs            6514324       0   6514324   0% /proc/acpi
+tmpfs            6514324       0   6514324   0% /sys/firmware
+[root@889e0484bdd2 /]#
+```
+
+
+
+- Filesystem：表示该文件系统位于哪个分区，因此该列显示的是设备名称；
+- 1K-blocks：此列表示文件系统的总大小，默认以 KB 为单位；
+- Used：表示用掉的硬盘空间大小；
+- Available：表示剩余的硬盘空间大小；
+- Use%：硬盘空间使用率。如果使用率高达 90% 以上，就需要额外注意，因为容量不足，会严重影响系统的正常运行；
+- Mounted on：文件系统的挂载点，也就是硬盘挂载的目录位置。
+
+
+
+```sh
+[root@889e0484bdd2 /]# df -k
+Filesystem     1K-blocks    Used Available Use% Mounted on
+overlay        263174212 5077348 244658708   3% /
+tmpfs              65536       0     65536   0% /dev
+tmpfs            6514324       0   6514324   0% /sys/fs/cgroup
+shm                65536       0     65536   0% /dev/shm
+/dev/sdc       263174212 5077348 244658708   3% /etc/hosts
+tmpfs            6514324       0   6514324   0% /proc/acpi
+tmpfs            6514324       0   6514324   0% /sys/firmware
+[root@889e0484bdd2 /]# df -m
+Filesystem     1M-blocks  Used Available Use% Mounted on
+overlay           257007  4959    238925   3% /
+tmpfs                 64     0        64   0% /dev
+tmpfs               6362     0      6362   0% /sys/fs/cgroup
+shm                   64     0        64   0% /dev/shm
+/dev/sdc          257007  4959    238925   3% /etc/hosts
+tmpfs               6362     0      6362   0% /proc/acpi
+tmpfs               6362     0      6362   0% /sys/firmware
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         251G  4.9G  234G   3% /
+tmpfs            64M     0   64M   0% /dev
+tmpfs           6.3G     0  6.3G   0% /sys/fs/cgroup
+shm              64M     0   64M   0% /dev/shm
+/dev/sdc        251G  4.9G  234G   3% /etc/hosts
+tmpfs           6.3G     0  6.3G   0% /proc/acpi
+tmpfs           6.3G     0  6.3G   0% /sys/firmware
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# df -aT
+Filesystem     Type    1K-blocks    Used Available Use% Mounted on
+overlay        overlay 263174212 5077352 244658704   3% /
+proc           proc            0       0         0    - /proc
+tmpfs          tmpfs       65536       0     65536   0% /dev
+devpts         devpts          0       0         0    - /dev/pts
+sysfs          sysfs           0       0         0    - /sys
+tmpfs          tmpfs     6514324       0   6514324   0% /sys/fs/cgroup
+cpuset         cgroup          0       0         0    - /sys/fs/cgroup/cpuset
+cpu            cgroup          0       0         0    - /sys/fs/cgroup/cpu
+cpuacct        cgroup          0       0         0    - /sys/fs/cgroup/cpuacct
+blkio          cgroup          0       0         0    - /sys/fs/cgroup/blkio
+memory         cgroup          0       0         0    - /sys/fs/cgroup/memory
+devices        cgroup          0       0         0    - /sys/fs/cgroup/devices
+freezer        cgroup          0       0         0    - /sys/fs/cgroup/freezer
+net_cls        cgroup          0       0         0    - /sys/fs/cgroup/net_cls
+perf_event     cgroup          0       0         0    - /sys/fs/cgroup/perf_event
+net_prio       cgroup          0       0         0    - /sys/fs/cgroup/net_prio
+hugetlb        cgroup          0       0         0    - /sys/fs/cgroup/hugetlb
+pids           cgroup          0       0         0    - /sys/fs/cgroup/pids
+rdma           cgroup          0       0         0    - /sys/fs/cgroup/rdma
+cgroup         cgroup          0       0         0    - /sys/fs/cgroup/systemd
+mqueue         mqueue          0       0         0    - /dev/mqueue
+shm            tmpfs       65536       0     65536   0% /dev/shm
+/dev/sdc       ext4    263174212 5077352 244658704   3% /etc/resolv.conf
+/dev/sdc       ext4    263174212 5077352 244658704   3% /etc/hostname
+/dev/sdc       ext4    263174212 5077352 244658704   3% /etc/hosts
+devpts         devpts          0       0         0    - /dev/console
+proc           proc            0       0         0    - /proc/bus
+proc           proc            0       0         0    - /proc/fs
+proc           proc            0       0         0    - /proc/irq
+proc           proc            0       0         0    - /proc/sys
+tmpfs          tmpfs     6514324       0   6514324   0% /proc/acpi
+tmpfs          tmpfs       65536       0     65536   0% /proc/kcore
+tmpfs          tmpfs       65536       0     65536   0% /proc/keys
+tmpfs          tmpfs       65536       0     65536   0% /proc/timer_list
+tmpfs          tmpfs       65536       0     65536   0% /proc/sched_debug
+tmpfs          tmpfs     6514324       0   6514324   0% /sys/firmware
+[root@889e0484bdd2 /]#
+```
+
+```sh
+[root@889e0484bdd2 /]# df -h /etc
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         251G  4.9G  234G   3% /
+[root@889e0484bdd2 /]#
+```
+
+
+
+
+
+## du命令
+
+du命令用于**统计目录或文件所占磁盘空间大小**
+
+
+
+命令：
+
+```sh
+du [选项] [目录或文件名]
+```
+
+
+
+选项：
+
+- -a：显示每个子文件的磁盘占用量。默认只统计子目录的磁盘占用量
+- -h：使用习惯单位显示磁盘占用量，如 KB、MB 或 GB 等；
+- -s：统计总磁盘占用量，而不列出子目录和子文件的磁盘占用量
+
+
+
+
+
+
+
+## mount命令
 
