@@ -13748,7 +13748,842 @@ mao@ubuntu:~/桌面$
 
 ## pstree命令
 
+pstree 命令是**以树形结构显示程序和进程之间的关系**
 
 
 
+命令：
+
+```sh
+pstree [选项] [PID或用户名]
+```
+
+
+
+| 选项 |                             含义                             |
+| :--: | :----------------------------------------------------------: |
+|  -a  | 显示启动每个进程对应的完整指令，包括启动进程的路径、参数等。 |
+|  -c  | 不使用精简法显示进程信息，即显示的进程中包含子进程和父进程。 |
+|  -n  |    根据进程 PID 号来排序输出，默认是以程序名排序输出的。     |
+|  -p  |                       显示进程的 PID。                       |
+|  -u  |                   显示进程对应的用户名称。                   |
+
+
+
+在使用 pstree 命令时，如果不指定进程的 PID 号，也不指定用户名称，则会以 init 进程为根进程，显示系统中所有程序和进程的信息；反之，若指定 PID 号或用户名，则将以 PID 或指定命令为根进程，显示 PID 或用户对应的所有程序和进程。
+
+init 进程是系统启动的第一个进程，进程的 PID 是 1，也是系统中所有进程的父进程。
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ pstree
+systemd─┬─ModemManager───2*[{ModemManager}]
+        ├─NetworkManager───2*[{NetworkManager}]
+        ├─VGAuthService
+        ├─accounts-daemon───2*[{accounts-daemon}]
+        ├─acpid
+        ├─avahi-daemon───avahi-daemon
+        ├─colord───2*[{colord}]
+        ├─cron
+        ├─cups-browsed───2*[{cups-browsed}]
+        ├─cupsd───dbus
+        ├─dbus-daemon
+        ├─gdm3─┬─gdm-session-wor─┬─gdm-x-session─┬─Xorg───{Xorg}
+        │      │                 │               ├─gnome-session-b───2*[{gnome-+
+        │      │                 │               └─2*[{gdm-x-session}]
+        │      │                 └─2*[{gdm-session-wor}]
+        │      └─2*[{gdm3}]
+        ├─gnome-keyring-d───3*[{gnome-keyring-d}]
+        ├─irqbalance───{irqbalance}
+        ├─2*[kerneloops]
+        ├─networkd-dispat
+        ├─polkitd───2*[{polkitd}]
+        ├─rsyslogd───3*[{rsyslogd}]
+        ├─rtkit-daemon───2*[{rtkit-daemon}]
+        ├─snapd───20*[{snapd}]
+        ├─switcheroo-cont───2*[{switcheroo-cont}]
+        ├─systemd─┬─(sd-pam)
+        │         ├─at-spi-bus-laun─┬─dbus-daemon
+        │         │                 └─3*[{at-spi-bus-laun}]
+        │         ├─at-spi2-registr───2*[{at-spi2-registr}]
+        │         ├─dbus-daemon
+        │         ├─dconf-service───2*[{dconf-service}]
+        │         ├─evolution-addre───5*[{evolution-addre}]
+        │         ├─evolution-calen───8*[{evolution-calen}]
+        │         ├─evolution-sourc───3*[{evolution-sourc}]
+        │         ├─gjs───10*[{gjs}]
+        │         ├─gnome-session-b─┬─evolution-alarm───5*[{evolution-alarm}]
+        │         │                 ├─gsd-disk-utilit───2*[{gsd-disk-utilit}]
+        │         │                 ├─update-notifier───4*[{update-notifier}]
+        │         │                 └─3*[{gnome-session-b}]
+        │         ├─gnome-session-c───{gnome-session-c}
+        │         ├─gnome-shell─┬─ibus-daemon─┬─ibus-dconf───3*[{ibus-dconf}]
+        │         │             │             ├─ibus-engine-sim───2*[{ibus-engi+
+        │         │             │             ├─ibus-extension-───3*[{ibus-exte+
+        │         │             │             └─2*[{ibus-daemon}]
+        │         │             └─11*[{gnome-shell}]
+        │         ├─gnome-shell-cal───5*[{gnome-shell-cal}]
+        │         ├─gnome-terminal-─┬─bash───pstree
+        │         │                 └─4*[{gnome-terminal-}]
+        │         ├─goa-daemon───3*[{goa-daemon}]
+        │         ├─goa-identity-se───2*[{goa-identity-se}]
+        │         ├─gsd-a11y-settin───3*[{gsd-a11y-settin}]
+        │         ├─gsd-color───3*[{gsd-color}]
+        │         ├─gsd-datetime───3*[{gsd-datetime}]
+        │         ├─gsd-housekeepin───3*[{gsd-housekeepin}]
+        │         ├─gsd-keyboard───3*[{gsd-keyboard}]
+        │         ├─gsd-media-keys───3*[{gsd-media-keys}]
+        │         ├─gsd-power───3*[{gsd-power}]
+        │         ├─gsd-print-notif───2*[{gsd-print-notif}]
+        │         ├─gsd-printer───2*[{gsd-printer}]
+        │         ├─gsd-rfkill───2*[{gsd-rfkill}]
+        │         ├─gsd-screensaver───2*[{gsd-screensaver}]
+        │         ├─gsd-sharing───3*[{gsd-sharing}]
+        │         ├─gsd-smartcard───4*[{gsd-smartcard}]
+        │         ├─gsd-sound───3*[{gsd-sound}]
+        │         ├─gsd-usb-protect───3*[{gsd-usb-protect}]
+        │         ├─gsd-wacom───2*[{gsd-wacom}]
+        │         ├─gsd-wwan───3*[{gsd-wwan}]
+        │         ├─gsd-xsettings───3*[{gsd-xsettings}]
+        │         ├─gvfs-afc-volume───3*[{gvfs-afc-volume}]
+        │         ├─gvfs-goa-volume───2*[{gvfs-goa-volume}]
+        │         ├─gvfs-gphoto2-vo───2*[{gvfs-gphoto2-vo}]
+        │         ├─gvfs-mtp-volume───2*[{gvfs-mtp-volume}]
+        │         ├─gvfs-udisks2-vo───3*[{gvfs-udisks2-vo}]
+        │         ├─gvfsd─┬─gvfsd-trash───2*[{gvfsd-trash}]
+        │         │       └─2*[{gvfsd}]
+        │         ├─gvfsd-fuse───5*[{gvfsd-fuse}]
+        │         ├─gvfsd-metadata───2*[{gvfsd-metadata}]
+        │         ├─ibus-portal───2*[{ibus-portal}]
+        │         ├─ibus-x11───2*[{ibus-x11}]
+        │         ├─pulseaudio───2*[{pulseaudio}]
+        │         ├─vmtoolsd───3*[{vmtoolsd}]
+        │         └─xdg-permission-───2*[{xdg-permission-}]
+        ├─systemd-journal
+        ├─systemd-logind
+        ├─systemd-resolve
+        ├─systemd-timesyn───{systemd-timesyn}
+        ├─systemd-udevd
+        ├─udisksd───4*[{udisksd}]
+        ├─unattended-upgr───{unattended-upgr}
+        ├─upowerd───2*[{upowerd}]
+        ├─vmtoolsd───3*[{vmtoolsd}]
+        ├─vmware-vmblock-───2*[{vmware-vmblock-}]
+        ├─whoopsie───2*[{whoopsie}]
+        └─wpa_supplicant
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ pstree -a
+systemd auto noprompt
+  ├─ModemManager --filter-policy=strict
+  │   └─2*[{ModemManager}]
+  ├─NetworkManager --no-daemon
+  │   └─2*[{NetworkManager}]
+  ├─VGAuthService
+  ├─accounts-daemon
+  │   └─2*[{accounts-daemon}]
+  ├─acpid
+  ├─avahi-daemon
+  │   └─avahi-daemon
+  ├─colord
+  │   └─2*[{colord}]
+  ├─cron -f
+  ├─cups-browsed
+  │   └─2*[{cups-browsed}]
+  ├─cupsd -l
+  │   └─dbus dbus:// 
+  ├─dbus-daemon --system --address=systemd: --nofork --nopidfile--systemd-
+  ├─gdm3
+  │   ├─gdm-session-wor
+  │   │   ├─gdm-x-session --run-scriptenv GNOME_SHELL_SESSION_MODE=ubuntu /us
+  │   │   │   ├─Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority...
+  │   │   │   │   └─{Xorg}
+  │   │   │   ├─gnome-session-b --systemd --systemd --session=ubuntu
+  │   │   │   │   └─2*[{gnome-session-b}]
+  │   │   │   └─2*[{gdm-x-session}]
+  │   │   └─2*[{gdm-session-wor}]
+  │   └─2*[{gdm3}]
+  ├─gnome-keyring-d --daemonize --login
+  │   └─3*[{gnome-keyring-d}]
+  ├─irqbalance --foreground
+  │   └─{irqbalance}
+  ├─kerneloops --test
+  ├─kerneloops
+  ├─networkd-dispat /usr/bin/networkd-dispatcher --run-startup-triggers
+  ├─polkitd --no-debug
+  │   └─2*[{polkitd}]
+  ├─rsyslogd -n -iNONE
+  │   └─3*[{rsyslogd}]
+  ├─rtkit-daemon
+  │   └─2*[{rtkit-daemon}]
+  ├─snapd
+  │   └─20*[{snapd}]
+  ├─switcheroo-cont
+  │   └─2*[{switcheroo-cont}]
+  ├─systemd --user
+  │   ├─(sd-pam)
+  │   ├─at-spi-bus-laun
+  │   │   ├─dbus-daemon...
+  │   │   └─3*[{at-spi-bus-laun}]
+  │   ├─at-spi2-registr --use-gnome-session
+  │   │   └─2*[{at-spi2-registr}]
+  │   ├─dbus-daemon --session --address=systemd: --nofork --nopidfile--systemd
+  │   ├─dconf-service
+  │   │   └─2*[{dconf-service}]
+  │   ├─evolution-addre
+  │   │   └─5*[{evolution-addre}]
+  │   ├─evolution-calen
+  │   │   └─8*[{evolution-calen}]
+  │   ├─evolution-sourc
+  │   │   └─3*[{evolution-sourc}]
+  │   ├─gjs /usr/share/gnome-shell/org.gnome.Shell.Notifications
+  │   │   └─10*[{gjs}]
+  │   ├─gnome-session-b --systemd-service --session=ubuntu
+  │   │   ├─evolution-alarm
+  │   │   │   └─5*[{evolution-alarm}]
+  │   │   ├─gsd-disk-utilit
+  │   │   │   └─2*[{gsd-disk-utilit}]
+  │   │   ├─update-notifier
+  │   │   │   └─4*[{update-notifier}]
+  │   │   └─3*[{gnome-session-b}]
+  │   ├─gnome-session-c --monitor
+  │   │   └─{gnome-session-c}
+  │   ├─gnome-shell
+  │   │   ├─ibus-daemon --panel disable --xim
+  │   │   │   ├─ibus-dconf
+  │   │   │   │   └─3*[{ibus-dconf}]
+  │   │   │   ├─ibus-engine-sim
+  │   │   │   │   └─2*[{ibus-engine-sim}]
+  │   │   │   ├─ibus-extension-
+  │   │   │   │   └─3*[{ibus-extension-}]
+  │   │   │   └─2*[{ibus-daemon}]
+  │   │   └─11*[{gnome-shell}]
+  │   ├─gnome-shell-cal
+  │   │   └─5*[{gnome-shell-cal}]
+  │   ├─gnome-terminal-
+  │   │   ├─bash
+  │   │   │   └─pstree -a
+  │   │   └─4*[{gnome-terminal-}]
+  │   ├─goa-daemon
+  │   │   └─3*[{goa-daemon}]
+  │   ├─goa-identity-se
+  │   │   └─2*[{goa-identity-se}]
+  │   ├─gsd-a11y-settin
+  │   │   └─3*[{gsd-a11y-settin}]
+  │   ├─gsd-color
+  │   │   └─3*[{gsd-color}]
+  │   ├─gsd-datetime
+  │   │   └─3*[{gsd-datetime}]
+  │   ├─gsd-housekeepin
+  │   │   └─3*[{gsd-housekeepin}]
+  │   ├─gsd-keyboard
+  │   │   └─3*[{gsd-keyboard}]
+  │   ├─gsd-media-keys
+  │   │   └─3*[{gsd-media-keys}]
+  │   ├─gsd-power
+  │   │   └─3*[{gsd-power}]
+  │   ├─gsd-print-notif
+  │   │   └─2*[{gsd-print-notif}]
+  │   ├─gsd-printer
+  │   │   └─2*[{gsd-printer}]
+  │   ├─gsd-rfkill
+  │   │   └─2*[{gsd-rfkill}]
+  │   ├─gsd-screensaver
+  │   │   └─2*[{gsd-screensaver}]
+  │   ├─gsd-sharing
+  │   │   └─3*[{gsd-sharing}]
+  │   ├─gsd-smartcard
+  │   │   └─4*[{gsd-smartcard}]
+  │   ├─gsd-sound
+  │   │   └─3*[{gsd-sound}]
+  │   ├─gsd-usb-protect
+  │   │   └─3*[{gsd-usb-protect}]
+  │   ├─gsd-wacom
+  │   │   └─2*[{gsd-wacom}]
+  │   ├─gsd-wwan
+  │   │   └─3*[{gsd-wwan}]
+  │   ├─gsd-xsettings
+  │   │   └─3*[{gsd-xsettings}]
+  │   ├─gvfs-afc-volume
+  │   │   └─3*[{gvfs-afc-volume}]
+  │   ├─gvfs-goa-volume
+  │   │   └─2*[{gvfs-goa-volume}]
+  │   ├─gvfs-gphoto2-vo
+  │   │   └─2*[{gvfs-gphoto2-vo}]
+  │   ├─gvfs-mtp-volume
+  │   │   └─2*[{gvfs-mtp-volume}]
+  │   ├─gvfs-udisks2-vo
+  │   │   └─3*[{gvfs-udisks2-vo}]
+  │   ├─gvfsd
+  │   │   ├─gvfsd-trash --spawner :1.7 /org/gtk/gvfs/exec_spaw/0
+  │   │   │   └─2*[{gvfsd-trash}]
+  │   │   └─2*[{gvfsd}]
+  │   ├─gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+  │   │   └─5*[{gvfsd-fuse}]
+  │   ├─gvfsd-metadata
+  │   │   └─2*[{gvfsd-metadata}]
+  │   ├─ibus-portal
+  │   │   └─2*[{ibus-portal}]
+  │   ├─ibus-x11 --kill-daemon
+  │   │   └─2*[{ibus-x11}]
+  │   ├─pulseaudio --daemonize=no --log-target=journal
+  │   │   └─2*[{pulseaudio}]
+  │   ├─vmtoolsd -n vmusr --blockFd 3
+  │   │   └─3*[{vmtoolsd}]
+  │   └─xdg-permission-
+  │       └─2*[{xdg-permission-}]
+  ├─systemd-journal
+  ├─systemd-logind
+  ├─systemd-resolve
+  ├─systemd-timesyn
+  │   └─{systemd-timesyn}
+  ├─systemd-udevd
+  ├─udisksd
+  │   └─4*[{udisksd}]
+  ├─unattended-upgr ...
+  │   └─{unattended-upgr}
+  ├─upowerd
+  │   └─2*[{upowerd}]
+  ├─vmtoolsd
+  │   └─3*[{vmtoolsd}]
+  ├─vmware-vmblock- /run/vmblock-fuse -orw,subtype=vmware-vmblock,default_permi
+  │   └─2*[{vmware-vmblock-}]
+  ├─whoopsie -f
+  │   └─2*[{whoopsie}]
+  └─wpa_supplicant -u -s -O /run/wpa_supplicant
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```bash
+mao@ubuntu:~/桌面$ pstree -c
+systemd─┬─ModemManager─┬─{ModemManager}
+        │              └─{ModemManager}
+        ├─NetworkManager─┬─{NetworkManager}
+        │                └─{NetworkManager}
+        ├─VGAuthService
+        ├─accounts-daemon─┬─{accounts-daemon}
+        │                 └─{accounts-daemon}
+        ├─acpid
+        ├─avahi-daemon───avahi-daemon
+        ├─colord─┬─{colord}
+        │        └─{colord}
+        ├─cron
+        ├─cups-browsed─┬─{cups-browsed}
+        │              └─{cups-browsed}
+        ├─cupsd───dbus
+        ├─dbus-daemon
+        ├─gdm3─┬─gdm-session-wor─┬─gdm-x-session─┬─Xorg───{Xorg}
+        │      │                 │               ├─gnome-session-b─┬─{gnome-ses+
+        │      │                 │               │                 └─{gnome-ses+
+        │      │                 │               ├─{gdm-x-session}
+        │      │                 │               └─{gdm-x-session}
+        │      │                 ├─{gdm-session-wor}
+        │      │                 └─{gdm-session-wor}
+        │      ├─{gdm3}
+        │      └─{gdm3}
+        ├─gnome-keyring-d─┬─{gnome-keyring-d}
+        │                 ├─{gnome-keyring-d}
+        │                 └─{gnome-keyring-d}
+        ├─irqbalance───{irqbalance}
+        ├─kerneloops
+        ├─kerneloops
+        ├─networkd-dispat
+        ├─polkitd─┬─{polkitd}
+        │         └─{polkitd}
+        ├─rsyslogd─┬─{rsyslogd}
+        │          ├─{rsyslogd}
+        │          └─{rsyslogd}
+        ├─rtkit-daemon─┬─{rtkit-daemon}
+        │              └─{rtkit-daemon}
+        ├─snapd─┬─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       ├─{snapd}
+        │       └─{snapd}
+        ├─switcheroo-cont─┬─{switcheroo-cont}
+        │                 └─{switcheroo-cont}
+        ├─systemd─┬─(sd-pam)
+        │         ├─at-spi-bus-laun─┬─dbus-daemon
+        │         │                 ├─{at-spi-bus-laun}
+        │         │                 ├─{at-spi-bus-laun}
+        │         │                 └─{at-spi-bus-laun}
+        │         ├─at-spi2-registr─┬─{at-spi2-registr}
+        │         │                 └─{at-spi2-registr}
+        │         ├─dbus-daemon
+        │         ├─dconf-service─┬─{dconf-service}
+        │         │               └─{dconf-service}
+        │         ├─evolution-addre─┬─{evolution-addre}
+        │         │                 ├─{evolution-addre}
+        │         │                 ├─{evolution-addre}
+        │         │                 ├─{evolution-addre}
+        │         │                 └─{evolution-addre}
+        │         ├─evolution-calen─┬─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 ├─{evolution-calen}
+        │         │                 └─{evolution-calen}
+        │         ├─evolution-sourc─┬─{evolution-sourc}
+        │         │                 ├─{evolution-sourc}
+        │         │                 └─{evolution-sourc}
+        │         ├─gjs─┬─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     ├─{gjs}
+        │         │     └─{gjs}
+        │         ├─gnome-session-b─┬─evolution-alarm─┬─{evolution-alarm}
+        │         │                 │                 ├─{evolution-alarm}
+        │         │                 │                 ├─{evolution-alarm}
+        │         │                 │                 ├─{evolution-alarm}
+        │         │                 │                 └─{evolution-alarm}
+        │         │                 ├─gsd-disk-utilit─┬─{gsd-disk-utilit}
+        │         │                 │                 └─{gsd-disk-utilit}
+        │         │                 ├─update-notifier─┬─{update-notifier}
+        │         │                 │                 ├─{update-notifier}
+        │         │                 │                 ├─{update-notifier}
+        │         │                 │                 └─{update-notifier}
+        │         │                 ├─{gnome-session-b}
+        │         │                 ├─{gnome-session-b}
+        │         │                 └─{gnome-session-b}
+        │         ├─gnome-session-c───{gnome-session-c}
+        │         ├─gnome-shell─┬─ibus-daemon─┬─ibus-dconf─┬─{ibus-dconf}
+        │         │             │             │            ├─{ibus-dconf}
+        │         │             │             │            └─{ibus-dconf}
+        │         │             │             ├─ibus-engine-sim─┬─{ibus-engine-+
+        │         │             │             │                 └─{ibus-engine-+
+        │         │             │             ├─ibus-extension-─┬─{ibus-extensi+
+        │         │             │             │                 ├─{ibus-extensi+
+        │         │             │             │                 └─{ibus-extensi+
+        │         │             │             ├─{ibus-daemon}
+        │         │             │             └─{ibus-daemon}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             ├─{gnome-shell}
+        │         │             └─{gnome-shell}
+        │         ├─gnome-shell-cal─┬─{gnome-shell-cal}
+        │         │                 ├─{gnome-shell-cal}
+        │         │                 ├─{gnome-shell-cal}
+        │         │                 ├─{gnome-shell-cal}
+        │         │                 └─{gnome-shell-cal}
+        │         ├─gnome-terminal-─┬─bash───pstree
+        │         │                 ├─{gnome-terminal-}
+        │         │                 ├─{gnome-terminal-}
+        │         │                 ├─{gnome-terminal-}
+        │         │                 └─{gnome-terminal-}
+        │         ├─goa-daemon─┬─{goa-daemon}
+        │         │            ├─{goa-daemon}
+        │         │            └─{goa-daemon}
+        │         ├─goa-identity-se─┬─{goa-identity-se}
+        │         │                 └─{goa-identity-se}
+        │         ├─gsd-a11y-settin─┬─{gsd-a11y-settin}
+        │         │                 ├─{gsd-a11y-settin}
+        │         │                 └─{gsd-a11y-settin}
+        │         ├─gsd-color─┬─{gsd-color}
+        │         │           ├─{gsd-color}
+        │         │           └─{gsd-color}
+        │         ├─gsd-datetime─┬─{gsd-datetime}
+        │         │              ├─{gsd-datetime}
+        │         │              └─{gsd-datetime}
+        │         ├─gsd-housekeepin─┬─{gsd-housekeepin}
+        │         │                 ├─{gsd-housekeepin}
+        │         │                 └─{gsd-housekeepin}
+        │         ├─gsd-keyboard─┬─{gsd-keyboard}
+        │         │              ├─{gsd-keyboard}
+        │         │              └─{gsd-keyboard}
+        │         ├─gsd-media-keys─┬─{gsd-media-keys}
+        │         │                ├─{gsd-media-keys}
+        │         │                └─{gsd-media-keys}
+        │         ├─gsd-power─┬─{gsd-power}
+        │         │           ├─{gsd-power}
+        │         │           └─{gsd-power}
+        │         ├─gsd-print-notif─┬─{gsd-print-notif}
+        │         │                 └─{gsd-print-notif}
+        │         ├─gsd-printer─┬─{gsd-printer}
+        │         │             └─{gsd-printer}
+        │         ├─gsd-rfkill─┬─{gsd-rfkill}
+        │         │            └─{gsd-rfkill}
+        │         ├─gsd-screensaver─┬─{gsd-screensaver}
+        │         │                 └─{gsd-screensaver}
+        │         ├─gsd-sharing─┬─{gsd-sharing}
+        │         │             ├─{gsd-sharing}
+        │         │             └─{gsd-sharing}
+        │         ├─gsd-smartcard─┬─{gsd-smartcard}
+        │         │               ├─{gsd-smartcard}
+        │         │               ├─{gsd-smartcard}
+        │         │               └─{gsd-smartcard}
+        │         ├─gsd-sound─┬─{gsd-sound}
+        │         │           ├─{gsd-sound}
+        │         │           └─{gsd-sound}
+        │         ├─gsd-usb-protect─┬─{gsd-usb-protect}
+        │         │                 ├─{gsd-usb-protect}
+        │         │                 └─{gsd-usb-protect}
+        │         ├─gsd-wacom─┬─{gsd-wacom}
+        │         │           └─{gsd-wacom}
+        │         ├─gsd-wwan─┬─{gsd-wwan}
+        │         │          ├─{gsd-wwan}
+        │         │          └─{gsd-wwan}
+        │         ├─gsd-xsettings─┬─{gsd-xsettings}
+        │         │               ├─{gsd-xsettings}
+        │         │               └─{gsd-xsettings}
+        │         ├─gvfs-afc-volume─┬─{gvfs-afc-volume}
+        │         │                 ├─{gvfs-afc-volume}
+        │         │                 └─{gvfs-afc-volume}
+        │         ├─gvfs-goa-volume─┬─{gvfs-goa-volume}
+        │         │                 └─{gvfs-goa-volume}
+        │         ├─gvfs-gphoto2-vo─┬─{gvfs-gphoto2-vo}
+        │         │                 └─{gvfs-gphoto2-vo}
+        │         ├─gvfs-mtp-volume─┬─{gvfs-mtp-volume}
+        │         │                 └─{gvfs-mtp-volume}
+        │         ├─gvfs-udisks2-vo─┬─{gvfs-udisks2-vo}
+        │         │                 ├─{gvfs-udisks2-vo}
+        │         │                 └─{gvfs-udisks2-vo}
+        │         ├─gvfsd─┬─gvfsd-trash─┬─{gvfsd-trash}
+        │         │       │             └─{gvfsd-trash}
+        │         │       ├─{gvfsd}
+        │         │       └─{gvfsd}
+        │         ├─gvfsd-fuse─┬─{gvfsd-fuse}
+        │         │            ├─{gvfsd-fuse}
+        │         │            ├─{gvfsd-fuse}
+        │         │            ├─{gvfsd-fuse}
+        │         │            └─{gvfsd-fuse}
+        │         ├─gvfsd-metadata─┬─{gvfsd-metadata}
+        │         │                └─{gvfsd-metadata}
+        │         ├─ibus-portal─┬─{ibus-portal}
+        │         │             └─{ibus-portal}
+        │         ├─ibus-x11─┬─{ibus-x11}
+        │         │          └─{ibus-x11}
+        │         ├─pulseaudio─┬─{pulseaudio}
+        │         │            └─{pulseaudio}
+        │         ├─vmtoolsd─┬─{vmtoolsd}
+        │         │          ├─{vmtoolsd}
+        │         │          └─{vmtoolsd}
+        │         └─xdg-permission-─┬─{xdg-permission-}
+        │                           └─{xdg-permission-}
+        ├─systemd-journal
+        ├─systemd-logind
+        ├─systemd-resolve
+        ├─systemd-timesyn───{systemd-timesyn}
+        ├─systemd-udevd
+        ├─udisksd─┬─{udisksd}
+        │         ├─{udisksd}
+        │         ├─{udisksd}
+        │         └─{udisksd}
+        ├─unattended-upgr───{unattended-upgr}
+        ├─upowerd─┬─{upowerd}
+        │         └─{upowerd}
+        ├─vmtoolsd─┬─{vmtoolsd}
+        │          ├─{vmtoolsd}
+        │          └─{vmtoolsd}
+        ├─vmware-vmblock-─┬─{vmware-vmblock-}
+        │                 └─{vmware-vmblock-}
+        ├─whoopsie─┬─{whoopsie}
+        │          └─{whoopsie}
+        └─wpa_supplicant
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ pstree -p -n -u
+systemd(1)─┬─systemd-journal(484)
+           ├─systemd-udevd(531)
+           ├─vmware-vmblock-(543)─┬─{vmware-vmblock-}(544)
+           │                      └─{vmware-vmblock-}(545)
+           ├─systemd-resolve(872,systemd-resolve)
+           ├─systemd-timesyn(873,systemd-timesync)───{systemd-timesyn}(894)
+           ├─VGAuthService(876)
+           ├─vmtoolsd(879)─┬─{vmtoolsd}(965)
+           │               ├─{vmtoolsd}(966)
+           │               └─{vmtoolsd}(1067)
+           ├─accounts-daemon(896)─┬─{accounts-daemon}(907)
+           │                      └─{accounts-daemon}(988)
+           ├─acpid(897)
+           ├─avahi-daemon(900,avahi)───avahi-daemon(952)
+           ├─cron(901)
+           ├─dbus-daemon(903,messagebus)
+           ├─NetworkManager(905)─┬─{NetworkManager}(1001)
+           │                     └─{NetworkManager}(1003)
+           ├─irqbalance(913)───{irqbalance}(929)
+           ├─networkd-dispat(917)
+           ├─polkitd(920)─┬─{polkitd}(938)
+           │              └─{polkitd}(989)
+           ├─rsyslogd(924,syslog)─┬─{rsyslogd}(953)
+           │                      ├─{rsyslogd}(954)
+           │                      └─{rsyslogd}(955)
+           ├─switcheroo-cont(933)─┬─{switcheroo-cont}(949)
+           │                      └─{switcheroo-cont}(991)
+           ├─systemd-logind(934)
+           ├─udisksd(936)─┬─{udisksd}(957)
+           │              ├─{udisksd}(990)
+           │              ├─{udisksd}(1023)
+           │              └─{udisksd}(1096)
+           ├─wpa_supplicant(939)
+           ├─cups-browsed(995)─┬─{cups-browsed}(1042)
+           │                   └─{cups-browsed}(1044)
+           ├─ModemManager(1000)─┬─{ModemManager}(1024)
+           │                    └─{ModemManager}(1030)
+           ├─unattended-upgr(1009)───{unattended-upgr}(1100)
+           ├─cupsd(1034)───dbus(1040,lp)
+           ├─gdm3(1036)─┬─{gdm3}(1041)
+           │            ├─{gdm3}(1043)
+           │            └─gdm-session-wor(3495)─┬─{gdm-session-wor}(3496)
+           │                                    ├─{gdm-session-wor}(3497)
+           │                                    └─gdm-x-session(3507,mao)─┬─{gdm-x-session}(3508)
+           │                                                              ├─Xorg(3509)───{Xorg}(3514)
+           │                                                              ├─{gdm-x-session}(3515)
+           │                                                              └─gnome-session-b(3517)─┬─{gnome-sess+
+           │                                                                                      └─{gnome-sess+
+           ├─whoopsie(1115,whoopsie)─┬─{whoopsie}(1132)
+           │                         └─{whoopsie}(1133)
+           ├─kerneloops(1120,kernoops)
+           ├─kerneloops(1127,kernoops)
+           ├─rtkit-daemon(1148,rtkit)─┬─{rtkit-daemon}(1155)
+           │                          └─{rtkit-daemon}(1156)
+           ├─upowerd(1252)─┬─{upowerd}(1256)
+           │               └─{upowerd}(1257)
+           ├─colord(1526,colord)─┬─{colord}(1570)
+           │                     └─{colord}(1572)
+           ├─systemd(1621,mao)─┬─(sd-pam)(1622)
+           │                   ├─pulseaudio(2925)─┬─{pulseaudio}(2938)
+           │                   │                  └─{pulseaudio}(2940)
+           │                   ├─dbus-daemon(3420)
+           │                   ├─gvfsd(3580)─┬─{gvfsd}(3581)
+           │                   │             ├─{gvfsd}(3582)
+           │                   │             └─gvfsd-trash(3773)─┬─{gvfsd-trash}(3774)
+           │                   │                                 └─{gvfsd-trash}(3775)
+           │                   ├─gvfsd-fuse(3585)─┬─{gvfsd-fuse}(3589)
+           │                   │                  ├─{gvfsd-fuse}(3590)
+           │                   │                  ├─{gvfsd-fuse}(3591)
+           │                   │                  ├─{gvfsd-fuse}(3592)
+           │                   │                  └─{gvfsd-fuse}(3593)
+           │                   ├─at-spi-bus-laun(3594)─┬─{at-spi-bus-laun}(3595)
+           │                   │                       ├─{at-spi-bus-laun}(3596)
+           │                   │                       ├─{at-spi-bus-laun}(3597)
+           │                   │                       └─dbus-daemon(3599)
+           │                   ├─gnome-session-c(3603)───{gnome-session-c}(3607)
+           │                   ├─gnome-session-b(3610)─┬─{gnome-session-b}(3611)
+           │                   │                       ├─{gnome-session-b}(3612)
+           │                   │                       ├─{gnome-session-b}(3614)
+           │                   │                       ├─evolution-alarm(3823)─┬─{evolution-alarm}(3906)
+           │                   │                       │                       ├─{evolution-alarm}(3909)
+           │                   │                       │                       ├─{evolution-alarm}(3912)
+           │                   │                       │                       ├─{evolution-alarm}(3915)
+           │                   │                       │                       └─{evolution-alarm}(3926)
+           │                   │                       ├─gsd-disk-utilit(3845)─┬─{gsd-disk-utilit}(3848)
+           │                   │                       │                       └─{gsd-disk-utilit}(3858)
+           │                   │                       └─update-notifier(3993)─┬─{update-notifier}(3996)
+           │                   │                                               ├─{update-notifier}(3997)
+           │                   │                                               ├─{update-notifier}(3998)
+           │                   │                                               └─{update-notifier}(4083)
+           │                   ├─gnome-shell(3624)─┬─{gnome-shell}(3635)
+           │                   │                   ├─{gnome-shell}(3637)
+           │                   │                   ├─{gnome-shell}(3638)
+           │                   │                   ├─{gnome-shell}(3640)
+           │                   │                   ├─{gnome-shell}(3641)
+           │                   │                   ├─{gnome-shell}(3642)
+           │                   │                   ├─{gnome-shell}(3643)
+           │                   │                   ├─{gnome-shell}(3644)
+           │                   │                   ├─{gnome-shell}(3645)
+           │                   │                   ├─{gnome-shell}(3646)
+           │                   │                   ├─{gnome-shell}(3647)
+           │                   │                   └─ibus-daemon(3648)─┬─{ibus-daemon}(3649)
+           │                   │                                       ├─{ibus-daemon}(3650)
+           │                   │                                       ├─ibus-dconf(3652)─┬─{ibus-dconf}(3658)
+           │                   │                                       │                  ├─{ibus-dconf}(3659)
+           │                   │                                       │                  └─{ibus-dconf}(3664)
+           │                   │                                       ├─ibus-extension-(3653)─┬─{ibus-extensio+
+           │                   │                                       │                       ├─{ibus-extensio+
+           │                   │                                       │                       └─{ibus-extensio+
+           │                   │                                       └─ibus-engine-sim(3887)─┬─{ibus-engine-s+
+           │                   │                                                               └─{ibus-engine-s+
+           │                   ├─ibus-x11(3655)─┬─{ibus-x11}(3668)
+           │                   │                └─{ibus-x11}(3669)
+           │                   ├─ibus-portal(3657)─┬─{ibus-portal}(3660)
+           │                   │                   └─{ibus-portal}(3661)
+           │                   ├─at-spi2-registr(3671)─┬─{at-spi2-registr}(3672)
+           │                   │                       └─{at-spi2-registr}(3673)
+           │                   ├─xdg-permission-(3675)─┬─{xdg-permission-}(3676)
+           │                   │                       └─{xdg-permission-}(3680)
+           │                   ├─gnome-shell-cal(3679)─┬─{gnome-shell-cal}(3681)
+           │                   │                       ├─{gnome-shell-cal}(3683)
+           │                   │                       ├─{gnome-shell-cal}(3684)
+           │                   │                       ├─{gnome-shell-cal}(3685)
+           │                   │                       └─{gnome-shell-cal}(3696)
+           │                   ├─evolution-sourc(3686)─┬─{evolution-sourc}(3687)
+           │                   │                       ├─{evolution-sourc}(3688)
+           │                   │                       └─{evolution-sourc}(3689)
+           │                   ├─goa-daemon(3694)─┬─{goa-daemon}(3698)
+           │                   │                  ├─{goa-daemon}(3701)
+           │                   │                  └─{goa-daemon}(3703)
+           │                   ├─evolution-calen(3697)─┬─{evolution-calen}(3702)
+           │                   │                       ├─{evolution-calen}(3707)
+           │                   │                       ├─{evolution-calen}(3712)
+           │                   │                       ├─{evolution-calen}(3713)
+           │                   │                       ├─{evolution-calen}(3714)
+           │                   │                       ├─{evolution-calen}(3716)
+           │                   │                       ├─{evolution-calen}(3718)
+           │                   │                       └─{evolution-calen}(3724)
+           │                   ├─goa-identity-se(3706)─┬─{goa-identity-se}(3708)
+           │                   │                       └─{goa-identity-se}(3710)
+           │                   ├─dconf-service(3719)─┬─{dconf-service}(3721)
+           │                   │                     └─{dconf-service}(3722)
+           │                   ├─evolution-addre(3720)─┬─{evolution-addre}(3725)
+           │                   │                       ├─{evolution-addre}(3726)
+           │                   │                       ├─{evolution-addre}(3728)
+           │                   │                       ├─{evolution-addre}(3729)
+           │                   │                       └─{evolution-addre}(3731)
+           │                   ├─gvfs-udisks2-vo(3732)─┬─{gvfs-udisks2-vo}(3733)
+           │                   │                       ├─{gvfs-udisks2-vo}(3734)
+           │                   │                       └─{gvfs-udisks2-vo}(3735)
+           │                   ├─gvfs-mtp-volume(3737)─┬─{gvfs-mtp-volume}(3738)
+           │                   │                       └─{gvfs-mtp-volume}(3740)
+           │                   ├─gvfs-goa-volume(3741)─┬─{gvfs-goa-volume}(3742)
+           │                   │                       └─{gvfs-goa-volume}(3743)
+           │                   ├─gvfs-gphoto2-vo(3745)─┬─{gvfs-gphoto2-vo}(3746)
+           │                   │                       └─{gvfs-gphoto2-vo}(3748)
+           │                   ├─gvfs-afc-volume(3749)─┬─{gvfs-afc-volume}(3750)
+           │                   │                       ├─{gvfs-afc-volume}(3751)
+           │                   │                       └─{gvfs-afc-volume}(3753)
+           │                   ├─gjs(3761)─┬─{gjs}(3765)
+           │                   │           ├─{gjs}(3766)
+           │                   │           ├─{gjs}(3767)
+           │                   │           ├─{gjs}(3768)
+           │                   │           ├─{gjs}(3769)
+           │                   │           ├─{gjs}(3770)
+           │                   │           ├─{gjs}(3771)
+           │                   │           ├─{gjs}(3772)
+           │                   │           ├─{gjs}(3777)
+           │                   │           └─{gjs}(3778)
+           │                   ├─gsd-a11y-settin(3786)─┬─{gsd-a11y-settin}(3791)
+           │                   │                       ├─{gsd-a11y-settin}(3795)
+           │                   │                       └─{gsd-a11y-settin}(3830)
+           │                   ├─gsd-color(3787)─┬─{gsd-color}(3850)
+           │                   │                 ├─{gsd-color}(3879)
+           │                   │                 └─{gsd-color}(3888)
+           │                   ├─gsd-datetime(3788)─┬─{gsd-datetime}(3814)
+           │                   │                    ├─{gsd-datetime}(3828)
+           │                   │                    └─{gsd-datetime}(3877)
+           │                   ├─gsd-housekeepin(3790)─┬─{gsd-housekeepin}(3797)
+           │                   │                       ├─{gsd-housekeepin}(3801)
+           │                   │                       └─{gsd-housekeepin}(3832)
+           │                   ├─gsd-keyboard(3792)─┬─{gsd-keyboard}(3840)
+           │                   │                    ├─{gsd-keyboard}(3854)
+           │                   │                    └─{gsd-keyboard}(3870)
+           │                   ├─gsd-media-keys(3794)─┬─{gsd-media-keys}(3862)
+           │                   │                      ├─{gsd-media-keys}(3869)
+           │                   │                      └─{gsd-media-keys}(3905)
+           │                   ├─gsd-power(3796)─┬─{gsd-power}(3859)
+           │                   │                 ├─{gsd-power}(3861)
+           │                   │                 └─{gsd-power}(3910)
+           │                   ├─gsd-print-notif(3799)─┬─{gsd-print-notif}(3808)
+           │                   │                       └─{gsd-print-notif}(3817)
+           │                   ├─gsd-rfkill(3803)─┬─{gsd-rfkill}(3806)
+           │                   │                  └─{gsd-rfkill}(3815)
+           │                   ├─gsd-screensaver(3804)─┬─{gsd-screensaver}(3809)
+           │                   │                       └─{gsd-screensaver}(3812)
+           │                   ├─gsd-sharing(3805)─┬─{gsd-sharing}(3820)
+           │                   │                   ├─{gsd-sharing}(3835)
+           │                   │                   └─{gsd-sharing}(3863)
+           │                   ├─gsd-smartcard(3807)─┬─{gsd-smartcard}(3818)
+           │                   │                     ├─{gsd-smartcard}(3826)
+           │                   │                     ├─{gsd-smartcard}(3864)
+           │                   │                     └─{gsd-smartcard}(3882)
+           │                   ├─gsd-sound(3810)─┬─{gsd-sound}(3824)
+           │                   │                 ├─{gsd-sound}(3834)
+           │                   │                 └─{gsd-sound}(3880)
+           │                   ├─gsd-usb-protect(3813)─┬─{gsd-usb-protect}(3821)
+           │                   │                       ├─{gsd-usb-protect}(3825)
+           │                   │                       └─{gsd-usb-protect}(3876)
+           │                   ├─gsd-wacom(3816)─┬─{gsd-wacom}(3871)
+           │                   │                 └─{gsd-wacom}(3889)
+           │                   ├─gsd-wwan(3819)─┬─{gsd-wwan}(3827)
+           │                   │                ├─{gsd-wwan}(3837)
+           │                   │                └─{gsd-wwan}(3881)
+           │                   ├─gsd-xsettings(3822)─┬─{gsd-xsettings}(3885)
+           │                   │                     ├─{gsd-xsettings}(3890)
+           │                   │                     └─{gsd-xsettings}(3904)
+           │                   ├─vmtoolsd(3836)─┬─{vmtoolsd}(3919)
+           │                   │                ├─{vmtoolsd}(3921)
+           │                   │                └─{vmtoolsd}(3947)
+           │                   ├─gsd-printer(3884)─┬─{gsd-printer}(3892)
+           │                   │                   └─{gsd-printer}(3894)
+           │                   ├─gnome-terminal-(3965)─┬─{gnome-terminal-}(3966)
+           │                   │                       ├─{gnome-terminal-}(3967)
+           │                   │                       ├─{gnome-terminal-}(3968)
+           │                   │                       ├─{gnome-terminal-}(3972)
+           │                   │                       └─bash(3973)───pstree(4129)
+           │                   └─gvfsd-metadata(3990)─┬─{gvfsd-metadata}(3991)
+           │                                          └─{gvfsd-metadata}(3992)
+           ├─snapd(2699)─┬─{snapd}(2709)
+           │             ├─{snapd}(2710)
+           │             ├─{snapd}(2711)
+           │             ├─{snapd}(2712)
+           │             ├─{snapd}(2713)
+           │             ├─{snapd}(2714)
+           │             ├─{snapd}(2715)
+           │             ├─{snapd}(2726)
+           │             ├─{snapd}(2727)
+           │             ├─{snapd}(2730)
+           │             ├─{snapd}(2731)
+           │             ├─{snapd}(2739)
+           │             ├─{snapd}(2751)
+           │             ├─{snapd}(2770)
+           │             ├─{snapd}(2771)
+           │             ├─{snapd}(2772)
+           │             ├─{snapd}(2774)
+           │             ├─{snapd}(2775)
+           │             ├─{snapd}(2776)
+           │             └─{snapd}(2777)
+           └─gnome-keyring-d(3502,mao)─┬─{gnome-keyring-d}(3503)
+                                       ├─{gnome-keyring-d}(3504)
+                                       └─{gnome-keyring-d}(3608)
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## lsof命令
 
