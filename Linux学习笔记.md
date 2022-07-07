@@ -13103,3 +13103,652 @@ mao@ubuntu:~/桌面$
 
 ### 示例
 
+1. 用top 命令查看某个进程：
+
+例如查看进程号为1的进程：
+
+```sh
+top -p 1
+```
+
+
+
+```sh
+任务:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2048.9 free,    970.1 used,    882.4 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2692.8 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+      1 root      20   0  168676  12744   8352 S   0.0   0.3   0:08.11 systemd  
+```
+
+
+
+
+
+2. 按照内存的使用率排序：
+
+输入top命令后按M键
+
+
+
+```sh
+mao@ubuntu:~/桌面$ top
+
+top - 06:47:54 up 39 min,  1 user,  load average: 0.08, 0.02, 0.01
+任务: 396 total,   1 running, 395 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   1990.5 free,   1028.4 used,    882.5 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2634.5 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND              
+   1842 mao       20   0 4286708 256984 114168 S   1.0   6.4   0:15.53 gnome-shell          
+   1709 mao       20   0  300612  73980  39792 S   2.0   1.9   0:19.92 Xorg                 
+   2251 mao       20   0  910848  64920  48108 S   1.3   1.6   0:06.11 gnome-terminal-      
+   1980 mao       20   0  647404  62052  45940 S   0.0   1.6   0:00.48 evolution-alarm      
+   2272 mao       20   0  823316  57544  44396 S   0.0   1.4   0:00.36 update-notifier      
+   1987 mao       20   0  302064  42716  30616 S   0.3   1.1   0:05.54 vmtoolsd             
+   2699 root      20   0 1613444  41008  19936 S   0.0   1.0   0:02.39 snapd                
+   1681 mao       20   0  553836  36612  30696 S   0.0   0.9   0:00.09 goa-daemon           
+   1873 mao       20   0  287400  33892  20100 S   0.0   0.8   0:01.05 ibus-extension-      
+    484 root      19  -1   74956  33820  32196 S   0.0   0.8   0:00.81 systemd-journal      
+   1928 mao       20   0  756424  33656  27752 S   0.0   0.8   0:00.22 evolution-addre      
+   1973 mao       20   0  912908  33248  22504 S   0.0   0.8   0:00.43 gsd-media-keys       
+   2033 mao       20   0  358504  32236  21400 S   0.0   0.8   0:00.45 gsd-xsettings        
+   1976 mao       20   0  431804  31676  21324 S   0.0   0.8   0:00.44 gsd-power            
+   1961 mao       20   0  432244  31668  21368 S   0.0   0.8   0:00.37 gsd-color            
+   1971 mao       20   0  357664  31212  20888 S   0.3   0.8   0:00.41 gsd-keyboard         
+   2018 mao       20   0  357224  30812  20508 S   0.0   0.8   0:00.42 gsd-wacom            
+   1915 mao       20   0  847876  30692  26888 S   0.0   0.8   0:00.19 evolution-calen      
+   1875 mao       20   0  209656  30568  20520 S   0.0   0.8   0:00.37 ibus-x11             
+   1941 mao       20   0 2939420  27196  22056 S   0.0   0.7   0:00.07 gjs                  
+   1906 mao       20   0  399508  26900  23060 S   0.0   0.7   0:00.11 evolution-sourc      
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+3. top 命令重定向到文件中
+
+```sh
+mao@ubuntu:~/桌面$ top -n 1 -b >> out.txt 
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ cat -n out.txt
+     1	top - 06:51:34 up 43 min,  1 user,  load average: 0.09, 0.04, 0.00
+     2	任务: 397 total,   2 running, 395 sleeping,   0 stopped,   0 zombie
+     3	%Cpu(s):  6.5 us,  0.4 sy,  0.0 ni, 93.1 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+     4	MiB Mem :   3901.4 total,   1990.0 free,   1028.7 used,    882.8 buff/cache
+     5	MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2634.1 avail Mem 
+     6	
+     7	 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND
+     8	   1842 mao       20   0 4548892 257396 114384 R 106.7   6.4   0:17.56 gnome-shell
+     9	   1709 mao       20   0  300612  73980  39792 S   6.7   1.9   0:24.22 Xorg
+    10	   2269 mao       20   0  171028   6392   5804 S   6.7   0.2   0:00.01 gvfsd-metadata
+    11	   2827 mao       20   0   20808   4072   3348 R   6.7   0.1   0:00.01 top
+    12	      1 root      20   0  168676  12744   8352 S   0.0   0.3   0:08.12 systemd
+    13	      2 root      20   0       0      0      0 S   0.0   0.0   0:00.05 kthreadd
+    14	      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+    15	      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par_gp
+    16	      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-kblockd
+    17	      7 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/0:1-events
+    18	      9 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_percpu_wq
+    19	     10 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_tasks_rude_
+    20	     11 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_tasks_trace
+    21	     12 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/0
+    22	     13 root      20   0       0      0      0 I   0.0   0.0   0:01.07 rcu_sched
+    23	     14 root      rt   0       0      0      0 S   0.0   0.0   0:00.05 migration/0
+    24	     15 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/0
+    25	     16 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/0
+    26	     17 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/1
+    27	     18 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/1
+    28	     19 root      rt   0       0      0      0 S   0.0   0.0   0:00.91 migration/1
+    29	     20 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/1
+    30	     22 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/1:0H-kblockd
+    31	     23 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/2
+    32	     24 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/2
+    33	     25 root      rt   0       0      0      0 S   0.0   0.0   0:00.92 migration/2
+    34	     26 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/2
+    35	     28 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/2:0H-kblockd
+    36	     29 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/3
+    37	     30 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/3
+    38	     31 root      rt   0       0      0      0 S   0.0   0.0   0:00.93 migration/3
+    39	     32 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/3
+    40	     34 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/3:0H-events+
+    41	     35 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/4
+    42	     36 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/4
+    43	     37 root      rt   0       0      0      0 S   0.0   0.0   0:00.95 migration/4
+    44	     38 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/4
+    45	     40 root       0 -20       0      0      0 I   0.0   0.0   0:00.01 kworker/4:0H-kblockd
+    46	     41 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/5
+    47	     42 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/5
+    48	     43 root      rt   0       0      0      0 S   0.0   0.0   0:00.95 migration/5
+    49	     44 root      20   0       0      0      0 S   0.0   0.0   0:00.02 ksoftirqd/5
+    50	     46 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/5:0H-kblockd
+    51	     47 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/6
+    52	     48 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/6
+    53	     49 root      rt   0       0      0      0 S   0.0   0.0   0:00.96 migration/6
+    54	     50 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/6
+    55	     52 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/6:0H-events+
+    56	     53 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/7
+    57	     54 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/7
+    58	     55 root      rt   0       0      0      0 S   0.0   0.0   0:00.96 migration/7
+    59	     56 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/7
+    60	     58 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/7:0H-events+
+    61	     59 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/8
+    62	     60 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/8
+    63	     61 root      rt   0       0      0      0 S   0.0   0.0   0:00.97 migration/8
+    64	     62 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/8
+    65	     64 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/8:0H-kblockd
+    66	     65 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/9
+    67	     66 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/9
+    68	     67 root      rt   0       0      0      0 S   0.0   0.0   0:00.97 migration/9
+    69	     68 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/9
+    70	     70 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/9:0H-events+
+    71	     71 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/10
+    72	     72 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/10
+    73	     73 root      rt   0       0      0      0 S   0.0   0.0   0:00.99 migration/10
+    74	     74 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/10
+    75	     76 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/10:0H-event+
+    76	     77 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/11
+    77	     78 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/11
+    78	     79 root      rt   0       0      0      0 S   0.0   0.0   0:00.99 migration/11
+    79	     80 root      20   0       0      0      0 S   0.0   0.0   0:00.10 ksoftirqd/11
+    80	     82 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/11:0H-event+
+    81	     83 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/12
+    82	     84 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/12
+    83	     85 root      rt   0       0      0      0 S   0.0   0.0   0:01.01 migration/12
+    84	     86 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/12
+    85	     88 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/12:0H-event+
+    86	     89 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/13
+    87	     90 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/13
+    88	     91 root      rt   0       0      0      0 S   0.0   0.0   0:01.01 migration/13
+    89	     92 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/13
+    90	     94 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/13:0H-event+
+    91	     95 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/14
+    92	     96 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/14
+    93	     97 root      rt   0       0      0      0 S   0.0   0.0   0:01.02 migration/14
+    94	     98 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/14
+    95	    100 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/14:0H-event+
+    96	    101 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/15
+    97	    102 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/15
+    98	    103 root      rt   0       0      0      0 S   0.0   0.0   0:01.02 migration/15
+    99	    104 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ksoftirqd/15
+   100	    105 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/15:0-rcu_pa+
+   101	    106 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/15:0H-event+
+   102	    107 root      20   0       0      0      0 S   0.0   0.0   0:00.01 kdevtmpfs
+   103	    108 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 netns
+   104	    109 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 inet_frag_wq
+   105	    110 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kauditd
+   106	    111 root      20   0       0      0      0 I   0.0   0.0   0:00.17 kworker/0:2-events
+   107	    114 root      20   0       0      0      0 S   0.0   0.0   0:00.00 khungtaskd
+   108	    115 root      20   0       0      0      0 S   0.0   0.0   0:00.00 oom_reaper
+   109	    116 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 writeback
+   110	    117 root      20   0       0      0      0 S   0.0   0.0   0:00.22 kcompactd0
+   111	    118 root      25   5       0      0      0 S   0.0   0.0   0:00.00 ksmd
+   112	    119 root      39  19       0      0      0 S   0.0   0.0   0:00.00 khugepaged
+   113	    166 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kintegrityd
+   114	    167 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kblockd
+   115	    168 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 blkcg_punt_bio
+   116	    170 root      20   0       0      0      0 I   0.0   0.0   0:00.11 kworker/8:1-events
+   117	    171 root      20   0       0      0      0 I   0.0   0.0   0:00.08 kworker/3:1-rcu_gp
+   118	    172 root      20   0       0      0      0 I   0.0   0.0   0:00.06 kworker/4:1-rcu_gp
+   119	    173 root      20   0       0      0      0 I   0.0   0.0   0:00.54 kworker/6:1-events
+   120	    174 root      20   0       0      0      0 I   0.0   0.0   0:00.08 kworker/5:1-rcu_gp
+   121	    175 root      20   0       0      0      0 I   0.0   0.0   0:00.23 kworker/7:1-events
+   122	    180 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/13:1-events
+   123	    181 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/14:1-events
+   124	    182 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 tpm_dev_wq
+   125	    183 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 ata_sff
+   126	    184 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 md
+   127	    185 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 edac-poller
+   128	    186 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 devfreq_wq
+   129	    187 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 watchdogd
+   130	    189 root      20   0       0      0      0 I   0.0   0.0   0:00.08 kworker/2:2-events
+   131	    190 root       0 -20       0      0      0 I   0.0   0.0   0:00.01 kworker/3:1H-kblockd
+   132	    192 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kswapd0
+   133	    193 root      20   0       0      0      0 S   0.0   0.0   0:00.00 ecryptfs-kthrea
+   134	    195 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kthrotld
+   135	    196 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/24-pciehp
+   136	    197 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/25-pciehp
+   137	    198 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/26-pciehp
+   138	    199 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/27-pciehp
+   139	    200 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/28-pciehp
+   140	    201 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/29-pciehp
+   141	    202 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/30-pciehp
+   142	    203 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/31-pciehp
+   143	    204 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/32-pciehp
+   144	    205 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/33-pciehp
+   145	    206 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/34-pciehp
+   146	    207 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/35-pciehp
+   147	    208 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/36-pciehp
+   148	    209 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/37-pciehp
+   149	    210 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/38-pciehp
+   150	    211 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/39-pciehp
+   151	    212 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/40-pciehp
+   152	    213 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/41-pciehp
+   153	    214 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/42-pciehp
+   154	    215 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/43-pciehp
+   155	    216 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/44-pciehp
+   156	    217 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/45-pciehp
+   157	    218 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/46-pciehp
+   158	    219 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/47-pciehp
+   159	    220 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/48-pciehp
+   160	    221 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/49-pciehp
+   161	    222 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/50-pciehp
+...
+...
+...
+   280	    529 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 card0-crtc7
+   281	    531 root      20   0   24140   7404   3892 S   0.0   0.2   0:00.67 systemd-udevd
+   282	    532 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop2
+   283	    539 root      20   0       0      0      0 I   0.0   0.0   0:00.13 kworker/1:3-mm_perc+
+   284	    540 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop3
+   285	    543 root      20   0  150668    320     56 S   0.0   0.0   0:00.00 vmware-vmblock-
+   286	    546 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop4
+   287	    547 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop5
+   288	    548 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop6
+   289	    549 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop7
+   290	    580 root       0 -20       0      0      0 S   0.0   0.0   0:00.32 loop8
+   291	    617 root       0 -20       0      0      0 S   0.0   0.0   0:00.02 loop9
+   292	    632 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop10
+   293	    656 root       0 -20       0      0      0 S   0.0   0.0   0:00.02 loop11
+   294	    694 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 cryptd
+   295	    715 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop12
+   296	    768 root       0 -20       0      0      0 S   0.0   0.0   0:00.01 loop13
+   297	    872 systemd+  20   0   23904  11940   8016 S   0.0   0.3   0:00.20 systemd-resolve
+   298	    873 systemd+  20   0   90260   6020   5248 S   0.0   0.2   0:00.11 systemd-timesyn
+   299	    876 root      20   0   58772  10660   9220 S   0.0   0.3   0:00.02 VGAuthService
+   300	    879 root      20   0  248076   7420   6408 S   0.0   0.2   0:05.84 vmtoolsd
+   301	    896 root      20   0  250532   9508   8472 S   0.0   0.2   0:00.19 accounts-daemon
+   302	    897 root      20   0    2548    712    644 S   0.0   0.0   0:00.07 acpid
+   303	    900 avahi     20   0    8532   3480   3156 S   0.0   0.1   0:00.16 avahi-daemon
+   304	    901 root      20   0   18052   3224   3012 S   0.0   0.1   0:00.01 cron
+   305	    903 message+  20   0    9904   6520   3984 S   0.0   0.2   0:01.05 dbus-daemon
+   306	    905 root      20   0  421500  22544  18924 S   0.0   0.6   0:01.05 NetworkManager
+   307	    913 root      20   0   81960   3776   3404 S   0.0   0.1   0:00.15 irqbalance
+   308	    917 root      20   0   47968  20068  11836 S   0.0   0.5   0:00.28 networkd-dispat
+   309	    920 root      20   0  253568  13720   9592 S   0.0   0.3   0:01.64 polkitd
+   310	    924 syslog    20   0  224356   4792   3756 S   0.0   0.1   0:00.30 rsyslogd
+   311	    933 root      20   0  244348   6752   6080 S   0.0   0.2   0:00.04 switcheroo-cont
+   312	    934 root      20   0   16764   8052   6988 S   0.0   0.2   0:00.30 systemd-logind
+   313	    936 root      20   0  395636  14416  12008 S   0.0   0.4   0:00.15 udisksd
+   314	    939 root      20   0   13688   4988   4400 S   0.0   0.1   0:00.07 wpa_supplicant
+   315	    952 avahi     20   0    8352    324      0 S   0.0   0.0   0:00.00 avahi-daemon
+   316	    995 root      20   0  178400  12832  11184 S   0.0   0.3   0:00.12 cups-browsed
+   317	   1000 root      20   0  313756  10376   8704 S   0.0   0.3   0:00.15 ModemManager
+   318	   1005 root      20   0       0      0      0 I   0.0   0.0   0:00.17 kworker/15:3-events
+   319	   1009 root      20   0  126660  22696  14560 S   0.0   0.6   0:00.17 unattended-upgr
+   320	   1034 root      20   0   36948   8636   7304 S   0.0   0.2   0:00.02 cupsd
+   321	   1036 root      20   0  248248   8864   7640 S   0.0   0.2   0:00.06 gdm3
+   322	   1040 lp        20   0   15336   6580   5780 S   0.0   0.2   0:00.01 dbus
+   323	   1115 whoopsie  20   0  253528  15984  14028 S   0.0   0.4   0:00.04 whoopsie
+   324	   1120 kernoops  20   0   11264    448      0 S   0.0   0.0   0:00.05 kerneloops
+   325	   1127 kernoops  20   0   11264    448      0 S   0.0   0.0   0:00.04 kerneloops
+   326	   1148 rtkit     21   1  152940   3084   2852 S   0.0   0.1   0:00.12 rtkit-daemon
+   327	   1252 root      20   0  260728   9704   8548 S   0.0   0.2   0:00.10 upowerd
+   328	   1526 colord    20   0  257568  16904  11664 S   0.0   0.4   0:00.18 colord
+   329	   1613 root      20   0  175828   9716   8196 S   0.0   0.2   0:00.02 gdm-session-wor
+   330	   1621 mao       20   0   19088  10312   8044 S   0.0   0.3   0:00.42 systemd
+   331	   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam)
+   332	   1627 mao        9 -11 1753632  20316  15596 S   0.0   0.5   0:00.33 pulseaudio
+   333	   1629 mao       39  19  520024  24788  16660 S   0.0   0.6   0:00.18 tracker-miner-f
+   334	   1632 mao       20   0    9832   7036   3888 S   0.0   0.2   0:00.52 dbus-daemon
+   335	   1637 mao       20   0  249096   7832   6856 S   0.0   0.2   0:00.06 gnome-keyring-d
+   336	   1640 mao       20   0  248440   7936   6948 S   0.0   0.2   0:00.06 gvfsd
+   337	   1646 mao       20   0  382064   8228   7368 S   0.0   0.2   0:00.01 gvfsd-fuse
+   338	   1665 mao       20   0  326084  11452   9852 S   0.0   0.3   0:00.11 gvfs-udisks2-vo
+   339	   1672 mao       20   0  244336   6260   5676 S   0.0   0.2   0:00.02 gvfs-mtp-volume
+   340	   1676 mao       20   0  244508   6272   5760 S   0.0   0.2   0:00.02 gvfs-goa-volume
+   341	   1681 mao       20   0  553836  36612  30696 S   0.0   0.9   0:00.09 goa-daemon
+   342	   1689 mao       20   0  327168  11496  10196 S   0.0   0.3   0:00.05 goa-identity-se
+   343	   1694 mao       20   0  246612   6836   6140 S   0.0   0.2   0:00.02 gvfs-gphoto2-vo
+   344	   1699 mao       20   0  325356   9248   8260 S   0.0   0.2   0:00.26 gvfs-afc-volume
+   345	   1707 mao       20   0  172804   6484   5848 S   0.0   0.2   0:00.02 gdm-x-session
+   346	   1726 mao       20   0  199456  15684  13920 S   0.0   0.4   0:00.06 gnome-session-b
+   347	   1793 mao       20   0    6040    456      0 S   0.0   0.0   0:00.02 ssh-agent
+   348	   1812 mao       20   0  309824   9156   8288 S   0.0   0.2   0:00.02 at-spi-bus-laun
+   349	   1817 mao       20   0    7248   4392   3924 S   0.0   0.1   0:00.06 dbus-daemon
+   350	   1821 mao       20   0   98860   4428   4012 S   0.0   0.1   0:00.00 gnome-session-c
+   351	   1828 mao       20   0  495904  17976  15288 S   0.0   0.4   0:00.20 gnome-session-b
+   352	   1868 mao       20   0  397436  10608   8936 S   0.0   0.3   0:00.05 ibus-daemon
+   353	   1872 mao       20   0  249288   9096   8348 S   0.0   0.2   0:00.01 ibus-dconf
+   354	   1873 mao       20   0  287400  33892  20100 S   0.0   0.8   0:01.07 ibus-extension-
+   355	   1875 mao       20   0  209656  30568  20520 S   0.0   0.8   0:00.38 ibus-x11
+   356	   1877 mao       20   0  249132   9184   8428 S   0.0   0.2   0:00.05 ibus-portal
+   357	   1891 mao       20   0  162836   7448   6668 S   0.0   0.2   0:00.74 at-spi2-registr
+   358	   1895 mao       20   0  244504   4736   4300 S   0.0   0.1   0:00.01 xdg-permission-
+   359	   1900 mao       20   0  581640  21092  18384 S   0.0   0.5   0:00.15 gnome-shell-cal
+   360	   1906 mao       20   0  399508  26900  23060 S   0.0   0.7   0:00.11 evolution-sourc
+   361	   1915 mao       20   0  847876  30692  26888 S   0.0   0.8   0:00.19 evolution-calen
+   362	   1918 mao       20   0  156220   5536   4968 S   0.0   0.1   0:00.01 dconf-service
+   363	   1928 mao       20   0  756424  33656  27752 S   0.0   0.8   0:00.22 evolution-addre
+   364	   1941 mao       20   0 2939420  27196  22056 S   0.0   0.7   0:00.07 gjs
+   365	   1955 mao       20   0  326200  10676   9388 S   0.0   0.3   0:00.06 gvfsd-trash
+   366	   1960 mao       20   0  322892   9220   8336 S   0.0   0.2   0:00.02 gsd-a11y-settin
+   367	   1961 mao       20   0  432244  31668  21368 S   0.0   0.8   0:00.40 gsd-color
+   368	   1964 mao       20   0  383344  17448  15328 S   0.0   0.4   0:00.04 gsd-datetime
+   369	   1967 mao       20   0  323176   9980   8976 S   0.0   0.2   0:00.11 gsd-housekeepin
+   370	   1971 mao       20   0  357664  31212  20888 S   0.0   0.8   0:00.43 gsd-keyboard
+   371	   1973 mao       20   0  912908  33248  22504 S   0.0   0.8   0:00.46 gsd-media-keys
+   372	   1976 mao       20   0  431804  31676  21324 S   0.0   0.8   0:00.46 gsd-power
+   373	   1980 mao       20   0  647404  62052  45940 S   0.0   1.6   0:00.50 evolution-alarm
+   374	   1985 mao       20   0  256932  11432  10024 S   0.0   0.3   0:00.03 gsd-print-notif
+   375	   1986 mao       20   0  465928   6268   5652 S   0.0   0.2   0:00.03 gsd-rfkill
+   376	   1987 mao       20   0  302064  42716  30616 S   0.0   1.1   0:05.99 vmtoolsd
+   377	   1991 mao       20   0  244336   6368   5784 S   0.0   0.2   0:00.01 gsd-screensaver
+   378	   1996 mao       20   0  477880  12512  11060 S   0.0   0.3   0:00.04 gsd-sharing
+   379	   2001 mao       20   0  327052  10892   9816 S   0.0   0.3   0:00.03 gsd-smartcard
+   380	   2002 mao       20   0  231800   5648   4608 S   0.0   0.1   0:00.05 gsd-disk-utilit
+   381	   2005 mao       20   0  330764  11076   9824 S   0.0   0.3   0:00.03 gsd-sound
+   382	   2011 mao       20   0  396852   9532   8572 S   0.0   0.2   0:00.03 gsd-usb-protect
+   383	   2018 mao       20   0  357224  30812  20508 S   0.0   0.8   0:00.44 gsd-wacom
+   384	   2028 mao       20   0  327216  10652   9484 S   0.0   0.3   0:00.04 gsd-wwan
+   385	   2033 mao       20   0  358504  32236  21400 S   0.0   0.8   0:00.48 gsd-xsettings
+   386	   2060 mao       20   0  351016  15308  13416 S   0.0   0.4   0:00.04 gsd-printer
+   387	   2117 mao       20   0  175456   9064   8328 S   0.0   0.2   0:00.02 ibus-engine-sim
+   388	   2251 mao       20   0  910848  64920  48108 S   0.0   1.6   0:07.39 gnome-terminal-
+   389	   2260 mao       20   0   19252   4824   3376 S   0.0   0.1   0:00.05 bash
+   390	   2272 mao       20   0  823316  57544  44396 S   0.0   1.4   0:00.39 update-notifier
+   391	   2482 root      20   0       0      0      0 I   0.0   0.0   0:00.06 kworker/9:0-events
+   392	   2483 root      20   0       0      0      0 I   0.0   0.0   0:00.09 kworker/10:0-events
+   393	   2485 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/12:0
+   394	   2489 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/1:0-events
+   395	   2657 root      20   0       0      0      0 I   0.0   0.0   0:00.14 kworker/u256:1-even+
+   396	   2683 root       0 -20       0      0      0 S   0.0   0.0   0:00.02 loop14
+   397	   2699 root      20   0 1613444  41008  19936 S   0.0   1.0   0:02.41 snapd
+   398	   2738 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/2:0
+   399	   2768 root      20   0       0      0      0 I   0.0   0.0   0:00.01 kworker/3:0-events
+   400	   2769 root      20   0       0      0      0 I   0.0   0.0   0:00.08 kworker/4:0-events
+   401	   2779 root      20   0       0      0      0 I   0.0   0.0   0:00.10 kworker/5:0-events
+   402	   2782 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/9:1-cgroup_+
+   403	   2807 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/11:1-cgroup+
+   404	   2826 root      20   0       0      0      0 I   0.0   0.0   0:00.01 kworker/u256:0-even+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+4. 只监听用户mao的进程
+
+```sh
+top -u mao
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ top -u mao
+
+top - 06:55:52 up 47 min,  1 user,  load average: 0.07, 0.11, 0.04
+任务: 397 total,   1 running, 396 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   1988.5 free,   1020.2 used,    892.7 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2642.3 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND              
+   1709 mao       20   0  300828  74120  39932 S   3.7   1.9   0:44.74 Xorg                 
+   2251 mao       20   0  910848  65796  48968 S   1.3   1.6   0:10.77 gnome-terminal-      
+   1842 mao       20   0 4538024 257564 114384 S   1.0   6.4   0:25.28 gnome-shell          
+   1987 mao       20   0  302064  42716  30616 S   0.3   1.1   0:06.59 vmtoolsd             
+   2882 mao       20   0   20808   4096   3312 R   0.3   0.1   0:00.01 top                  
+   1621 mao       20   0   19088  10312   8044 S   0.0   0.3   0:00.42 systemd              
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam)             
+   1627 mao        9 -11 1753632  20320  15600 S   0.0   0.5   0:00.34 pulseaudio           
+   1629 mao       39  19  520164  24872  16744 S   0.0   0.6   0:00.19 tracker-miner-f      
+   1632 mao       20   0    9832   7036   3888 S   0.0   0.2   0:00.59 dbus-daemon          
+   1637 mao       20   0  249096   7832   6856 S   0.0   0.2   0:00.08 gnome-keyring-d      
+   1640 mao       20   0  248440   7936   6948 S   0.0   0.2   0:00.06 gvfsd                
+   1646 mao       20   0  382064   8228   7368 S   0.0   0.2   0:00.01 gvfsd-fuse           
+   1665 mao       20   0  326084  11452   9852 S   0.0   0.3   0:00.12 gvfs-udisks2-vo      
+   1672 mao       20   0  244336   6260   5676 S   0.0   0.2   0:00.03 gvfs-mtp-volume      
+   1676 mao       20   0  244508   6272   5760 S   0.0   0.2   0:00.02 gvfs-goa-volume      
+   1681 mao       20   0  553836  36612  30696 S   0.0   0.9   0:00.09 goa-daemon           
+   1689 mao       20   0  327168  11496  10196 S   0.0   0.3   0:00.05 goa-identity-se      
+   1694 mao       20   0  246612   6836   6140 S   0.0   0.2   0:00.03 gvfs-gphoto2-vo      
+   1699 mao       20   0  325356   9248   8260 S   0.0   0.2   0:00.30 gvfs-afc-volume      
+   1707 mao       20   0  172804   6484   5848 S   0.0   0.2   0:00.02 gdm-x-session        
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+5. 终止任务
+
+输入top -u mao 命令后按k键
+
+```sh
+mao@ubuntu:~/桌面$ top -u mao
+
+top - 06:57:52 up 49 min,  1 user,  load average: 0.05, 0.10, 0.04
+任务: 397 total,   1 running, 396 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   1987.8 free,   1021.0 used,    892.7 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2641.5 avail Mem 
+PID to signal/kill [default pid = 1709] 
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND              
+   1709 mao       20   0  300612  74120  39932 S   2.0   1.9   0:46.12 Xorg                 
+   2251 mao       20   0  910848  65796  48968 S   1.3   1.6   0:11.22 gnome-terminal-      
+   1842 mao       20   0 4538020 257564 114384 S   1.0   6.4   0:26.01 gnome-shell          
+   1891 mao       20   0  162836   7448   6668 S   0.3   0.2   0:01.24 at-spi2-registr      
+   2885 mao       20   0   20808   4164   3380 R   0.3   0.1   0:00.02 top                  
+   1621 mao       20   0   19088  10312   8044 S   0.0   0.3   0:00.42 systemd              
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam)             
+   1627 mao        9 -11 1753632  20320  15600 S   0.0   0.5   0:00.34 pulseaudio           
+   1629 mao       39  19  520164  24872  16744 S   0.0   0.6   0:00.19 tracker-miner-f      
+   1632 mao       20   0    9832   7036   3888 S   0.0   0.2   0:00.59 dbus-daemon          
+   1637 mao       20   0  249096   7832   6856 S   0.0   0.2   0:00.08 gnome-keyring-d      
+   1640 mao       20   0  248440   7936   6948 S   0.0   0.2   0:00.06 gvfsd                
+   1646 mao       20   0  382064   8228   7368 S   0.0   0.2   0:00.01 gvfsd-fuse           
+   1665 mao       20   0  326084  11452   9852 S   0.0   0.3   0:00.12 gvfs-udisks2-vo      
+   1672 mao       20   0  244336   6260   5676 S   0.0   0.2   0:00.03 gvfs-mtp-volume      
+   1676 mao       20   0  244508   6272   5760 S   0.0   0.2   0:00.02 gvfs-goa-volume      
+   1681 mao       20   0  553836  36612  30696 S   0.0   0.9   0:00.09 goa-daemon           
+   1689 mao       20   0  327168  11496  10196 S   0.0   0.3   0:00.05 goa-identity-se      
+   1694 mao       20   0  246612   6836   6140 S   0.0   0.2   0:00.03 gvfs-gphoto2-vo      
+   1699 mao       20   0  325356   9248   8260 S   0.0   0.2   0:00.31 gvfs-afc-volume      
+   1707 mao       20   0  172804   6484   5848 S   0.0   0.2   0:00.02 gdm-x-session        
+```
+
+
+
+输入信号，信号9代表强制中止
+
+```sh
+top - 06:59:27 up 51 min,  1 user,  load average: 0.01, 0.07, 0.03
+任务: 397 total,   1 running, 396 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.4 us,  0.0 sy,  0.0 ni, 99.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   1987.8 free,   1021.0 used,    892.7 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2641.5 avail Mem 
+Send pid 1709 signal [15/sigterm] 
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND              
+   1709 mao       20   0  300612  74120  39932 S   6.7   1.9   0:47.53 Xorg                 
+   1842 mao       20   0 4538020 257528 114384 S   6.7   6.4   0:26.68 gnome-shell          
+   1621 mao       20   0   19088  10312   8044 S   0.0   0.3   0:00.42 systemd              
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam)             
+   1627 mao        9 -11 1753632  20320  15600 S   0.0   0.5   0:00.34 pulseaudio           
+   1629 mao       39  19  520164  24872  16744 S   0.0   0.6   0:00.19 tracker-miner-f      
+   1632 mao       20   0    9832   7036   3888 S   0.0   0.2   0:00.60 dbus-daemon          
+   1637 mao       20   0  249096   7832   6856 S   0.0   0.2   0:00.08 gnome-keyring-d      
+   1640 mao       20   0  248440   7936   6948 S   0.0   0.2   0:00.06 gvfsd                
+   1646 mao       20   0  382064   8228   7368 S   0.0   0.2   0:00.01 gvfsd-fuse           
+   1665 mao       20   0  326084  11452   9852 S   0.0   0.3   0:00.12 gvfs-udisks2-vo      
+   1672 mao       20   0  244336   6260   5676 S   0.0   0.2   0:00.03 gvfs-mtp-volume      
+   1676 mao       20   0  244508   6272   5760 S   0.0   0.2   0:00.02 gvfs-goa-volume      
+   1681 mao       20   0  553836  36612  30696 S   0.0   0.9   0:00.09 goa-daemon           
+   1689 mao       20   0  327168  11496  10196 S   0.0   0.3   0:00.05 goa-identity-se      
+   1694 mao       20   0  246612   6836   6140 S   0.0   0.2   0:00.03 gvfs-gphoto2-vo      
+   1699 mao       20   0  325356   9248   8260 S   0.0   0.2   0:00.31 gvfs-afc-volume      
+   1707 mao       20   0  172804   6484   5848 S   0.0   0.2   0:00.02 gdm-x-session        
+   1726 mao       20   0  199456  15684  13920 S   0.0   0.4   0:00.06 gnome-session-b      
+   1793 mao       20   0    6040    456      0 S   0.0   0.0   0:00.02 ssh-agent            
+   1812 mao       20   0  309824   9156   8288 S   0.0   0.2   0:00.02 at-spi-bus-laun      
+
+```
+
+
+
+
+
+6. 改变某个进程的优先级
+
+使用用 "r" 交互命令。我们能够修改的只有 Nice 的优先级，而不能修改 Priority 的优先级
+
+
+
+```sh
+top - 07:02:29 up 54 min,  1 user,  load average: 0.16, 0.09, 0.04
+任务: 409 total,   1 running, 408 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2011.9 free,    971.8 used,    917.8 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2690.2 avail Mem 
+PID to renice [default pid = 3509] 
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+   3509 mao       20   0  288780  64292  40092 S   4.3   1.6   0:01.85 Xorg     
+   3624 mao       20   0 4305384 259044 114464 S   3.0   6.5   0:04.90 gnome-s+ 
+   3965 mao       20   0  908328  63192  47064 S   1.7   1.6   0:00.55 gnome-t+ 
+   3671 mao       20   0  162836   7532   6756 S   0.7   0.2   0:00.04 at-spi2+ 
+   4085 mao       20   0   20804   4032   3256 R   0.3   0.1   0:00.02 top      
+   1621 mao       20   0   19156  10380   8044 S   0.0   0.3   0:00.86 systemd  
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam) 
+   2925 mao        9 -11 1344248  19924  15276 S   0.0   0.5   0:00.08 pulseau+ 
+   3420 mao       20   0    8868   6032   3908 S   0.0   0.2   0:00.45 dbus-da+ 
+   3502 mao       20   0  249096   7960   6976 S   0.0   0.2   0:00.07 gnome-k+ 
+   3507 mao       20   0  172804   6816   6184 S   0.0   0.2   0:00.01 gdm-x-s+ 
+   3517 mao       20   0  199592  15888  14116 S   0.0   0.4   0:00.03 gnome-s+ 
+   3580 mao       20   0  248504   7904   6952 S   0.0   0.2   0:00.06 gvfsd    
+   3585 mao       20   0  382064   8196   7332 S   0.0   0.2   0:00.01 gvfsd-f+ 
+   3594 mao       20   0  309824   9228   8352 S   0.0   0.2   0:00.02 at-spi-+ 
+   3599 mao       20   0    7248   4260   3808 S   0.0   0.1   0:00.03 dbus-da+ 
+   3603 mao       20   0   98860   4336   3912 S   0.0   0.1   0:00.00 gnome-s+ 
+```
+
+
+
+把ni优先级设置为-20
+
+
+
+```sh
+top - 07:04:09 up 56 min,  1 user,  load average: 0.05, 0.07, 0.04
+任务: 410 total,   1 running, 409 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.4 us,  0.4 sy,  0.0 ni, 99.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2011.2 free,    972.5 used,    917.8 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2689.5 avail Mem 
+Renice PID 3509 to value -20
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+   3509 mao       20   0  288504  64328  40128 S  13.3   1.6   0:02.36 Xorg     
+   1621 mao       20   0   19156  10380   8044 S   0.0   0.3   0:00.86 systemd  
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam) 
+   2925 mao        9 -11 1344248  19924  15276 S   0.0   0.5   0:00.08 pulseau+ 
+   3420 mao       20   0    8868   6032   3908 S   0.0   0.2   0:00.45 dbus-da+ 
+   3502 mao       20   0  249096   7960   6976 S   0.0   0.2   0:00.07 gnome-k+ 
+   3507 mao       20   0  172804   6816   6184 S   0.0   0.2   0:00.01 gdm-x-s+ 
+   3517 mao       20   0  199592  15888  14116 S   0.0   0.4   0:00.03 gnome-s+ 
+   3580 mao       20   0  248504   7904   6952 S   0.0   0.2   0:00.06 gvfsd    
+   3585 mao       20   0  382064   8196   7332 S   0.0   0.2   0:00.01 gvfsd-f+ 
+   3594 mao       20   0  309824   9228   8352 S   0.0   0.2   0:00.02 at-spi-+ 
+   3599 mao       20   0    7248   4260   3808 S   0.0   0.1   0:00.03 dbus-da+ 
+   3603 mao       20   0   98860   4336   3912 S   0.0   0.1   0:00.00 gnome-s+ 
+   3610 mao       20   0  422172  18060  15368 S   0.0   0.5   0:00.16 gnome-s+ 
+   3624 mao       20   0 4303332 257936 114464 S   0.0   6.5   0:05.32 gnome-s+ 
+   3648 mao       20   0  397440  10820   9156 S   0.0   0.3   0:00.05 ibus-da+ 
+   3652 mao       20   0  249288   9116   8360 S   0.0   0.2   0:00.01 ibus-dc+ 
+```
+
+
+
+权限不够可以使用sudo命令：
+
+```sh
+mao@ubuntu:~/桌面$ sudo top -u mao
+[sudo] mao 的密码： 
+
+top - 07:06:38 up 58 min,  1 user,  load average: 0.00, 0.04, 0.02
+任务: 397 total,   2 running, 395 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2012.8 free,    970.1 used,    918.6 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2691.9 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+   3509 mao       20   0  288504  64328  40128 R   8.3   1.6   0:04.31 Xorg     
+   3624 mao       20   0 4303332 257900 114464 S   5.3   6.5   0:06.70 gnome-s+ 
+   3965 mao       20   0  908328  63508  47380 S   3.0   1.6   0:01.53 gnome-t+ 
+   3836 mao       20   0  302060  42504  30408 S   0.3   1.1   0:00.95 vmtoolsd 
+   1621 mao       20   0   19156  10380   8044 S   0.0   0.3   0:00.86 systemd  
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam) 
+   2925 mao        9 -11 1344248  19924  15276 S   0.0   0.5   0:00.08 pulseau+ 
+   3420 mao       20   0    8868   6032   3908 S   0.0   0.2   0:00.45 dbus-da+ 
+   3502 mao       20   0  249096   7960   6976 S   0.0   0.2   0:00.07 gnome-k+ 
+   3507 mao       20   0  172804   6816   6184 S   0.0   0.2   0:00.01 gdm-x-s+ 
+   3517 mao       20   0  199592  15888  14116 S   0.0   0.4   0:00.03 gnome-s+ 
+   3580 mao       20   0  248504   7904   6952 S   0.0   0.2   0:00.06 gvfsd    
+   3585 mao       20   0  382064   8196   7332 S   0.0   0.2   0:00.01 gvfsd-f+ 
+   3594 mao       20   0  309824   9228   8352 S   0.0   0.2   0:00.02 at-spi-+ 
+   3599 mao       20   0    7248   4260   3808 S   0.0   0.1   0:00.03 dbus-da+ 
+   3603 mao       20   0   98860   4336   3912 S   0.0   0.1   0:00.00 gnome-s+ 
+   3610 mao       20   0  422172  18060  15368 S   0.0   0.5   0:00.16 gnome-s+ 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+更改后：
+
+```sh
+mao@ubuntu:~/桌面$ sudo top -u mao
+
+top - 07:07:25 up 59 min,  1 user,  load average: 0.00, 0.03, 0.02
+任务: 397 total,   1 running, 396 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2012.8 free,    970.0 used,    918.6 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2692.0 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+   3509 mao        0 -20  288504  64328  40128 S   2.0   1.6   0:05.27 Xorg     
+   3965 mao       20   0  908328  63508  47380 S   0.7   1.6   0:01.94 gnome-t+ 
+   3624 mao       20   0 4303332 257900 114464 S   0.3   6.5   0:07.20 gnome-s+ 
+   3836 mao       20   0  302060  42504  30408 S   0.3   1.1   0:01.05 vmtoolsd 
+   1621 mao       20   0   19156  10380   8044 S   0.0   0.3   0:00.86 systemd  
+   1622 mao       20   0  169004   3464      4 S   0.0   0.1   0:00.00 (sd-pam) 
+   2925 mao        9 -11 1344248  19924  15276 S   0.0   0.5   0:00.08 pulseau+ 
+   3420 mao       20   0    8868   6032   3908 S   0.0   0.2   0:00.45 dbus-da+ 
+   3502 mao       20   0  249096   7960   6976 S   0.0   0.2   0:00.07 gnome-k+ 
+   3507 mao       20   0  172804   6816   6184 S   0.0   0.2   0:00.01 gdm-x-s+ 
+   3517 mao       20   0  199592  15888  14116 S   0.0   0.4   0:00.03 gnome-s+ 
+   3580 mao       20   0  248504   7904   6952 S   0.0   0.2   0:00.06 gvfsd    
+   3585 mao       20   0  382064   8196   7332 S   0.0   0.2   0:00.01 gvfsd-f+ 
+   3594 mao       20   0  309824   9228   8352 S   0.0   0.2   0:00.02 at-spi-+ 
+   3599 mao       20   0    7248   4260   3808 S   0.0   0.1   0:00.03 dbus-da+ 
+   3603 mao       20   0   98860   4336   3912 S   0.0   0.1   0:00.00 gnome-s+ 
+   3610 mao       20   0  422172  18060  15368 S   0.0   0.5   0:00.16 gnome-s+ 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+
+
+## pstree命令
+
+
+
+
+
