@@ -14063,7 +14063,7 @@ mao@ubuntu:~/桌面$
 
 
 
-```bash
+```sh
 mao@ubuntu:~/桌面$ pstree -c
 systemd─┬─ModemManager─┬─{ModemManager}
         │              └─{ModemManager}
@@ -14586,4 +14586,415 @@ mao@ubuntu:~/桌面$
 
 
 ## lsof命令
+
+lsof 命令，“list opened files”的缩写，直译过来，就是**列举系统中已经被打开的文件**。通过 lsof 命令，我们就可以根据文件找到对应的进程信息，也可以根据进程信息找到进程打开的文件。
+
+
+
+命令：
+
+```sh
+lsof [选项]
+```
+
+
+
+|   选项    |                 功能                 |
+| :-------: | :----------------------------------: |
+| -c 字符串 | 只列出以字符串开头的进程打开的文件。 |
+| +d 目录名 | 列出某个目录中所有被进程调用的文件。 |
+| -u 用户名 |   只列出某个用户的进程打开的文件。   |
+|  -p pid   |    列出某个 PID 进程打开的文件。     |
+
+
+
+
+
+执行命令：
+
+```sh
+lsof -u mao
+```
+
+
+
+```sh
+deja-dup- 2322  mao  mem       REG                8,5    26304     272833 /usr/share/locale-langpack/zh_CN/LC_MESSAGES/deja-dup.mo
+deja-dup- 2322  mao  mem       REG                8,5   346336     266282 /usr/lib/x86_64-linux-gnu/deja-dup/libdeja.so
+deja-dup- 2322  mao  mem       REG                8,5   191472     666296 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+deja-dup- 2322  mao  mem       REG               0,52        2         39 /run/user/1000/dconf/user
+deja-dup- 2322  mao    0r      CHR                1,3      0t0          5 /dev/null
+deja-dup- 2322  mao    1u     unix 0x0000000000000000      0t0      84502 type=STREAM
+deja-dup- 2322  mao    2u     unix 0x0000000000000000      0t0      84503 type=STREAM
+deja-dup- 2322  mao    3u  a_inode               0,13        0      14514 [eventfd]
+deja-dup- 2322  mao    4u  a_inode               0,13        0      14514 [eventfd]
+deja-dup- 2322  mao    5u  a_inode               0,13        0      14514 [eventfd]
+deja-dup- 2322  mao    6u     unix 0x0000000000000000      0t0      63294 type=STREAM
+deja-dup- 2322  mao    7u  a_inode               0,13        0      14514 [eventfd]
+deja-dup- 2322  mao    9u  netlink                         0t0      65026 ROUTE
+deja-dup- 2322  mao   10u     unix 0x0000000000000000      0t0      65027 type=STREAM
+lsof      2369  mao  cwd       DIR                8,5     4096     271582 /home/mao/桌面
+lsof      2369  mao  rtd       DIR                8,5     4096          2 /
+lsof      2369  mao  txt       REG                8,5   175744     656069 /usr/bin/lsof
+lsof      2369  mao  mem       REG                8,5    51832     667294 /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+lsof      2369  mao  mem       REG                8,5 14537584     663577 /usr/lib/locale/locale-archive
+lsof      2369  mao  mem       REG                8,5   157224     667438 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+lsof      2369  mao  mem       REG                8,5    18816     666655 /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+lsof      2369  mao  mem       REG                8,5   584392     667381 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.9.0
+lsof      2369  mao  mem       REG                8,5  2029224     666514 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+lsof      2369  mao  mem       REG                8,5   163200     667537 /usr/lib/x86_64-linux-gnu/libselinux.so.1
+lsof      2369  mao  mem       REG                8,5   191472     666296 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+lsof      2369  mao    0u      CHR              136,0      0t0          3 /dev/pts/0
+lsof      2369  mao    1u      CHR              136,0      0t0          3 /dev/pts/0
+lsof      2369  mao    2u      CHR              136,0      0t0          3 /dev/pts/0
+lsof      2369  mao    3r      DIR               0,23        0          1 /proc
+lsof      2369  mao    4r      DIR               0,23        0      58349 /proc/2369/fd
+lsof      2369  mao    5w     FIFO               0,12      0t0      58354 pipe
+lsof      2369  mao    6r     FIFO               0,12      0t0      58355 pipe
+lsof      2370  mao  cwd       DIR                8,5     4096     271582 /home/mao/桌面
+lsof      2370  mao  rtd       DIR                8,5     4096          2 /
+lsof      2370  mao  txt       REG                8,5   175744     656069 /usr/bin/lsof
+lsof      2370  mao  mem       REG                8,5    51832     667294 /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+lsof      2370  mao  mem       REG                8,5 14537584     663577 /usr/lib/locale/locale-archive
+lsof      2370  mao  mem       REG                8,5   157224     667438 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+lsof      2370  mao  mem       REG                8,5    18816     666655 /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+lsof      2370  mao  mem       REG                8,5   584392     667381 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.9.0
+lsof      2370  mao  mem       REG                8,5  2029224     666514 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+lsof      2370  mao  mem       REG                8,5   163200     667537 /usr/lib/x86_64-linux-gnu/libselinux.so.1
+lsof      2370  mao  mem       REG                8,5   191472     666296 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+lsof      2370  mao    4r     FIFO               0,12      0t0      58354 pipe
+lsof      2370  mao    7w     FIFO               0,12      0t0      58355 pipe
+mao@ubuntu:~/桌面$ 
+```
+
+只列举一部分
+
+
+
+执行命令：
+
+```sh
+lsof +d /home/mao
+```
+
+```sh
+mao@ubuntu:~/桌面$ lsof +d /home/mao
+COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+tracker-m 1632  mao  cwd    DIR    8,5     4096 688519 /home/mao
+dbus-daem 1636  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfsd     1642  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfsd-fus 1648  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfs-udis 1668  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfs-mtp- 1675  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfs-goa- 1680  mao  cwd    DIR    8,5     4096 688519 /home/mao
+goa-daemo 1685  mao  cwd    DIR    8,5     4096 688519 /home/mao
+goa-ident 1692  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfs-gpho 1697  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfs-afc- 1702  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gdm-x-ses 1710  mao  cwd    DIR    8,5     4096 688519 /home/mao
+Xorg      1712  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gnome-ses 1730  mao  cwd    DIR    8,5     4096 688519 /home/mao
+at-spi-bu 1819  mao  cwd    DIR    8,5     4096 688519 /home/mao
+dbus-daem 1824  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gnome-ses 1828  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gnome-ses 1835  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gnome-she 1849  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-daem 1873  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-dcon 1877  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-exte 1878  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-x11  1880  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-port 1882  mao  cwd    DIR    8,5     4096 688519 /home/mao
+at-spi2-r 1895  mao  cwd    DIR    8,5     4096 688519 /home/mao
+xdg-permi 1899  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gnome-she 1904  mao  cwd    DIR    8,5     4096 688519 /home/mao
+evolution 1910  mao  cwd    DIR    8,5     4096 688519 /home/mao
+evolution 1920  mao  cwd    DIR    8,5     4096 688519 /home/mao
+dconf-ser 1925  mao  cwd    DIR    8,5     4096 688519 /home/mao
+evolution 1937  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gjs       1950  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gvfsd-tra 1964  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-a11y- 1979  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-color 1980  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-datet 1982  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-house 1986  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-keybo 1987  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-media 1989  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-power 1993  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-print 1995  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-rfkil 1996  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-scree 1997  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-shari 2000  mao  cwd    DIR    8,5     4096 688519 /home/mao
+evolution 2004  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-smart 2006  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-sound 2011  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-usb-p 2017  mao  cwd    DIR    8,5     4096 688519 /home/mao
+vmtoolsd  2019  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-wacom 2020  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-wwan  2023  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-xsett 2028  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-disk- 2029  mao  cwd    DIR    8,5     4096 688519 /home/mao
+ibus-engi 2071  mao  cwd    DIR    8,5     4096 688519 /home/mao
+gsd-print 2076  mao  cwd    DIR    8,5     4096 688519 /home/mao
+bash      2169  mao  cwd    DIR    8,5     4096 271582 /home/mao/桌面
+gvfsd-met 2213  mao  cwd    DIR    8,5     4096 688519 /home/mao
+update-no 2226  mao  cwd    DIR    8,5     4096 688519 /home/mao
+deja-dup- 2322  mao  cwd    DIR    8,5     4096 688519 /home/mao
+lsof      2418  mao  cwd    DIR    8,5     4096 271582 /home/mao/桌面
+lsof      2419  mao  cwd    DIR    8,5     4096 271582 /home/mao/桌面
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+执行命令：
+
+```sh
+lsof -c lsof
+```
+
+```sh
+mao@ubuntu:~/桌面$ lsof -c lsof
+COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+lsof    2431  mao  cwd    DIR    8,5     4096 271582 /home/mao/桌面
+lsof    2431  mao  rtd    DIR    8,5     4096      2 /
+lsof    2431  mao  txt    REG    8,5   175744 656069 /usr/bin/lsof
+lsof    2431  mao  mem    REG    8,5 14537584 663577 /usr/lib/locale/locale-archive
+lsof    2431  mao  mem    REG    8,5   157224 667438 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+lsof    2431  mao  mem    REG    8,5    18816 666655 /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+lsof    2431  mao  mem    REG    8,5   584392 667381 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.9.0
+lsof    2431  mao  mem    REG    8,5  2029224 666514 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+lsof    2431  mao  mem    REG    8,5   163200 667537 /usr/lib/x86_64-linux-gnu/libselinux.so.1
+lsof    2431  mao  mem    REG    8,5   191472 666296 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+lsof    2431  mao    0u   CHR  136,0      0t0      3 /dev/pts/0
+lsof    2431  mao    1u   CHR  136,0      0t0      3 /dev/pts/0
+lsof    2431  mao    2u   CHR  136,0      0t0      3 /dev/pts/0
+lsof    2431  mao    3r   DIR   0,23        0      1 /proc
+lsof    2431  mao    4r   DIR   0,23        0  86115 /proc/2431/fd
+lsof    2431  mao    5w  FIFO   0,12      0t0  86120 pipe
+lsof    2431  mao    6r  FIFO   0,12      0t0  86121 pipe
+lsof    2432  mao  cwd    DIR    8,5     4096 271582 /home/mao/桌面
+lsof    2432  mao  rtd    DIR    8,5     4096      2 /
+lsof    2432  mao  txt    REG    8,5   175744 656069 /usr/bin/lsof
+lsof    2432  mao  mem    REG    8,5 14537584 663577 /usr/lib/locale/locale-archive
+lsof    2432  mao  mem    REG    8,5   157224 667438 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+lsof    2432  mao  mem    REG    8,5    18816 666655 /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+lsof    2432  mao  mem    REG    8,5   584392 667381 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.9.0
+lsof    2432  mao  mem    REG    8,5  2029224 666514 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+lsof    2432  mao  mem    REG    8,5   163200 667537 /usr/lib/x86_64-linux-gnu/libselinux.so.1
+lsof    2432  mao  mem    REG    8,5   191472 666296 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+lsof    2432  mao    4r  FIFO   0,12      0t0  86120 pipe
+lsof    2432  mao    7w  FIFO   0,12      0t0  86121 pipe
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## 进程优先级
+
+Linux 是一个多用户、多任务的操作系统，系统中通常运行着非常多的进程。但是 CPU 在一个时钟周期内只能运算一条指令。谁应该先运算，谁应该后运算呢？这就需要由进程的优先级来决定了。
+
+CPU 在运算数据时，不是把一个集成算完成，再进行下一个进程的运算，而是先运算进程 1，再运算进程 2，接下来运算进程 3，然后再运算进程 1，直到进程任务结束。不仅如此，由于进程优先级的存在，进程并不是依次运算的，而是哪个进程的优先级高，哪个进程会在一次运算循环中被更多次地运算。
+
+
+
+在ps -le命令中，PRI 代表 Priority，NI 代表 Nice。这两个值都表示优先级，数值越小代表该进程越优先被 CPU 处理。不过，PRI值是由内核动态调整的，用户不能直接修改。所以我们只能通过修改 NI 值来影响 PRI 值，间接地调整进程优先级。
+
+
+
+PRI 和 NI 的关系如下：
+
+```
+PRI (最终值) = PRI (原始值) + NI
+```
+
+NI 值越小，进程的 PRI 就会降低，该进程就越优先被 CPU 处理；反之，NI 值越大，进程的 PRI 值就会増加，该进程就越靠后被 CPU 处理
+
+
+
+修改 NI 值时有几个注意事项：
+
+- NI 范围是 -20~19。
+- 普通用户调整 NI 值的范围是 0~19，而且只能调整自己的进程。
+- 普通用户只能调高 NI 值，而不能降低。如原本 NI 值为 0，则只能调整为大于 0。
+- 只有 root 用户才能设定进程 NI 值为负值，而且可以调整任何用户的进程。
+
+
+
+
+
+
+
+## nice命令
+
+**改变进程优先级**
+
+nice 命令可以给要启动的进程赋予 NI 值，但是不能修改已运行进程的 NI 值。
+
+
+
+命令：
+
+```sh
+nice [-n NI值] 命令
+```
+
+
+
+-n NI值：给命令赋予 NI 值，该值的范围为 -20~19
+
+
+
+```sh
+mao@ubuntu:~/桌面$ nice --help
+用法：nice [选项] [命令 [参数]...]
+以指定的优先级运行命令，这会影响相应进程的调度。
+如果不指定命令，程序会显示当前的优先级。优先级的范围是从 -20
+（最大优先级）到 19（最小优先级）。
+
+必选参数对长短选项同时适用。
+  -n, --adjustment=N   在优先级数值上加上数字 N（默认为 10）
+      --help		显示此帮助信息并退出
+      --version		显示版本信息并退出
+```
+
+
+
+
+
+## renice 命令
+
+renice 命令同nice 命令恰恰相反，renice 命令**可以在进程运行时修改其 NI 值，从而调整优先级**。
+
+
+
+命令：
+
+```sh
+renice [优先级] PID
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ top -u mao
+
+top - 07:08:20 up 23 min,  1 user,  load average: 0.06, 0.02, 0.05
+任务: 396 total,   2 running, 394 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2174.3 free,    973.0 used,    754.1 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2689.7 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND                                
+   1712 mao       20   0  298788  71416  39580 S   2.3   1.8   0:18.55 Xorg                                   
+   1849 mao       20   0 4304276 257368 113568 S   1.7   6.4   0:17.88 gnome-shell                            
+   2161 mao       20   0  908648  66740  50176 S   1.0   1.7   0:06.54 gnome-terminal-                        
+   2019 mao       20   0  302056  42840  30748 R   0.7   1.1   0:03.19 vmtoolsd                               
+   1895 mao       20   0  162836   7660   6888 S   0.3   0.2   0:00.81 at-spi2-registr                        
+   2541 mao       20   0   20812   4084   3292 R   0.3   0.1   0:00.08 top                                    
+   1624 mao       20   0   19100  10316   8036 S   0.0   0.3   0:00.35 systemd                                
+   1625 mao       20   0  169024   3492      4 S   0.0   0.1   0:00.00 (sd-pam)                               
+   1630 mao        9 -11 1491488  20332  15608 S   0.0   0.5   0:00.24 pulseaudio                             
+   1632 mao       39  19  520156  25080  17020 S   0.0   0.6   0:00.19 tracker-miner-f                        
+   1636 mao       20   0   11152   8332   3996 S   0.0   0.2   0:00.61 dbus-daemon                            
+   1640 mao       20   0  249128   7500   6592 S   0.0   0.2   0:00.08 gnome-keyring-d                        
+   1642 mao       20   0  248432   7996   6992 S   0.0   0.2   0:00.07 gvfsd                                  
+   1648 mao       20   0  382064   8040   7184 S   0.0   0.2   0:00.02 gvfsd-fuse                             
+   1668 mao       20   0  326080  11580   9700 S   0.0   0.3   0:00.05 gvfs-udisks2-vo                        
+   1675 mao       20   0  244336   6504   5924 S   0.0   0.2   0:00.03 gvfs-mtp-volume                        
+   1680 mao       20   0  244508   6196   5672 S   0.0   0.2   0:00.03 gvfs-goa-volume                        
+   1685 mao       20   0  553836  36768  30824 S   0.0   0.9   0:00.08 goa-daemon                             
+   1692 mao       20   0  327168  11552  10244 S   0.0   0.3   0:00.04 goa-identity-se                        
+   1697 mao       20   0  246612   6904   6208 S   0.0   0.2   0:00.03 gvfs-gphoto2-vo                        
+   1702 mao       20   0  325356   8912   7912 S   0.0   0.2   0:00.16 gvfs-afc-volume                        
+   1710 mao       20   0  172804   6520   5888 S   0.0   0.2   0:00.01 gdm-x-session                          
+   1730 mao       20   0  199456  15668  13920 S   0.0   0.4   0:00.08 gnome-session-b                        
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+更改Xorg进程的nice优先级为20（可能权限不够）：
+
+```sh
+renice -20 1712
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ renice -20 1712
+renice: 设置 1712 的优先级失败(process ID): 权限不够
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+加权限
+
+```sh
+sudo renice -20 1712
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo renice -20 1712
+[sudo] mao 的密码： 
+1712 (process ID) 旧优先级为 0，新优先级为 -20
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+验证：
+
+```sh
+mao@ubuntu:~/桌面$ top -u mao
+
+top - 07:11:16 up 26 min,  1 user,  load average: 0.00, 0.02, 0.04
+任务: 396 total,   1 running, 395 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.4 total,   2174.3 free,    972.2 used,    754.9 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2690.5 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND                                
+   1712 mao        0 -20  298788  71416  39580 S   2.3   1.8   0:19.95 Xorg                                   
+   2161 mao       20   0  908648  66740  50176 S   1.3   1.7   0:07.21 gnome-terminal-                        
+   1849 mao       20   0 4304276 257368 113568 S   1.0   6.4   0:18.93 gnome-shell                            
+   2019 mao       20   0  302056  42840  30748 S   0.7   1.1   0:03.61 vmtoolsd                               
+   2546 mao       20   0   20812   4048   3260 R   0.7   0.1   0:00.02 top                                    
+   1624 mao       20   0   19100  10316   8036 S   0.0   0.3   0:00.35 systemd                                
+   1625 mao       20   0  169024   3492      4 S   0.0   0.1   0:00.00 (sd-pam)                               
+   1630 mao        9 -11 1491488  20332  15608 S   0.0   0.5   0:00.24 pulseaudio                             
+   1632 mao       39  19  520156  25080  17020 S   0.0   0.6   0:00.19 tracker-miner-f                        
+   1636 mao       20   0   11152   8332   3996 S   0.0   0.2   0:00.61 dbus-daemon                            
+   1640 mao       20   0  249128   7500   6592 S   0.0   0.2   0:00.08 gnome-keyring-d                        
+   1642 mao       20   0  248432   7996   6992 S   0.0   0.2   0:00.07 gvfsd                                  
+   1648 mao       20   0  382064   8040   7184 S   0.0   0.2   0:00.02 gvfsd-fuse                             
+   1668 mao       20   0  326080  11580   9700 S   0.0   0.3   0:00.05 gvfs-udisks2-vo                        
+   1675 mao       20   0  244336   6504   5924 S   0.0   0.2   0:00.03 gvfs-mtp-volume                        
+   1680 mao       20   0  244508   6196   5672 S   0.0   0.2   0:00.03 gvfs-goa-volume                        
+   1685 mao       20   0  553836  36768  30824 S   0.0   0.9   0:00.08 goa-daemon                             
+   1692 mao       20   0  327168  11552  10244 S   0.0   0.3   0:00.04 goa-identity-se                        
+   1697 mao       20   0  246612   6904   6208 S   0.0   0.2   0:00.03 gvfs-gphoto2-vo                        
+   1702 mao       20   0  325356   8912   7912 S   0.0   0.2   0:00.18 gvfs-afc-volume                        
+   1710 mao       20   0  172804   6520   5888 S   0.0   0.2   0:00.01 gdm-x-session                          
+   1730 mao       20   0  199456  15668  13920 S   0.0   0.4   0:00.08 gnome-session-b                        
+   1799 mao       20   0    6040    452      0 S   0.0   0.0   0:00.01 ssh-agent                              
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## 进程间通信常用信号
+
+
 
