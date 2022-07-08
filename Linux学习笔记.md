@@ -14998,3 +14998,76 @@ mao@ubuntu:~/桌面$
 
 
 
+查看信号：
+
+```sh
+mao@ubuntu:~/桌面$ kill -l
+ 1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP
+ 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+21) SIGTTIN	22) SIGTTOU	23) SIGURG	24) SIGXCPU	25) SIGXFSZ
+26) SIGVTALRM	27) SIGPROF	28) SIGWINCH	29) SIGIO	30) SIGPWR
+31) SIGSYS	34) SIGRTMIN	35) SIGRTMIN+1	36) SIGRTMIN+2	37) SIGRTMIN+3
+38) SIGRTMIN+4	39) SIGRTMIN+5	40) SIGRTMIN+6	41) SIGRTMIN+7	42) SIGRTMIN+8
+43) SIGRTMIN+9	44) SIGRTMIN+10	45) SIGRTMIN+11	46) SIGRTMIN+12	47) SIGRTMIN+13
+48) SIGRTMIN+14	49) SIGRTMIN+15	50) SIGRTMAX-14	51) SIGRTMAX-13	52) SIGRTMAX-12
+53) SIGRTMAX-11	54) SIGRTMAX-10	55) SIGRTMAX-9	56) SIGRTMAX-8	57) SIGRTMAX-7
+58) SIGRTMAX-6	59) SIGRTMAX-5	60) SIGRTMAX-4	61) SIGRTMAX-3	62) SIGRTMAX-2
+63) SIGRTMAX-1	64) SIGRTMAX	
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+| 信号代号 | 信号名称 |                            说 明                             |
+| :------: | :------: | :----------------------------------------------------------: |
+|    1     |  SIGHUP  |      该信号让进程立即关闭，然后重新读取配置文件之后重启      |
+|    2     |  SIGINT  |   程序中止信号，用于中止前台进程。相当于输出 Ctrl+C 快捷键   |
+|    8     |  SIGFPE  | 在发生致命的算术运算错误时发出。不仅包括浮点运算错误，还包括溢出及除数为 0 等其他所有的算术运算错误 |
+|    9     | SIGKILL  | 用来立即结束程序的运行。本信号不能被阻塞、处理和忽略。般用于强制中止进程 |
+|    14    | SIGALRM  | 时钟定时信号，计算的是实际的时间或时钟时间。alarm 函数使用该信号 |
+|    15    | SIGTERM  | 正常结束进程的信号，kill 命令的默认信号。如果进程已经发生了问题，那么这 个信号是无法正常中止进程的，这时我们才会尝试 SIGKILL 信号，也就是信号 9 |
+|    18    | SIGCONT  |       该信号可以让暂停的进程恢复执行。本信号不能被阻断       |
+|    19    | SIGSTOP  | 该信号可以暂停前台进程，相当于输入 Ctrl+Z 快捷键。本信号不能被阻断 |
+
+
+
+
+
+
+
+## kill命令
+
+终止进程
+
+kill 命令只是用来向进程发送一个信号，至于这个信号是什么，是用户指定的
+
+
+
+命令：
+
+```sh
+kill [信号] PID
+```
+
+kill 命令是按照 PID 来确定进程的，所以 kill 命令只能识别 PID，而不能识别进程名
+
+
+
+| 信号编号 | 信号名 |                             含义                             |
+| :------: | :----: | :----------------------------------------------------------: |
+|    0     |  EXIT  |                    程序退出时收到该信息。                    |
+|    1     |  HUP   | 终端连接的挂起信号，这个信号也会造成某些进程在没有终止的情况下重新初始化。 |
+|    2     |  INT   | 表示结束进程，但并不是强制性的，常用的 "Ctrl+C" 组合键发出就是一个 kill -2 的信号。 |
+|    3     |  QUIT  |                            退出。                            |
+|    9     |  KILL  |                  杀死进程，即强制结束进程。                  |
+|    11    |  SEGV  |                           段错误。                           |
+|    15    |  TERM  |            正常结束进程，是 kill 命令的默认信号。            |
+
+
+
+
+
+## killall命令
+
