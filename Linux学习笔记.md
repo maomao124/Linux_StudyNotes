@@ -15067,7 +15067,374 @@ kill 命令是按照 PID 来确定进程的，所以 kill 命令只能识别 PID
 
 
 
+```sh
+PS C:\Users\mao\Desktop> docker ps -a
+CONTAINER ID   IMAGE                     COMMAND                  CREATED              STATUS                          PORTS              NAMES
+7527b9b49817   docker_compose_boot:1.0   "java -jar Docker_co…"   About a minute ago   Up About a minute               80/tcp, 8080/tcp   sad_archimedes
+889e0484bdd2   centos                    "/bin/bash"              6 days ago           Exited (130) 3 days ago                            centos
+e331c5c18f3f   ubuntu                    "bash"                   8 days ago           Exited (137) 5 days ago                            ubuntu
+bc3a894f3f5a   mysql                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                             mysql3
+acc4ae47d7fe   mysql                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                             mysql2
+1219851e3bc5   grafana/grafana           "/run.sh"                2 weeks ago          Exited (0) 2 minutes ago                           desktop_grafana_1
+059cf60a61b1   google/cadvisor           "/usr/bin/cadvisor -…"   2 weeks ago          Exited (0) 2 minutes ago                           desktop_cadvisor_1
+71da6b2b40a2   tutum/influxdb:0.9        "/run.sh"                2 weeks ago          Exited (0) About a minute ago                      desktop_influxdb_1
+e955fb5f7a77   docker_compose_boot:1.0   "java -jar Docker_co…"   2 weeks ago          Exited (143) 2 weeks ago                           docker_compose_boot1
+72a29340a31e   redis                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                             compose_redis
+ce530f498cc4   mysql                     "docker-entrypoint.s…"   2 weeks ago          Exited (0) 2 weeks ago                             compose_mysql
+8a8076944128   redis                     "docker-entrypoint.s…"   3 weeks ago          Exited (0) 23 hours ago                            redis1
+2d379d342bb6   mysql                     "docker-entrypoint.s…"   3 weeks ago          Exited (0) 3 weeks ago                             mysql1
+3ca156e4541d   tomcat                    "catalina.sh run"        3 weeks ago          Exited (143) 2 weeks ago                           tomcat1
+PS C:\Users\mao\Desktop> docker exec -it 7527b9b49817 /bin/bash
+root@7527b9b49817:/usr/local#
+
+```
+
+```sh
+root@7527b9b49817:/usr/local# top
+top - 13:20:55 up 3 min,  0 users,  load average: 0.02, 0.05, 0.01
+Tasks:   4 total,   1 running,   3 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  12723.3 total,  10776.9 free,    792.8 used,   1153.5 buff/cache
+MiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  11681.3 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1 root      20   0 8865520 293864  26828 S   0.3   2.3   0:19.13 java
+   56 root      20   0    2884    952    860 S   0.0   0.0   0:00.02 sh
+   81 root      20   0    4620   3592   3112 S   0.0   0.0   0:00.02 bash
+   89 root      20   0    7336   3344   2776 R   0.0   0.0   0:00.00 top
+```
+
+
+
+查看日志：
+
+```sh
+root@7527b9b49817:/usr/local# cat server.log
+2022-07-09 13:17:54.969  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:17:54.973 DEBUG 1 --- [main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:17:54.973  INFO 1 --- [main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:17:55.874  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:17:55.878  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:17:55.906  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:17:56.714  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:17:56.729  INFO 1 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:17:56.730  INFO 1 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:17:56.810  INFO 1 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:17:56.811  INFO 1 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1769 ms
+2022-07-09 13:17:56.924  INFO 1 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:17:57.191  INFO 1 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2022-07-09 13:17:58.613  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:17:58.630  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 4.4 seconds (JVM running for 5.044)
+root@7527b9b49817:/usr/local#
+```
+
+
+
+杀死pid为1的进程，使用信号2，这是一个spring boot项目实例
+
+```sh
+kill 2 1
+```
+
+
+
+```sh
+root@7527b9b49817:/usr/local# kill 2 1
+bash: kill: (2) - No such process
+root@7527b9b49817:/usr/local#
+PS C:\Users\mao\Desktop>
+```
+
+
+
+再次通过查看日志，通过docker命令
+
+```sh
+PS C:\Users\mao\Desktop> docker logs 7527b9b49817
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.0)
+
+2022-07-09 13:17:54.969  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:17:54.973 DEBUG 1 --- [           main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:17:54.973  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:17:55.874  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:17:55.878  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:17:55.906  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:17:56.714  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:17:56.729  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:17:56.730  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:17:56.810  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:17:56.811  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1769 ms
+2022-07-09 13:17:56.924  INFO 1 --- [           main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:17:57.191  INFO 1 --- [           main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+ _ _   |_  _ _|_. ___ _ |    _
+| | |\/|_)(_| | |_\  |_)||_|_\
+     /               |
+                        3.5.1
+2022-07-09 13:17:58.613  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:17:58.630  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 4.4 seconds (JVM running for 5.044)
+2022-07-09 13:26:38.035  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-07-09 13:26:38.036  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+PS C:\Users\mao\Desktop>
+```
+
+
+
+发现使用信号2 ，退出前打印了一部分内容
+
+```sh
+2022-07-09 13:26:38.035  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-07-09 13:26:38.036  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+```
+
+
+
+再次启动，进入容器：
+
+```sh
+docker start 7527b9b49817
+```
+
+```sh
+docker exec -it 7527b9b49817 /bin/bash
+```
+
+
+
+
+
+查看日志：
+
+```sh
+root@7527b9b49817:/usr/local# ls
+Docker_compose_boot.jar  bin  etc  games  include  java  lib  man  sbin  server.log  share  src
+root@7527b9b49817:/usr/local# cat server.log
+2022-07-09 13:17:54.969  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:17:54.973 DEBUG 1 --- [main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:17:54.973  INFO 1 --- [main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:17:55.874  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:17:55.878  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:17:55.906  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:17:56.714  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:17:56.729  INFO 1 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:17:56.730  INFO 1 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:17:56.810  INFO 1 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:17:56.811  INFO 1 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1769 ms
+2022-07-09 13:17:56.924  INFO 1 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:17:57.191  INFO 1 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2022-07-09 13:17:58.613  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:17:58.630  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 4.4 seconds (JVM running for 5.044)
+2022-07-09 13:26:38.035  INFO 1 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-07-09 13:26:38.036  INFO 1 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2022-07-09 13:31:48.914  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:31:48.917 DEBUG 1 --- [main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:31:48.918  INFO 1 --- [main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:31:49.677  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:31:49.680  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:31:49.703  INFO 1 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:31:50.367  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:31:50.378  INFO 1 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:31:50.378  INFO 1 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:31:50.442  INFO 1 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:31:50.443  INFO 1 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1469 ms
+2022-07-09 13:31:50.537  INFO 1 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:31:50.747  INFO 1 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2022-07-09 13:31:51.852  INFO 1 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:31:51.868  INFO 1 --- [main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 3.589 seconds (JVM running for 4.021)
+root@7527b9b49817:/usr/local#
+```
+
+
+
+杀死pid为1的进程，使用信号9：
+
+```sh
+kill 9 1
+```
+
+
+
+```sh
+root@7527b9b49817:/usr/local# kill 9 1
+root@7527b9b49817:/usr/local#
+PS C:\Users\mao\Desktop>
+```
+
+
+
+查看日志：
+
+```sh
+PS C:\Users\mao\Desktop> docker logs 7527b9b49817
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.0)
+
+2022-07-09 13:17:54.969  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:17:54.973 DEBUG 1 --- [           main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:17:54.973  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:17:55.874  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:17:55.878  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:17:55.906  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:17:56.714  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:17:56.729  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:17:56.730  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:17:56.810  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:17:56.811  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1769 ms
+2022-07-09 13:17:56.924  INFO 1 --- [           main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:17:57.191  INFO 1 --- [           main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+ _ _   |_  _ _|_. ___ _ |    _
+| | |\/|_)(_| | |_\  |_)||_|_\
+     /               |
+                        3.5.1
+2022-07-09 13:17:58.613  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:17:58.630  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 4.4 seconds (JVM running for 5.044)
+2022-07-09 13:26:38.035  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-07-09 13:26:38.036  INFO 1 --- [ionShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.0)
+
+2022-07-09 13:31:48.914  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Starting DockerComposeBootApplication v0.0.1-SNAPSHOT using Java 17.0.3.1 on 7527b9b49817 with PID 1 (/usr/local/Docker_compose_boot.jar started by root in /usr/local)
+2022-07-09 13:31:48.917 DEBUG 1 --- [           main] m.d.DockerComposeBootApplication         : Running with Spring Boot v2.7.0, Spring v5.3.20
+2022-07-09 13:31:48.918  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : The following 1 profile is active: "dev"
+2022-07-09 13:31:49.677  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-07-09 13:31:49.680  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-07-09 13:31:49.703  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2022-07-09 13:31:50.367  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-09 13:31:50.378  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-09 13:31:50.378  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2022-07-09 13:31:50.442  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-09 13:31:50.443  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1469 ms
+2022-07-09 13:31:50.537  INFO 1 --- [           main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2022-07-09 13:31:50.747  INFO 1 --- [           main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+ _ _   |_  _ _|_. ___ _ |    _
+| | |\/|_)(_| | |_\  |_)||_|_\
+     /               |
+                        3.5.1
+2022-07-09 13:31:51.852  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-09 13:31:51.868  INFO 1 --- [           main] m.d.DockerComposeBootApplication         : Started DockerComposeBootApplication in 3.589 seconds (JVM running for 4.021)
+PS C:\Users\mao\Desktop>
+```
+
+
+
+
+
+
+
 
 
 ## killall命令
+
+killall 也是用于关闭进程的一个命令，但和 kill 不同的是，killall 命令不再依靠 PID 来杀死单个进程，而是**通过程序的进程名来杀死一类进程**
+
+
+
+命令：
+
+```sh
+killall [选项] [信号] 进程名
+```
+
+
+
+选项：
+
+- -i：交互式，询问是否要杀死某个进程；
+- -I：忽略进程名的大小写；
+
+
+
+
+
+## pkill命令
+
+pkill 命令和 killall 命令的用法相同，都是**通过进程名杀死一类进程**
+
+
+
+命令：
+
+```sh
+pkill [信号] 进程名
+```
+
+
+
+| 信号编号 | 信号名 |                             含义                             |
+| :------: | :----: | :----------------------------------------------------------: |
+|    0     |  EXIT  |                    程序退出时收到该信息。                    |
+|    1     |  HUP   | 挂掉电话线或终端连接的挂起信号，这个信号也会造成某些进程在没有终止的情况下重新初始化。 |
+|    2     |  INT   | 表示结束进程，但并不是强制性的，常用的 "Ctrl+C" 组合键发出就是一个 kill -2 的信号。 |
+|    3     |  QUIT  |                            退出。                            |
+|    9     |  KILL  |                  杀死进程，即强制结束进程。                  |
+|    11    |  SEGV  |                           段错误。                           |
+|    15    |  TERM  |            正常结束进程，是 kill 命令的默认信号。            |
+
+
+
+
+
+```sh
+root@7527b9b49817:/usr/local# top
+top - 13:39:12 up 21 min,  0 users,  load average: 0.13, 0.16, 0.07
+Tasks:   3 total,   1 running,   2 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  12723.3 total,  10579.5 free,    988.9 used,   1154.9 buff/cache
+MiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  11485.3 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1 root      20   0 8798960 313236  27220 S   0.0   2.4   0:19.84 java
+   68 root      20   0    4620   3780   3192 S   0.0   0.0   0:00.02 bash
+   77 root      20   0    7336   3276   2708 R   0.0   0.0   0:00.00 top
+```
+
+
+
+```sh
+pkill java
+```
+
+```sh
+root@7527b9b49817:/usr/local# pkill java
+root@7527b9b49817:/usr/local#
+PS C:\Users\mao\Desktop>
+```
+
+
+
+
+
+**pkill命令踢出登陆用户：**
+
+```sh
+pkill [-t 终端号] 进程名
+```
+
+[-t 终端号] 选项用于按照终端号踢出用户；
+
+
+
+
+
+
+
+## 命令放入后台运行
 
