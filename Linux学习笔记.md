@@ -16449,3 +16449,231 @@ mao      ? :0           2022-07-09 21:24   ?          1701 (:0)
 mao@ubuntu:~/桌面$ 
 ```
 
+
+
+
+
+## last 命令
+
+last 命令可以查看当前和过去登陆系统用户的相关信息
+
+
+
+命令：
+
+```sh
+last [选项]
+```
+
+
+
+|    选项     |                        含义                        |
+| :---------: | :------------------------------------------------: |
+|     -a      | 把从何处登陆系统的主机名或 IP 地址显示在最后一行。 |
+|     -R      |         不显示登陆系统的主机名或 IP 地址。         |
+|     -x      |  显示系统关机、重新开机以及执行等级的改变等信息。  |
+| -n 显示列数 |              设置列出信息的显示列数。              |
+|     -d      |          将显示的 IP 地址转换成主机名称。          |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ last --help
+
+用法：
+ last [选项] [<用户名>...] [<tty>...]
+
+显示上次登录用户的列表。
+
+选项：
+ -<数字>              显示行数
+ -a, --hostlast       最后一列显示主机名
+ -d, --dns            将 IP 号转换回主机名
+ -F, --file <文件>    用指定文件代替 /var/log/wtmp
+ -F, --fulltimes      打印完整的登录和注销时间和日期
+ -i, --ip             以数字和点的形式显示 IP 号
+ -n, --limit <数字>   要显示的行数
+ -R, --nohostname     不显示主机名字段
+ -s, --since <时间>   显示从指定时间起的行
+ -t, --until <时间>   显示到指定时间为止的行
+ -p, --present <时间> 显示在指定时间谁在场(present)
+ -w, --fullnames      显示完整的用户名和域名
+ -x, --system         显示系统关机项和运行级别更改
+     --time-format <格式>    以指定<格式>显示时间戳：
+                               notime|short|full|iso
+
+ -h, --help           display this help
+ -V, --version        display version
+
+更多信息请参阅 last(1)。
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ last
+mao      :0           :0               Sat Jul  9 21:24    gone - no logout
+reboot   system boot  5.11.0-38-generi Sat Jul  9 21:24   still running
+mao      :0           :0               Fri Jul  8 06:45 - crash (1+14:38)
+reboot   system boot  5.11.0-38-generi Fri Jul  8 06:44   still running
+mao      :0           :0               Thu Jul  7 07:00 - crash  (23:43)
+mao      :0           :0               Thu Jul  7 06:08 - 07:00  (00:52)
+reboot   system boot  5.11.0-38-generi Thu Jul  7 06:08   still running
+mao      :0           :0               Wed Jul  6 22:10 - crash  (07:57)
+reboot   system boot  5.11.0-38-generi Wed Jul  6 22:10   still running
+mao      :0           :0               Wed Jul  6 04:44 - down   (01:51)
+reboot   system boot  5.11.0-38-generi Wed Jul  6 04:43 - 06:35  (01:51)
+mao      :0           :0               Tue Jul  5 04:00 - down   (02:39)
+reboot   system boot  5.11.0-38-generi Tue Jul  5 03:59 - 06:40  (02:40)
+mao      :0           :0               Mon Jul  4 21:46 - crash  (06:13)
+reboot   system boot  5.11.0-38-generi Mon Jul  4 21:44 - 06:40  (08:56)
+mao      :0           :0               Mon Jul  4 04:37 - crash  (17:06)
+reboot   system boot  5.11.0-38-generi Mon Jul  4 04:37 - 06:40 (1+02:03)
+mao      :0           :0               Sat Jul  2 21:46 - crash (1+06:51)
+reboot   system boot  5.11.0-38-generi Sat Jul  2 21:46 - 06:40 (2+08:54)
+mao      :0           :0               Sat Jul  2 04:23 - down   (02:43)
+reboot   system boot  5.11.0-38-generi Sat Jul  2 04:22 - 07:07  (02:44)
+mao      :0           :0               Thu Dec 30 04:32 - crash (183+22:50)
+reboot   system boot  5.11.0-38-generi Thu Dec 30 04:30 - 07:07 (184+01:36)
+mao      :0           :0               Wed Dec 29 03:11 - crash (1+01:19)
+reboot   system boot  5.11.0-38-generi Wed Dec 29 03:10 - 07:07 (185+02:56)
+mao      :0           :0               Wed Dec 29 02:38 - crash  (00:32)
+reboot   system boot  5.11.0-38-generi Wed Dec 29 02:36 - 07:07 (185+03:30)
+mao      :0           :0               Fri Nov 19 20:59 - crash (39+05:36)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:57 - 07:07 (224+09:09)
+mao      :0           :0               Fri Nov 19 20:37 - crash  (00:19)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:37 - 07:07 (224+09:29)
+mao      :0           :0               Fri Nov 19 20:20 - down   (00:16)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:20 - 20:37  (00:16)
+mao      :0           :0               Fri Nov  5 05:21 - down   (00:20)
+reboot   system boot  5.11.0-38-generi Fri Nov  5 05:20 - 05:42  (00:21)
+mao      :0           :0               Thu Nov  4 22:21 - crash  (06:59)
+reboot   system boot  5.11.0-38-generi Thu Nov  4 22:20 - 05:42  (07:21)
+mao      :0           :0               Sat Oct 23 04:59 - crash (12+17:21)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 04:59 - 05:42 (13+00:43)
+mao      :0           :0               Sat Oct 23 04:15 - down   (00:03)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 04:15 - 04:19  (00:04)
+mao      :0           :0               Sat Oct 23 03:51 - down   (00:20)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:51 - 04:12  (00:20)
+mao      :0           :0               Sat Oct 23 03:41 - down   (00:07)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:41 - 03:49  (00:07)
+mao      :0           :0               Sat Oct 23 03:16 - down   (00:19)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:16 - 03:35  (00:19)
+mao      :0           :0               Sat Oct 23 03:12 - down   (00:01)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:11 - 03:14  (00:02)
+mao      :0           :0               Sat Oct 23 02:09 - crash  (01:02)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 02:08 - 03:14  (01:05)
+mao      :0           :0               Fri Oct 22 23:22 - crash  (02:45)
+reboot   system boot  5.11.0-38-generi Fri Oct 22 23:21 - 03:14  (03:53)
+mao      :0           :0               Fri Oct 22 05:05 - crash  (18:15)
+reboot   system boot  5.11.0-27-generi Fri Oct 22 05:05 - 03:14  (22:09)
+mao      :0           :0               Fri Oct 15 05:21 - down   (00:03)
+mao      :0           :0               Fri Oct 15 04:22 - 05:21  (00:59)
+reboot   system boot  5.11.0-27-generi Fri Oct 15 04:20 - 05:24  (01:04)
+
+wtmp begins Fri Oct 15 04:20:13 2021
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## astlog 命令
+
+lastlog 命令可以查看到每个系统用户最近一次登陆系统的时间
+
+
+
+```sh
+mao@ubuntu:~/桌面$ lastlog --help
+用法：lastlog [选项]
+
+选项：
+  -b, --before DAYS             仅打印早于 DAYS 的最近登录记录
+  -C, --clear                   清除一个用户的最近登录记录(须配合 -u 使用)
+  -h, --help                    显示此帮助信息并退出
+  -R, --root CHROOT_DIR         chroot 到的目录
+  -S, --set                     设置最近登录记录为当前时间(须配合 -u 使用)
+  -t, --time DAYS               仅打印晚于 DAYS 的最近登录记录
+  -u, --user LOGIN              打印 LOGIN 用户的最近登录记录
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ lastlog
+用户名           端口     来自             最后登录时间
+root                                       **从未登录过**
+daemon                                     **从未登录过**
+bin                                        **从未登录过**
+sys                                        **从未登录过**
+sync                                       **从未登录过**
+games                                      **从未登录过**
+man                                        **从未登录过**
+lp                                         **从未登录过**
+mail                                       **从未登录过**
+news                                       **从未登录过**
+uucp                                       **从未登录过**
+proxy                                      **从未登录过**
+www-data                                   **从未登录过**
+backup                                     **从未登录过**
+list                                       **从未登录过**
+irc                                        **从未登录过**
+gnats                                      **从未登录过**
+nobody                                     **从未登录过**
+systemd-network                            **从未登录过**
+systemd-resolve                            **从未登录过**
+systemd-timesync                           **从未登录过**
+messagebus                                 **从未登录过**
+syslog                                     **从未登录过**
+_apt                                       **从未登录过**
+tss                                        **从未登录过**
+uuidd                                      **从未登录过**
+tcpdump                                    **从未登录过**
+avahi-autoipd                              **从未登录过**
+usbmux                                     **从未登录过**
+rtkit                                      **从未登录过**
+dnsmasq                                    **从未登录过**
+cups-pk-helper                             **从未登录过**
+speech-dispatcher                           **从未登录过**
+avahi                                      **从未登录过**
+kernoops                                   **从未登录过**
+saned                                      **从未登录过**
+nm-openvpn                                 **从未登录过**
+hplip                                      **从未登录过**
+whoopsie                                   **从未登录过**
+colord                                     **从未登录过**
+geoclue                                    **从未登录过**
+pulse                                      **从未登录过**
+gnome-initial-setup                           **从未登录过**
+gdm                                        **从未登录过**
+sssd                                       **从未登录过**
+mao                                        **从未登录过**
+systemd-coredump                           **从未登录过**
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 数据备份与恢复
+
