@@ -15438,3 +15438,411 @@ pkill [-t 终端号] 进程名
 
 ## 命令放入后台运行
 
+方法一：
+
+在命令后面加入 `空格 &`。使用这种方法放入后台的命令，在后台处于执行状态。
+
+
+
+方法二：
+
+命令执行过裎中按 Ctrl+Z 快捷键，命令在后台处于暂停状态
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ps
+    PID TTY          TIME CMD
+   2157 pts/0    00:00:00 bash
+   2334 pts/0    00:00:00 ps
+mao@ubuntu:~/桌面$ ps &
+[1] 2335
+mao@ubuntu:~/桌面$     PID TTY          TIME CMD
+   2157 pts/0    00:00:00 bash
+   2335 pts/0    00:00:00 ps
+
+[1]+  已完成               ps
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ top
+
+top - 21:28:49 up 4 min,  1 user,  load average: 0.13, 0.26, 0.14
+任务: 445 total,   2 running, 443 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3901.5 total,   2092.5 free,    986.9 used,    822.1 buff/cache
+MiB Swap:    687.5 total,    687.5 free,      0.0 used.   2676.7 avail Mem 
+
+ 进程号 USER      PR  NI    VIRT    RES    SHR    %CPU  %MEM     TIME+ COMMAND  
+    931 root      20   0 1613188  40232  19788 S   2.0   1.0   0:02.81 snapd    
+   1703 mao       20   0  291376  66184  39620 S   2.0   1.7   0:07.07 Xorg     
+   2149 mao       20   0  908324  63656  47432 S   1.3   1.6   0:01.90 gnome-t+ 
+   1837 mao       20   0 4289004 261860 118428 S   1.0   6.6   0:10.74 gnome-s+ 
+    872 root      20   0  248076   7484   6472 S   0.7   0.2   0:01.17 vmtoolsd 
+   1693 mao       20   0  325356   9144   8148 S   0.3   0.2   0:00.06 gvfs-af+ 
+   1995 mao       20   0  302052  42384  30296 S   0.3   1.1   0:01.18 vmtoolsd 
+   2337 mao       20   0   20804   4244   3204 R   0.3   0.1   0:00.03 top      
+      1 root      20   0  167596  11432   8336 S   0.0   0.3   0:07.94 systemd  
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.06 kthreadd 
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp   
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+ 
+      5 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker+ 
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+ 
+      7 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker+ 
+      8 root      20   0       0      0      0 I   0.0   0.0   0:00.01 kworker+ 
+      9 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_perc+ 
+[1]+  已停止               top
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## jobs 命令
+
+jobs 命令可以**用来查看当前终端放入后台的工作**
+
+
+
+命令：
+
+```sh
+jobs [选项]
+```
+
+
+
+|      选项      |                  含义                  |
+| :------------: | :------------------------------------: |
+| -l（L 的小写） |          列出进程的 PID 号。           |
+|       -n       | 只列出上次发出通知后改变了状态的进程。 |
+|       -p       |         只列出进程的 PID 号。          |
+|       -r       |          只列出运行中的进程。          |
+|       -s       |          只列出已停止的进程。          |
+
+
+
++"号代表最近一个放入后台的工作，也是工作恢复时默认恢复的工作。"-"号代表倒数第二个放入后台的工作，而第三个以后的工作就没有"+-"标志了
+
+
+
+```sh
+mao@ubuntu:~/桌面$ jobs
+[1]+  已停止               top
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ jobs -l
+[1]+  2337 停止 (信号)         top
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ jobs -n
+mao@ubuntu:~/桌面$ jobs -p
+2337
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ jobs -r
+mao@ubuntu:~/桌面$ jobs -s
+[1]+  已停止               top
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## fg命令
+
+fg 命令**用于把后台工作恢复到前台执行**
+
+
+
+命令：
+
+```sh
+fg %工作号
+```
+
+在使用此命令时，％ 可以省略，但若将`% 工作号`全部省略，则此命令会将带有 + 号的工作恢复到前台。
+
+
+
+```sh
+mao@ubuntu:~/桌面$ jobs
+[1]+  已停止               vi
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ fg 1
+vi
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ jobs
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+top 命令是不能在后台执行的，所以，如果要想中止 top 命令，要么把 top 命令恢复到前台，然后正常退出；要么找到 top 命令的 PID，使用 kill 命令杀死这个进程。
+
+
+
+
+
+
+
+## bg命令
+
+bg 命令用于**把后台暂停的工作恢复到后台执行**
+
+
+
+命令：
+
+```sh
+bg ％工作号
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ jobs
+mao@ubuntu:~/桌面$ vi
+
+[1]+  已停止               vi
+mao@ubuntu:~/桌面$ jobs
+[1]+  已停止               vi
+mao@ubuntu:~/桌面$ bg 1
+[1]+ vi &
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## nohup命令
+
+nohup 命令的作用就是**让后台工作在离开操作终端时，也能够正确地在后台执行**
+
+
+
+命令：
+
+```sh
+nohup [命令] &
+```
+
+
+
+&’表示此命令会在终端后台工作；反之，如果没有‘&’，则表示此命令会在终端前台工作
+
+
+
+
+
+
+
+## at命令
+
+安装at 软件包，并开启 atd 服务
+
+
+
+```sh
+yum -y install at
+```
+
+或者
+
+```sh
+sudo apt install at
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ at
+
+Command 'at' not found, but can be installed with:
+
+sudo apt install at
+
+mao@ubuntu:~/桌面$ sudo apt install at
+[sudo] mao 的密码： 
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+将会同时安装下列软件：
+  libfl2
+建议安装：
+  default-mta | mail-transport-agent
+下列【新】软件包将被安装：
+  at libfl2
+升级了 0 个软件包，新安装了 2 个软件包，要卸载 0 个软件包，有 61 个软件包未被升级。
+需要下载 50.1 kB 的归档。
+解压缩后会消耗 241 kB 的额外空间。
+您希望继续执行吗？ [Y/n] y
+获取:1 http://cn.archive.ubuntu.com/ubuntu focal/main amd64 libfl2 amd64 2.6.4-6.2 [11.5 kB]
+获取:2 http://cn.archive.ubuntu.com/ubuntu focal/main amd64 at amd64 3.1.23-1ubuntu1 [38.7 kB]
+已下载 50.1 kB，耗时 7秒 (7,230 B/s)                                           
+正在选中未选择的软件包 libfl2:amd64。
+(正在读取数据库 ... 系统当前共安装有 195447 个文件和目录。)
+准备解压 .../libfl2_2.6.4-6.2_amd64.deb  ...
+正在解压 libfl2:amd64 (2.6.4-6.2) ...
+正在选中未选择的软件包 at。
+准备解压 .../at_3.1.23-1ubuntu1_amd64.deb  ...
+正在解压 at (3.1.23-1ubuntu1) ...
+正在设置 libfl2:amd64 (2.6.4-6.2) ...
+正在设置 at (3.1.23-1ubuntu1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/atd.service → /lib/s
+ystemd/system/atd.service.
+正在处理用于 systemd (245.4-4ubuntu3.11) 的触发器 ...
+正在处理用于 man-db (2.9.1-1) 的触发器 ...
+正在处理用于 libc-bin (2.31-0ubuntu9.2) 的触发器 ...
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ type at
+at 已被录入哈希表 (/usr/bin/at)
+mao@ubuntu:~/桌面$ at
+Garbled time
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+at 命令要想正确执行，还需要 atd 服务的支持。atd 服务是独立的服务，启动的命令如下：
+
+```sh
+service atd start
+```
+
+
+
+需要验证密码
+
+```sh
+mao@ubuntu:~/桌面$ service atd start
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+如果想让 atd 服务开机时自启动，则可以使用如下命令：
+
+```sh
+chkconfig atd on
+```
+
+独立服务的自启动也可以修改 /etc/rc.local 配置文件
+
+我系统无此命令
+
+
+
+
+
+**访问控制**指的是允许哪些用户使用 at 命令设定定时任务，或者不允许哪些用户使用 at 命令。
+
+
+
+at 命令的访问控制是依靠 /etc/at.allow（白名单）和 /etc/at.deny（黑名单）这两个文件来实现的，具体规则如下：
+
+- 如果系统中有 /etc/at.allow 文件，那么只有写入 /etc/at.allow 文件（白名单）中的用户可以使用 at 命令，其他用户不能使用 at 命令（注意，/etc/at.allow 文件的优先级更高，也就是说，如果同一个用户既写入 /etc/at.allow 文件，又写入 /etc/at.deny 文件，那么这个用户是可以使用 at 命令的）。
+- 如果系统中没有 /etc/at.allow 文件，只有 /etc/at.deny 文件，那么写入 /etc/at.deny 文件（黑名单）中的用户不能使用 at 命令，其他用户可以使用 at 命令。不过这个文件对 root 用户不生效。
+- 如果系统中这两个文件都不存在，那么只有 root 用户可以使用 at 命令。
+
+
+
+系统中默认只有 /etc/at.deny 文件，而且这个文件是空的，因此，系统中所有的用户都可以使用 at 命令
+
+
+
+
+
+at命令：
+
+```sh
+at [选项] [时间]
+```
+
+
+
+|     选项      |                             含义                             |
+| :-----------: | :----------------------------------------------------------: |
+|      -m       | 当 at 工作完成后，无论命令是否输出，都用 E-mail 通知执行 at 命令的用户。 |
+| -c 工作标识号 |                  显示该 at 工作的实际内容。                  |
+|    -t 时间    |   在指定时间提交工作并执行，时间格式为 [[CC]YY]MMDDhhmm。    |
+|      -d       | 删除某个工作，需要提供相应的工作标识号（ID），同 atrm 命令的作用相同。 |
+|      -l       |  列出当前所有等待运行的工作，和 atq 命令具有相同的额作用。   |
+|  -f 脚本文件  |                   指定所要提交的脚本文件。                   |
+
+
+
+|            格式            |                             用法                             |
+| :------------------------: | :----------------------------------------------------------: |
+|           HH:MM            | 比如 04:00 AM。如果时间已过，则它会在第二天的同一时间执行。  |
+|    Midnight（midnight）    |                代表 12:00 AM（也就是 00:00）                 |
+|        Noon（noon）        |                代表 12:00 PM（相当于 12:00）                 |
+|     Teatime（teatime）     |                 代表 4:00 PM（相当于 16:00）                 |
+|     英文月名 日期 年份     | 比如 January 15 2018 表示 2018 年 1 月 15 号，年份可有可无。 |
+| MMDDYY、MM/DD/YY、MM.DD.YY |            比如 011518 表示 2018 年 1 月 15 号。             |
+|          now+时间          | 以 minutes、hours、days 或 weeks 为单位，例如 now+5 days 表示命令在 5 天之后的此时此刻执行。 |
+
+
+
+at 命令只要指定正确的时间，就可以输入需要在指定时间执行的命令。这个命令可以是系统命令，也可以是 Shell 脚本
+
+使用Ctrl+D快捷键保存at任务
+
+
+
+```sh
+mao@ubuntu:~/桌面$ touch 3.txt
+mao@ubuntu:~/桌面$ cat 1.txt
+123
+mao@ubuntu:~/桌面$ at now +1 minutes
+warning: commands will be executed using /bin/sh
+at> cat 1.txt > 3.txt
+at> <EOT>
+job 3 at Sat Jul  9 22:14:00 2022
+mao@ubuntu:~/桌面$ 
+mao@ubuntu:~/桌面$ cat 3.txt
+123
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+atq 命令用于查看当前等待运行的工作，atrm 命令后者用于删除指定的工作
+
+
+
+
+
+
+
+## crontab命令
+
+
+
