@@ -16294,5 +16294,158 @@ mao@ubuntu:~/桌面$
 
 
 
-## w和who命令
+## w命令
+
+查看服务器上目前已登录的用户信息
+
+w 命令除了能知道目前已登陆的用户信息，还可以知道每个用户执行任务的情况
+
+
+
+w 命令：
+
+```sh
+w [选项] [用户名]
+```
+
+
+
+
+
+| 选项 |                      含义                       |
+| :--: | :---------------------------------------------: |
+|  -h  |              不显示输出信息的标题               |
+|  -l  |                  用长格式输出                   |
+|  -s  | 用短格式输出，不显示登陆时间，JCPU 和 PCPU 时间 |
+|  -V  |                  显示版本信息                   |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ w --help
+
+用法：
+ w [选项]
+
+选项：
+ -h, --no-header     do not print header
+ -u, --no-current    ignore current process username
+ -s, --short         short format
+ -f, --from          show remote hostname field
+ -o, --old-style     旧格式输出
+ -i, --ip-addr       display IP address instead of hostname (if possible)
+
+     --help     显示此帮助信息并退出
+ -V, --version  显示程序版本然后离开
+
+欲了解更多详细信息，请参见 w(1)。
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ w
+ 05:12:42 up  1:57,  1 user,  load average: 0.00, 0.00, 0.00
+USER     TTY      来自           LOGIN@   IDLE   JCPU   PCPU WHAT
+mao      :0       :0               21:24   ?xdm?   4:02   0.02s /usr/lib/gdm3/gdm-x-session --run-script env GNOME_S
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ w -h
+mao      :0       :0               21:24   ?xdm?   4:03   0.02s /usr/lib/gdm3/gdm-x-session --run-script env GNOME_S
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ w -s
+ 05:14:17 up  1:59,  1 user,  load average: 0.00, 0.00, 0.00
+USER     TTY      来自            空闲等待
+mao      :0       :0               ?xdm?  /usr/lib/gdm3/gdm-x-session --run-script env GNOME_SHELL_SESSION_MODE=ub
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## who命令
+
+查看服务器上目前已登录的用户信息
+
+
+
+who 命令：
+
+```sh
+who [选项] [file]
+```
+
+
+
+|   选项   |                             含义                             |
+| :------: | :----------------------------------------------------------: |
+|    -a    |                列出所有信息，相当于所有选项。                |
+|    -b    |                 列出系统最近启动的时间日期。                 |
+|    -l    |                  列出所有可登陆的终端信息。                  |
+|    -m    |  仅列出关于当前终端的信息，`who -m` 命令等同于 `who am i`。  |
+|    -q    |            列出在本地系统上的用户和用户数的清单。            |
+|    -r    |                   显示当前系统的运行级别。                   |
+|    -s    |  仅显示名称、线路和时间字段信息，这是 who 命令的默认选项。   |
+|    -u    | 显示当前每个用户的用户名、登陆终端、登陆时间、线路活动和进程标识。 |
+| -T 或 -w | 显示 tty 终端的状态，“+”表示对任何人可写，“-”表示仅对 root 用户或所有者可写，“？”表示遇到线路故障。 |
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ who --help
+用法：who [选项]... [ 文件 | 参数1 参数2 ]
+显示当前已登录的用户信息。
+
+  -a, --all		等于-b -d --login -p -r -t -T -u 选项的组合
+  -b, --boot		上次系统启动时间
+  -d, --dead		显示已死的进程
+  -H, --heading	输出头部的标题列
+      --ips         print ips instead of hostnames. with --lookup,
+                    canonicalizes based on stored IP, if available,
+                    rather than stored hostname
+  -l，--login		显示系统登录进程
+      --lookup		尝试通过 DNS 规范化主机名
+  -m			只针对和标准输入有直接交互的主机和用户
+  -p, --process	显示由 init 进程衍生的活动进程
+  -q, --count		列出所有已登录用户的登录名与用户数量
+  -r, --runlevel	显示当前的运行级别
+  -s, --short		只显示名称、线路和时间(默认)
+  -T, -w, --mesg	用+，- 或 ? 标注用户消息状态
+  -u, --users		列出已登录的用户
+      --message	等于-T
+      --writable	等于-T
+      --help		显示此帮助信息并退出
+      --version		显示版本信息并退出
+
+如果文件未被指定，则使用/var/run/utmp。/var/log/wtmp 是通用的相关文件。
+如果给定了参数1和参数2，则假定同时启用了 -m 参数：常见的参数例子如
+"am i" 或 "mom likes"。
+
+完整文档请见：<https://www.gnu.org/software/coreutils/who>
+或者在本地使用：info '(coreutils) who invocation'
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ who
+mao      :0           2022-07-09 21:24 (:0)
+mao@ubuntu:~/桌面$ who -s
+mao      :0           2022-07-09 21:24 (:0)
+mao@ubuntu:~/桌面$ 
+```
+
+```sh
+mao@ubuntu:~/桌面$ who -a
+           系统引导 2022-07-09 21:24
+           运行级别 5 2022-07-09 21:24
+mao      ? :0           2022-07-09 21:24   ?          1701 (:0)
+mao@ubuntu:~/桌面$ 
+```
 
