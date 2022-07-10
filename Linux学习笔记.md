@@ -16087,5 +16087,212 @@ mao@ubuntu:~/桌面$
 
 ## dmesg命令
 
+显示开机信息
 
+
+
+命令：
+
+```sh
+dmesg
+```
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ dmesg | grep CPU
+[    0.398178] smpboot: Allowing 128 CPUs, 112 hotplug CPUs
+[    0.398266] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:128 nr_cpu_ids:128 nr_node_ids:1
+[    0.762294] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=128, Nodes=1
+[    0.781546] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=128.
+[    0.787384] random: crng done (trusting CPU's manufacturer)
+[    0.855304] smpboot: CPU0: AMD Ryzen 7 2700 Eight-Core Processor (family: 0x17, model: 0x8, stepping: 0x2)
+[    0.884684] smp: Bringing up secondary CPUs ...
+[    0.885688] .... node  #0, CPUs:          #1
+[    0.046778] smpboot: CPU 2 Converting physical 0 to logical die 1
+[    0.046778] smpboot: CPU 4 Converting physical 0 to logical die 2
+[    0.046778] smpboot: CPU 6 Converting physical 0 to logical die 3
+[    0.046778] smpboot: CPU 8 Converting physical 0 to logical die 4
+[    0.046778] smpboot: CPU 10 Converting physical 0 to logical die 5
+[    0.046778] smpboot: CPU 12 Converting physical 0 to logical die 6
+[    0.046778] smpboot: CPU 14 Converting physical 0 to logical die 7
+[    0.999089] smp: Brought up 1 node, 16 CPUs
+[    7.619568] ledtrig-cpu: registered to indicate activity on CPUs
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ dmesg
+[    0.000000] Linux version 5.11.0-38-generic (buildd@lgw01-amd64-041) (gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #42~20.04.1-Ubuntu SMP Tue Sep 28 20:41:07 UTC 2021 (Ubuntu 5.11.0-38.42~20.04.1-generic 5.11.22)
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.11.0-38-generic root=UUID=f016fec7-baa2-4d84-99bb-4b8bde2ff82c ro find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US quiet
+[    0.000000] KERNEL supported cpus:
+[    0.000000]   Intel GenuineIntel
+[    0.000000]   AMD AuthenticAMD
+[    0.000000]   Hygon HygonGenuine
+[    0.000000]   Centaur CentaurHauls
+[    0.000000]   zhaoxin   Shanghai  
+[    0.000000] [Firmware Bug]: TSC doesn't count with P0 frequency!
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    0.000000] x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'compacted' format.
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009e7ff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009e800-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000dc000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000bfecffff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000bfed0000-0x00000000bfefefff] ACPI data
+[    0.000000] BIOS-e820: [mem 0x00000000bfeff000-0x00000000bfefffff] ACPI NVS
+[    0.000000] BIOS-e820: [mem 0x00000000bff00000-0x00000000bfffffff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000f0000000-0x00000000f7ffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fec00000-0x00000000fec0ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fee00000-0x00000000fee00fff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffe0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000013fffffff] usable
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] SMBIOS 2.7 present.
+[    0.000000] DMI: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 07/22/2020
+[    0.000000] vmware: hypercall mode: 0x01
+[    0.000000] Hypervisor detected: VMware
+[    0.000000] vmware: TSC freq read from hypervisor : 3800.051 MHz
+[    0.000000] vmware: Host bus clock speed read from hypervisor : 66000000 Hz
+[    0.000000] vmware: using clock offset of 36772570590 ns
+[    0.000049] tsc: Detected 3800.051 MHz processor
+[    0.002925] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+[    0.003013] e820: remove [mem 0x000a0000-0x000fffff] usable
+[    0.003071] last_pfn = 0x140000 max_arch_pfn = 0x400000000
+[    0.003204] MTRR default type: uncachable
+[    0.003223] MTRR fixed ranges enabled:
+[    0.003242]   00000-9FFFF write-back
+[    0.003261]   A0000-BFFFF uncachable
+[    0.003280]   C0000-CFFFF write-protect
+[    0.003300]   D0000-EFFFF uncachable
+[    0.003324]   F0000-FFFFF write-protect
+[    0.003343] MTRR variable ranges enabled:
+[    0.003362]   0 base 000000000000 mask 1FE000000000 write-back
+[    0.003382]   1 base 0000C0000000 mask 1FFFC0000000 uncachable
+[    0.003402]   2 disabled
+[    0.003421]   3 disabled
+[    0.003439]   4 disabled
+[    0.003458]   5 disabled
+[    0.003476]   6 disabled
+[    0.003495]   7 disabled
+[    0.003528] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.003568] total RAM covered: 130048M
+[    0.004154] Found optimal setting for mtrr clean up
+[    0.004172]  gran_size: 64K 	chunk_size: 64K 	num_reg: 7  	lose cover RAM: 0G
+[    0.004308] e820: update [mem 0xc0000000-0xffffffff] usable ==> reserved
+[    0.004423] last_pfn = 0xc0000 max_arch_pfn = 0x400000000
+[    0.008068] found SMP MP-table at [mem 0x000f6a70-0x000f6a7f]
+[    0.013132] check: Scanning 1 areas for low memory corruption
+[    0.017563] Using GB pages for direct mapping
+[    0.021441] RAMDISK: [mem 0x31abf000-0x34d56fff]
+...
+```
+
+
+
+
+
+
+
+## free命令
+
+free 命令用来**显示系统内存状态**，包括系统物理内存、虚拟内存（swap 交换分区）、共享内存和系统缓存的使用情况
+
+
+
+命令：
+
+```sh
+free [选项]
+```
+
+
+
+|    选项     |                             含义                             |
+| :---------: | :----------------------------------------------------------: |
+|     -b      |          以 Byte（字节）为单位，显示内存使用情况。           |
+|     -k      | 以 KB 为单位，显示内存使用情况，此选项是 free 命令的默认选项。 |
+|     -m      |               以 MB 为单位，显示内存使用情况。               |
+|     -g      |               以 GB 为单位，显示内存使用情况。               |
+|     -t      |       在输出的最终结果中，输出内存和 swap 分区的总量。       |
+|     -o      |                   不显示系统缓冲区这一列。                   |
+| -s 间隔秒数 |          根据指定的间隔时间，持续显示内存使用情况。          |
+
+
+
+```sh
+mao@ubuntu:~/桌面$ free --help
+
+用法：
+ free [选项]
+
+选项：
+ -b, --bytes         以字节显示输出
+     --kilo          使用千字节显示输出
+     --mega          使用兆字节显示输出
+     --giga          使用吉字节显示输出
+     --tera          使用太字节显示输出
+     --peta          show output in petabytes
+ -k, --kibi          show output in kibibytes
+ -m, --mebi          show output in mebibytes
+ -g, --gibi          show output in gibibytes
+     --tebi          show output in tebibytes
+     --pebi          show output in pebibytes
+ -h, --human         显示人类可读的输出
+     --si            使用 1000 的倍数而非使用 1024
+ -l, --lohi          show detailed low and high memory statistics
+ -t, --total         show total for RAM + swap
+ -s N, --seconds N   repeat printing every N seconds
+ -c N, --count N     repeat printing N times, then exit
+ -w, --wide          宽版输出
+
+     --help     显示此帮助信息并退出
+ -V, --version  显示程序版本然后离开
+
+欲了解更多详细信息，请参见 free(1)。
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ free
+              总计         已用        空闲      共享    缓冲/缓存    可用
+内存：     3995088     1081812     1870568        2500     1042708     2664640
+交换：      703976           0      703976
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ free -m
+              总计         已用        空闲      共享    缓冲/缓存    可用
+内存：        3901        1056        1826           2        1018        2601
+交换：         687           0         687
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ free -h
+              总计         已用        空闲      共享    缓冲/缓存    可用
+内存：       3.8Gi       1.0Gi       1.8Gi       2.0Mi       1.0Gi       2.5Gi
+交换：       687Mi          0B       687Mi
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## w和who命令
 
