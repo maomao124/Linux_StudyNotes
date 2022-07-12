@@ -16677,3 +16677,489 @@ mao@ubuntu:~/桌面$
 
 # 数据备份与恢复
 
+## 备份策略
+
+### 完全备份
+
+完全备份是指把所有需要备份的数据全部备份。当然，完全备份可以备份整块硬盘、整个分区或某个具体的目录。对于 Linux 操作系统来说，完全备份指的就是将根目录下的所有文件进行备份。
+
+* 优点：所有数据都进行了备份，系统中任何数据丢失都能恢复，且恢复效率较高。如果完全备份备份的是整块硬盘，那么甚至不需要数据恢复，只要把备份硬盘安装上，服务器就会恢复正常。
+* 缺点：需要备份的数据量较大，备份时间较长，备份了很多无用数据，占用的空间较大
+
+
+
+
+
+### 累计增量备份
+
+累计增量备份是指先进行一次完全备份，服务器运行一段时间之后，比较当前系统和完全备份的备份数据之间的差异，只备份有差异的数据。服务器继续运行，再经过一段时间，进行第二次增量备份。在进行第二次增量备份时，当前系统和第一次增量备份的数据进行比较，也是只备份有差异的数据。第三次增量备份是和第二次增量备份的数据进行比较，以此类推。
+
+假设我们在第一天进行一次完全备份。第二天增量备份时，只会备份第二天和第一天之间的差异数据，但是第二天的总备份数据是完全备份加第一次增量备份的数据。第三天增量备份时，只会备份第三天和第二天之间的差异数据，但是第三天的总备份数据是完全备份加第一次增量备份的数据，再加第二次增量备份的数据。当然，第四天增量备份时，只会备份第四天和第三天的差异数据，但是第四天的总备份数据是完全备份加第一次增量备份的数据，加第二次增量备份的数据，再加第三次增量备份的数据。
+
+* 优点：每次备份需要备份的数据较少，耗时较短，占用的空间较小
+* 缺点：数据恢复比较麻烦。当进行数据恢复时，就要先恢复完全备份的数据，再依次恢复第一次增量备份的数据、第二次增量备份的数据和第三次增量备份的数据，最终才能恢复所有的数据
+
+
+
+
+
+### 差异增量备份
+
+差异增量备份也要先进行一次完全备份，但是和累计增量备份不同的是，每次差异备份都备份和原始的完全备份不同的数据。也就是说，差异备份每次备份的参照物都是原始的完全备份，而不是上一次的差异备份。
+
+假设我们在第一天也进行一次完全备份。第二天差异备份时，会备份第二天和第一天之间的差异数据，而第二天的备份数据是完全备份加第一次差异备份的数据。第三天进行差异备份时，仍和第一天的原始数据进行对比，把第二天和第三天所有的数据都备份在第二次差异备份中，第三天的备份数据是完全备份加第二次差异备份的数据。第四天进行差异备份时，仍和第一天的原始数据进行对比，把第二天、第三天和第四天所有的不同数据都备份到第三次差异备份中，第四天的备份数据是完全备份加第三次差异备份的数据。
+
+* 优点：差异备份既不像完全备份一样把所有数据都进行备份，也不像增量备份在进行数据恢复时那么麻烦，只要先恢复完全备份的数据，再恢复差异备份的数据即可。
+* 缺点：随着时间的增加，和完全备份相比，变动的数据越来越多，那么差异备份也可能会变得数据量庞大、备份速度缓慢、占用空间较大。
+
+
+
+
+
+## dump命令
+
+系统默认没有安装此命令，需要安装
+
+
+
+CentOS：
+
+```sh
+yum -y install dump
+```
+
+
+
+ubuntu：
+
+```sh
+sudo apt install dump
+```
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo apt install dump
+[sudo] mao 的密码： 
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+下列【新】软件包将被安装：
+  dump
+升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 61 个软件包未被升级。
+需要下载 130 kB 的归档。
+解压缩后会消耗 372 kB 的额外空间。
+获取:1 http://cn.archive.ubuntu.com/ubuntu focal/universe amd64 dump amd64 0.4b46-6 [130 kB]
+已下载 130 kB，耗时 6秒 (21.6 kB/s)                                            
+正在选中未选择的软件包 dump。
+(正在读取数据库 ... 系统当前共安装有 195480 个文件和目录。)
+准备解压 .../dump_0.4b46-6_amd64.deb  ...
+正在解压 dump (0.4b46-6) ...
+正在设置 dump (0.4b46-6) ...
+update-alternatives: 使用 /usr/sbin/rmt-dump 来在自动模式中提供 /usr/sbin/rmt (r
+mt)
+正在处理用于 man-db (2.9.1-1) 的触发器 ...
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+> dump 命令使用“备份级别”来实现增量备份，它支持 0～9 共 10 个备份级别。其中，0 级别指的就是完全备份，1～9 级别都是增量备份级别。
+
+> 只有在备份整个分区或整块硬盘时，才能支持 1～9 的增量备份级别；如果只是备份某个文件或不是分区的目录，则只能使用 0 级别进行完全备份。
+
+
+
+命令：
+
+```sh
+dump [选项] 备份之后的文件名 原文件或目录
+```
+
+选项：
+-level：就是我们说的 0～9 共 10 个备份级别；
+-f 文件名：指定备份之后的文件名；
+-u：备份成功之后，把备份时间、备份级别以及实施备份的文件系统等信息，都记录在 /etc/dumpdates 文件中；
+-v：显示备份过程中更多的输出信息；
+-j：调用 bzlib 库压缩备份文件，其实就是把备份文件压缩为 .bz2 格式，默认压缩等级是 2；
+-W：显示允许被 dump 的分区的备份等级及备份时间；
+
+
+
+
+
+```sh
+sudo dump -0j -f backup.bz2 a.c
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo dump -0j -f backup.bz2 a.c
+  DUMP: Date of this level 0 dump: Mon Jul 11 22:16:03 2022
+  DUMP: Dumping /dev/sda5 (/ (dir home/mao/桌面/a.c)) to backup.bz2
+  DUMP: Label: none
+  DUMP: Writing 10 Kilobyte records
+  DUMP: Compressing output at transformation level 2 (bzlib)
+  DUMP: mapping (Pass I) [regular files]
+  DUMP: mapping (Pass II) [directories]
+  DUMP: estimated 272 blocks.
+  DUMP: Volume 1 started with block 1 at: Mon Jul 11 22:16:03 2022
+  DUMP: dumping (Pass III) [directories]
+  DUMP: dumping (Pass IV) [regular files]
+  DUMP: Closing backup.bz2
+  DUMP: Volume 1 completed at: Mon Jul 11 22:16:03 2022
+  DUMP: 260 blocks (0.25MB) on 1 volume(s)
+  DUMP: finished in less than a second
+  DUMP: Date of this level 0 dump: Mon Jul 11 22:16:03 2022
+  DUMP: Date this dump completed:  Mon Jul 11 22:16:03 2022
+  DUMP: Average transfer rate: 0 kB/s
+  DUMP: Wrote 260kB uncompressed, 16kB compressed, 16.250:1
+  DUMP: DUMP IS DONE
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+sudo dump -0j -f backup2.bz2 /home/mao/
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo dump -0j -f backup2.bz2 /home/mao/
+  DUMP: Date of this level 0 dump: Mon Jul 11 22:19:06 2022
+  DUMP: Dumping /dev/sda5 (/ (dir home/mao)) to backup2.bz2
+  DUMP: Label: none
+  DUMP: Writing 10 Kilobyte records
+  DUMP: Compressing output at transformation level 2 (bzlib)
+  DUMP: mapping (Pass I) [regular files]
+  DUMP: mapping (Pass II) [directories]
+  DUMP: estimated 65690 blocks.
+  DUMP: Volume 1 started with block 1 at: Mon Jul 11 22:19:06 2022
+  DUMP: dumping (Pass III) [directories]
+  DUMP: dumping (Pass IV) [regular files]
+  DUMP: Closing backup2.bz2
+  DUMP: Volume 1 completed at: Mon Jul 11 22:19:10 2022
+  DUMP: Volume 1 took 0:00:04
+  DUMP: Volume 1 transfer rate: 5854 kB/s
+  DUMP: Volume 1 65420kB uncompressed, 23417kB compressed, 2.794:1
+  DUMP: 65420 blocks (63.89MB) on 1 volume(s)
+  DUMP: finished in 4 seconds, throughput 16355 kBytes/sec
+  DUMP: Date of this level 0 dump: Mon Jul 11 22:19:06 2022
+  DUMP: Date this dump completed:  Mon Jul 11 22:19:10 2022
+  DUMP: Average transfer rate: 5854 kB/s
+  DUMP: Wrote 65420kB uncompressed, 23417kB compressed, 2.794:1
+  DUMP: DUMP IS DONE
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l
+总用量 23644
+-rw-rw-r-- 1 mao  mao         4 12月 29  2021 1.txt
+-rw------- 1 mao  mao      8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao  mao     16984 12月 29  2021 a.out
+-rw-r--r-- 1 root root 23979218 7月  11 22:19 backup2.bz2
+-rw-r--r-- 1 root root    16765 7月  11 22:17 backup.bz2
+-rw------- 1 mao  mao      9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao  mao      2956 11月  4  2021 filea.c
+-rw------- 1 mao  mao        96 10月 23  2021 func1.c
+-rw------- 1 mao  mao        98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao  mao      2324 12月 29  2021 linux_file.c
+-rw------- 1 mao  mao       242 10月 23  2021 main.c
+-rw------- 1 mao  mao       206 10月 23  2021 main.h
+-rw------- 1 mao  mao        20 7月   9 21:52 nohup.out
+-rw-rw-r-- 1 mao  mao    123464 7月  10 04:50 out.txt
+-rw-rw-r-- 1 mao  mao         4 7月   5 06:18 test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+
+
+## restore命令
+
+restore 命令是 dump 命令的配套命令，dump 命令是用来备份分区和数据的，而 restore 命令是用来恢复数据的。
+
+
+
+命令：
+
+```sh
+restore [模式选项] [-f]
+```
+
+
+
+- -C：比较备份数据和实际数据的变化。如果实际数据中的现有数据发生了变化，那么这个选项能够检测到这个变化。但是如果实际数据中新增了数据，那么这个选项是不能检测到变化的。
+- -i：进入交互模式，手工选择需要恢复的文件；
+- -t：查看模式，用于查看备份文件中拥有哪些数据；
+- -r：还原模式，用于数据还原；
+- -f ：用于指定备份文件的文件名
+
+
+
+```sh
+restore -t -f backup.bz2
+```
+
+```sh
+mao@ubuntu:~/桌面$ restore -t -f backup.bz2
+Dump tape is compressed.
+Dump   date: Mon Jul 11 22:17:18 2022
+Dumped from: the epoch
+Level 0 dump of / (dir home/mao/桌面/a.c) on ubuntu:/dev/sda5
+Label: none
+         2	.
+    655361	./home
+    688519	./home/mao
+    271582	./home/mao/桌面
+    266055	./home/mao/桌面/a.c
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+restore -t -f backup2.bz2
+```
+
+```sh
+Dump   date: Mon Jul 11 22:19:06 2022
+Dumped from: the epoch
+Level 0 dump of / (dir home/mao) on ubuntu:/dev/sda5
+Label: none
+         2	.
+    655361	./home
+    688519	./home/mao
+    664557	./home/mao/.bashrc
+    682460	./home/mao/.profile
+    682461	./home/mao/.bash_logout
+    411074	./home/mao/.config
+    411082	./home/mao/.config/pulse
+    411088	./home/mao/.config/pulse/2cd3a15613614cc6b0f466b652abd32b-device-volumes.tdb
+    411089	./home/mao/.config/pulse/2cd3a15613614cc6b0f466b652abd32b-stream-volumes.tdb
+    411090	./home/mao/.config/pulse/2cd3a15613614cc6b0f466b652abd32b-card-database.tdb
+    411091	./home/mao/.config/pulse/cookie
+    411146	./home/mao/.config/pulse/2cd3a15613614cc6b0f466b652abd32b-default-sink
+    411147	./home/mao/.config/pulse/2cd3a15613614cc6b0f466b652abd32b-default-source
+    411096	./home/mao/.config/goa-1.0
+    411130	./home/mao/.config/dconf
+    411132	./home/mao/.config/dconf/user
+    411144	./home/mao/.config/user-dirs.locale
+    404494	./home/mao/.config/user-dirs.dirs
+    411148	./home/mao/.config/ibus
+    411149	./home/mao/.config/ibus/bus
+    393703	./home/mao/.config/ibus/bus/2cd3a15613614cc6b0f466b652abd32b-unix-0
+    411182	./home/mao/.config/evolution
+    411183	./home/mao/.config/evolution/sources
+    411186	./home/mao/.config/evolution/sources/system-proxy.source
+    411200	./home/mao/.config/gtk-3.0
+    425526	./home/mao/.config/gtk-3.0/bookmarks
+    411210	./home/mao/.config/nautilus
+    411072	./home/mao/.config/update-notifier
+    434253	./home/mao/.config/gnome-session
+    434254	./home/mao/.config/gnome-session/saved-session
+    434266	./home/mao/.config/enchant
+    395809	./home/mao/.config/enchant/en_AU.dic
+    395838	./home/mao/.config/enchant/en_AU.exc
+    411233	./home/mao/.config/gnome-initial-setup-done
+    434267	./home/mao/.config/gedit
+    395865	./home/mao/.config/gedit/accels
+    411245	./home/mao/.config/gnome-control-center
+    419144	./home/mao/.config/gnome-control-center/backgrounds
+    419145	./home/mao/.config/gnome-control-center/backgrounds/last-edited.xml
+    411185	./home/mao/.config/procps
+    411083	./home/mao/.local
+    411084	./home/mao/.local/share
+    411085	./home/mao/.local/share/tracker
+    411111	./home/mao/.local/share/tracker/data
+    411100	./home/mao/.local/share/tracker/data/.meta.isrunning
+    411118	./home/mao/.local/share/tracker/data/tracker-store.ontology.journal
+    411122	./home/mao/.local/share/tracker/data/tracker-store.journal
+    411119	./home/mao/.local/share/xorg
+    411114	./home/mao/.local/share/xorg/Xorg.0.log
+    411143	./home/mao/.local/share/xorg/Xorg.0.log.old
+    411129	./home/mao/.local/share/keyrings
+    411131	./home/mao/.local/share/keyrings/login.keyring
+    411133	./home/mao/.local/share/keyrings/user.keystore
+    411145	./home/mao/.local/share/gnome-shell
+    411214	./home/mao/.local/share/gnome-shell/gnome-overrides-migrated
+    427127	./home/mao/.local/share/gnome-shell/application_state
+    411243	./home/mao/.local/share/gnome-shell/notifications
+...
+...
+...
+    684378	./home/mao/.viminfo
+    684433	./home/mao/.selected_editor
+    655995	./home/mao/.pam_environment
+    271582	./home/mao/桌面
+    285751	./home/mao/桌面/.swp
+    285752	./home/mao/桌面/.swo
+    285753	./home/mao/桌面/.swn
+    285754	./home/mao/桌面/.swm
+    285755	./home/mao/桌面/.swl
+    285756	./home/mao/桌面/.myfile.txt.swp
+    285757	./home/mao/桌面/.file.txt.swp
+    272001	./home/mao/桌面/.swk
+    266344	./home/mao/桌面/.file.txt.swo
+    267996	./home/mao/桌面/a.out
+    272170	./home/mao/桌面/.file.c.swp
+    276907	./home/mao/桌面/main.h
+    276917	./home/mao/桌面/main.c
+    277010	./home/mao/桌面/func2.c
+    277095	./home/mao/桌面/func1.c
+    266106	./home/mao/桌面/filea.c
+    266130	./home/mao/桌面/linux_file.c
+    266145	./home/mao/桌面/1.txt
+    266074	./home/mao/桌面/.swj
+    266055	./home/mao/桌面/a.c
+    266096	./home/mao/桌面/.hello.o.cmd
+    266107	./home/mao/桌面/.hello.mod.cmd
+    266036	./home/mao/桌面/test.txt
+    266112	./home/mao/桌面/.modules.order.cmd
+    266118	./home/mao/桌面/.a.c.swp
+    267994	./home/mao/桌面/out.txt
+    266115	./home/mao/桌面/.Module.symvers.cmd
+    267992	./home/mao/桌面/English_early_education_machine_input.c
+    266119	./home/mao/桌面/nohup.out
+    266116	./home/mao/桌面/.hello.mod.o.cmd
+    266127	./home/mao/桌面/.hello.ko.cmd
+    266120	./home/mao/桌面/backup.bz2
+    271585	./home/mao/下载
+    271586	./home/mao/模板
+    271587	./home/mao/公共的
+    271649	./home/mao/文档
+    271653	./home/mao/音乐
+    271813	./home/mao/图片
+    271814	./home/mao/视频
+```
+
+
+
+
+
+```sh
+restore -r -f ./../backup.bz2
+```
+
+```sh
+mao@ubuntu:~/桌面$ mkdir test
+mao@ubuntu:~/桌面$ cd test
+mao@ubuntu:~/桌面/test$ ls-l
+ls-l：未找到命令
+mao@ubuntu:~/桌面/test$ ls -l
+总用量 0
+mao@ubuntu:~/桌面/test$ restore -r -f ./../backup.bz2
+Dump tape is compressed.
+./lost+found: (inode 11) not found on tape
+./boot: (inode 131073) not found on tape
+./swapfile: (inode 12) not found on tape
+./etc: (inode 786433) not found on tape
+./media: (inode 262145) not found on tape
+./var: (inode 524289) not found on tape
+./bin: (inode 13) not found on tape
+./dev: (inode 393217) not found on tape
+./home/mao/.bashrc: (inode 664557) not found on tape
+./home/mao/.profile: (inode 682460) not found on tape
+./home/mao/.bash_logout: (inode 682461) not found on tape
+./home/mao/.config: (inode 411074) not found on tape
+./home/mao/.local: (inode 411083) not found on tape
+./home/mao/.cache: (inode 411092) not found on tape
+./home/mao/.gnupg: (inode 411125) not found on tape
+./home/mao/.bash_history: (inode 656580) not found on tape
+./home/mao/.sudo_as_admin_successful: (inode 657925) not found on tape
+./home/mao/.mozilla: (inode 665730) not found on tape
+./home/mao/.viminfo: (inode 684378) not found on tape
+./home/mao/.selected_editor: (inode 684433) not found on tape
+./home/mao/.pam_environment: (inode 655995) not found on tape
+./home/mao/桌面/.swp: (inode 285751) not found on tape
+./home/mao/桌面/.swo: (inode 285752) not found on tape
+./home/mao/桌面/.swn: (inode 285753) not found on tape
+./home/mao/桌面/.swm: (inode 285754) not found on tape
+./home/mao/桌面/.swl: (inode 285755) not found on tape
+./home/mao/桌面/.myfile.txt.swp: (inode 285756) not found on tape
+./home/mao/桌面/.file.txt.swp: (inode 285757) not found on tape
+./home/mao/桌面/.swk: (inode 272001) not found on tape
+./home/mao/桌面/.file.txt.swo: (inode 266344) not found on tape
+./home/mao/桌面/a.out: (inode 267996) not found on tape
+./home/mao/桌面/.file.c.swp: (inode 272170) not found on tape
+./home/mao/桌面/main.h: (inode 276907) not found on tape
+./home/mao/桌面/main.c: (inode 276917) not found on tape
+./home/mao/桌面/func2.c: (inode 277010) not found on tape
+./home/mao/桌面/func1.c: (inode 277095) not found on tape
+./home/mao/桌面/filea.c: (inode 266106) not found on tape
+./home/mao/桌面/linux_file.c: (inode 266130) not found on tape
+./home/mao/桌面/1.txt: (inode 266145) not found on tape
+./home/mao/桌面/.swj: (inode 266074) not found on tape
+./home/mao/桌面/.hello.o.cmd: (inode 266096) not found on tape
+./home/mao/桌面/.hello.mod.cmd: (inode 266107) not found on tape
+./home/mao/桌面/test.txt: (inode 266036) not found on tape
+./home/mao/桌面/.modules.order.cmd: (inode 266112) not found on tape
+./home/mao/桌面/.a.c.swp: (inode 266118) not found on tape
+./home/mao/桌面/out.txt: (inode 267994) not found on tape
+./home/mao/桌面/.Module.symvers.cmd: (inode 266115) not found on tape
+./home/mao/桌面/English_early_education_machine_input.c: (inode 267992) not found on tape
+./home/mao/桌面/nohup.out: (inode 266119) not found on tape
+./home/mao/桌面/.hello.mod.o.cmd: (inode 266116) not found on tape
+./home/mao/桌面/.hello.ko.cmd: (inode 266127) not found on tape
+./home/mao/桌面/backup.bz2: (inode 266120) not found on tape
+./home/mao/下载: (inode 271585) not found on tape
+./home/mao/模板: (inode 271586) not found on tape
+./home/mao/公共的: (inode 271587) not found on tape
+./home/mao/文档: (inode 271649) not found on tape
+./home/mao/音乐: (inode 271653) not found on tape
+./home/mao/图片: (inode 271813) not found on tape
+./home/mao/视频: (inode 271814) not found on tape
+./lib: (inode 14) not found on tape
+./lib32: (inode 15) not found on tape
+./lib64: (inode 16) not found on tape
+./libx32: (inode 17) not found on tape
+./mnt: (inode 655362) not found on tape
+./opt: (inode 393218) not found on tape
+./proc: (inode 786435) not found on tape
+./root: (inode 786436) not found on tape
+./run: (inode 131075) not found on tape
+./sbin: (inode 18) not found on tape
+./snap: (inode 262148) not found on tape
+./srv: (inode 393219) not found on tape
+./sys: (inode 655363) not found on tape
+./tmp: (inode 262149) not found on tape
+./usr: (inode 655364) not found on tape
+./cdrom: (inode 802079) not found on tape
+restore: chown: Operation not permitted
+restore: chown: Operation not permitted
+mao@ubuntu:~/桌面/test$ ls -l
+总用量 1504
+drwxr-xr-x 3 mao mao    4096 10月 15  2021 home
+-rw------- 1 mao mao 1533984 7月  11 22:32 restoresymtable
+mao@ubuntu:~/桌面/test$ cd home/mao
+mao@ubuntu:~/桌面/test/home/mao$ ls -l
+总用量 4
+drwxr-xr-x 2 mao mao 4096 7月  11 22:16 桌面
+mao@ubuntu:~/桌面/test/home/mao$ cd 桌面
+mao@ubuntu:~/桌面/test/home/mao/桌面$ ls -l
+总用量 12
+-rw------- 1 mao mao 8859 12月 30  2021 a.c
+mao@ubuntu:~/桌面/test/home/mao/桌面$ 
+```
+
+
+
+
+
+
+
+## dd命令
+
