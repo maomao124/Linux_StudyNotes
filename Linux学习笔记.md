@@ -17163,3 +17163,171 @@ mao@ubuntu:~/桌面/test/home/mao/桌面$
 
 ## dd命令
 
+dd 命令主要用来进行数据备份，并且可以在备份的过程中进行格式转换。其实 dd 命令可以把源数据复制成目标数据，而且不管源数据是文件、分区、磁盘还是光盘，都可以进行数据备份。
+
+
+
+命令：
+
+```sh
+dd if="输入文件" of="输出文件" bs="数据块" count="数量"
+```
+
+
+
+参数：
+
+1. if：定义输入数据的文件，也可以是输入设备；
+2. of：定义输出数据的文件，也可以是输出设备；
+3. bs：指定数据块的大小，也就是定义一次性读取或写入多少字节。模式数据块大小是 512 字节；
+4. count：指定 bs 的数量；
+5. conv=标志：依据标志转换文件。标志有以下这些：
+   - ascii：由 EBCDIC 码转换至 ASCII 码；
+   - ebcdic：由 ASCII 码转换至 EBCDIC 码；
+   - ibm：由 ASCII 码转换至替换的 EBCDIC 码；
+   - block：将结束字符块里的换行替换成等长的空格；
+   - unblock：将 cbs 大小的块中尾部的空格替换为一个换行符；
+   - lcase：将大写字符转换为小写；
+   - notrunc：不截断输出文件；
+   - ucase：将小写字符转换为大写；
+   - swab：交换每一对输入数据字节；
+   - noerror：读取数据发生错误后仍然继续；
+   - sync：将每个输入数据块以 NUL 字符填满至 ibs 的大小；当配合 block 或 unblock 时，会以空格代替 NUL 字符填充；
+
+
+
+```sh
+mao@ubuntu:~/桌面$ dd --help
+用法：dd [操作数] ...
+　或：dd 选项
+复制文件，依照指定操作数转换并格式化。
+
+  bs=字节数      一次读写的比特数（默认：512）；
+                 会覆盖 ibs 和 obs 选项
+  cbs=字节数     一次转换的字节数
+  conv=CONVS     依照每个逗号分割的符号列表转换文件
+  count=块数     只将复制指定数量的输入块
+  ibs=字节数     一次读取的字节数（默认：512)
+  if=文件         从指定文件而非标准输入来进行读取
+  iflag=标志      按照以逗号分隔的符号列表指定的方式读取
+  obs=字节数      一次写入指定字节数（默认：512）
+  of=文件         写入到指定文件而非标准输出
+  oflag=标志      按照以逗号分隔的符号列表指定的方式写入
+  seek=块数       在输出开始处跳过指定的 obs 大小的块数
+  skip=块数       在输入开始处跳过指定的 ibs 大小的块数
+  status=等级     要输出到标准错误的信息等级；
+                  'none' 将仅输出错误信息，
+                  'noxfer' 将不输出最终传输统计信息，
+                  'progress' 将显示周期性的传输统计信息
+
+N and BYTES may be followed by the following multiplicative suffixes:
+c =1, w =2, b =512, kB =1000, K =1024, MB =1000*1000, M =1024*1024, xM =M,
+GB =1000*1000*1000, G =1024*1024*1024, and so on for T, P, E, Z, Y.
+
+Each CONV symbol may be:
+
+  ascii     from EBCDIC to ASCII
+  ebcdic    from ASCII to EBCDIC
+  ibm       from ASCII to alternate EBCDIC
+  block     pad newline-terminated records with spaces to cbs-size
+  unblock   replace trailing spaces in cbs-size records with newline
+  lcase     change upper case to lower case
+  ucase     change lower case to upper case
+  sparse    try to seek rather than write the output for NUL input blocks
+  swab      swap every pair of input bytes
+  sync      pad every input block with NULs to ibs-size; when used
+            with block or unblock, pad with spaces rather than NULs
+  excl      如果输出文件已存在则认为操作失败
+  nocreat   不要创建输出文件
+  notrunc   不要截断输出文件
+  noerror   读取数据发生错误后仍然继续
+  fdatasync  结束前将输出文件数据物理上写入磁盘
+  fsync     与上者类似，但也将元数据一同写入
+
+FLAG 符号可以是：
+
+  append	追加模式(仅对输出有意义；隐含了conv=notrunc)
+  direct    使用直接I/O 存取模式
+  directory  除非是目录，否则操作失败
+  dsync     使用同步 I/O 存取模式
+  sync      与上者类似，但同时也对元数据生效
+  fullblock	为输入积累完整块(仅iflag)
+  nonblock	使用无阻塞I/O 存取模式
+  noatime   不更新访问时间
+  nocache   请求不使用缓存。参见 oflag=sync
+  noctty	不根据文件指派控制终端
+  nofollow  不跟随链接文件
+  count_bytes  把 'count=N' 看作字节计数（仅 iflag）
+  skip_bytes  把 'skip=N' 看作字节计数（仅 iflag）
+  seek_bytes  把 'seek=N' 看作字节计数（仅 oflag）
+
+向正在运行的 'dd' 进程发送 USR1 信号可以令其向标准错误输出 I/O
+统计数据并继续进行复制。
+
+选项有：
+
+      --help		显示此帮助信息并退出
+      --version		显示版本信息并退出
+
+完整文档请见：<https://www.gnu.org/software/coreutils/dd>
+或者在本地使用：info '(coreutils) dd invocation'
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+备份一个文件：
+
+```sh
+dd if=./a.c of=./backup.bak
+```
+
+```sh
+mao@ubuntu:~/桌面$ dd if=./a.c of=./backup.bak
+记录了17+1 的读入
+记录了17+1 的写出
+8859字节（8.9 kB，8.7 KiB）已复制，0.000606253 s，14.6 MB/s
+mao@ubuntu:~/桌面$ ls -l
+总用量 168
+-rw-rw-r-- 1 mao mao     4 12月 29  2021 1.txt
+-rw------- 1 mao mao  8859 12月 30  2021 a.c
+-rwxrwxr-x 1 mao mao 16984 12月 29  2021 a.out
+-rw-rw-r-- 1 mao mao  8859 7月  11 22:45 backup.bak
+-rw------- 1 mao mao  9221 12月 30  2021 English_early_education_machine_input.c
+-rw------- 1 mao mao  2956 11月  4  2021 filea.c
+-rw------- 1 mao mao    96 10月 23  2021 func1.c
+-rw------- 1 mao mao    98 10月 23  2021 func2.c
+-rwxrw-rw- 1 mao mao  2324 12月 29  2021 linux_file.c
+-rw------- 1 mao mao   242 10月 23  2021 main.c
+-rw------- 1 mao mao   206 10月 23  2021 main.h
+-rw-rw-r-- 1 mao mao 78631 7月  11 22:28 out.txt
+-rw-rw-r-- 1 mao mao     4 7月   5 06:18 test.txt
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+备份分区为一个备份文件：
+
+```sh
+dd if=/dev/sda5 of=/tmp/sda5.bak
+```
+
+
+
+整盘备份：
+
+```sh
+dd if=/dev/sda of=/dev/sdb
+```
+
+
+
+
+
+
+
+## rsync命令
+
