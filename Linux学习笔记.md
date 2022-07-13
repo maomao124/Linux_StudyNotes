@@ -18394,3 +18394,154 @@ mao@ubuntu:~/桌面$
 
 ## 独立服务管理
 
+### 独立服务的启动管理
+
+独立的服务要想启动，主要有两种方法。
+
+1. **使用/etc/init.d/目录中的启动脚本来启动独立的服务**
+
+
+
+```sh
+/etc/init.d独立服务名 start| stop|status|restart|...
+```
+
+
+
+参数：
+
+- start：启动服务；
+- stop：停止服务；
+- status：查看服务状态；
+- restart：重启动服务；
+
+
+
+2. **使用service命令来启动独立的服务**
+
+
+
+```sh
+service 独立服务名 start|stop|restart|...
+```
+
+
+
+service 命令还可以查看所有独立服务的启动状态：
+
+```sh
+service --status-all
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ service --status-all
+ [ + ]  acpid
+ [ - ]  alsa-utils
+ [ - ]  anacron
+ [ + ]  apparmor
+ [ + ]  apport
+ [ + ]  atd
+ [ + ]  avahi-daemon
+ [ - ]  bluetooth
+ [ - ]  console-setup.sh
+ [ + ]  cron
+ [ + ]  cups
+ [ + ]  cups-browsed
+ [ + ]  dbus
+ [ + ]  gdm3
+ [ - ]  grub-common
+ [ - ]  hwclock.sh
+ [ + ]  irqbalance
+ [ + ]  kerneloops
+ [ - ]  keyboard-setup.sh
+ [ + ]  kmod
+ [ + ]  network-manager
+ [ + ]  open-vm-tools
+ [ + ]  openvpn
+ [ - ]  plymouth
+ [ - ]  plymouth-log
+ [ - ]  pppd-dns
+ [ + ]  procps
+ [ - ]  pulseaudio-enable-autospawn
+ [ - ]  quota
+ [ - ]  quotarpc
+ [ - ]  rsync
+ [ + ]  rsyslog
+ [ - ]  saned
+ [ - ]  speech-dispatcher
+ [ - ]  spice-vdagent
+ [ + ]  udev
+ [ + ]  ufw
+ [ + ]  unattended-upgrades
+ [ - ]  uuidd
+ [ + ]  whoopsie
+ [ - ]  x11-common
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+### 独立服务的自启动管理
+
+自启动指的是在系统之后，服务是否随着系统的启动而自动启动。
+
+独立服务的自启动方法有三种
+
+
+
+1. **使用 chkconfig 服务自启动管理命令**
+
+
+
+```sh
+chkconfig --list
+```
+
+
+
+使用 chkconfig 命令除了可以查看所有 RPM 包默认安装服务的自启动状态，也可以修改和设置 RPM 包默认安装服务的自启动状态，只是独立的服务和基于 xinetd 的服务的设定方法稍有不同。
+
+```sh
+chkconfig [--level 运行级别][独立服务名][on|off]
+```
+
+- --level: 设定在哪个运行级别中开机自启动（on），或者关闭自启动（off）
+
+
+
+
+
+2. **修改 /etc/rc.d/rc.local 文件，设置服务自启动**
+
+在文件中加入服务的启动命令。这个文件是在系统启动时，在输入用户名和密码之前最后读取的文件。这个文件中有什么命令，都会在系统启动时调用。
+
+如果我们把服务的启动命令放入这个文件，这个服务就会在开机时自启动
+
+
+
+
+
+3. 使用 ntsysv 命令管理自启动
+
+
+
+```sh
+ntsysv [--level 运行级别]
+```
+
+- --level 运行级别：可以指定设定自启动的运行级别
+
+
+
+
+
+
+
+## xinetd服务管理
+
+
+
