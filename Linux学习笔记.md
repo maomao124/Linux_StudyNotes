@@ -17588,7 +17588,7 @@ mao@ubuntu:~/桌面$
 远程备份文件：
 
 ```sh
-rsync -av ./a.c 127.0.0.1:/home/mao/桌面/c.c
+rsync -av ./a.c mao127.0.0.1:/home/mao/桌面/c.c
 ```
 
 
@@ -17602,4 +17602,795 @@ rsync -av ./a.c 127.0.0.1:/home/mao/桌面/c.c
 
 
 # 系统服务管理
+
+## 系统服务及其分类
+
+系统服务是在后台运行的应用程序，并且可以提供一些本地系统或网络的功能。我们把这些应用程序称作服务，也就是 Service
+
+守护进程就是为了实现服务、功能的进程。守护进程就是服务在后台运行的真实进程。
+
+
+
+Linux 中的服务按照安装方法不同可以分为 RPM 包默认安装的服务和源码包安装的服务两大类。其中，RPM 包默认安装的服务又因为启动与自启动管理方法不同分为独立的服务和基于 xinetd 的服务。
+
+
+
+- 独立的服务：就是独立启动的意思，这种服务可以自行启动，而不用依赖其他的管理服务。因为不依赖其他的管理服务，所以，当客户端请求访问时，独立的服务响应请求更快速。目前，Linux 中的大多数服务都是独立的服务，如 apache 服务、FTP 服务、Samba 服务等。
+- 基于 xinetd 的服务：这种服务就不能独立启动了，而要依靠管理服务来调用。这个负责管理的服务就是 xinetd 服务。xinetd 服务是系统的超级守护进程，其作用就是管理不能独立启动的服务。当有客户端请求时，先请求 xinetd 服务，由 xinetd 服务去唤醒相对应的服务。当客户端请求结束后，被唤醒的服务会关闭并释放资源。这样做的好处是只需要持续启动 xinetd 服务，而其他基于 xinetd 的服务只有在需要时才被启动，不会占用过多的服务器资源。但是这种服务由于在有客户端请求时才会被唤醒，所以响应时间相对较长。
+
+
+
+
+
+## 查询已经安装的服务和区分服务
+
+如何区分这些服务呢？首先要区分 RPM 包默认安装的服务和源码包安装的服务。源码包安装的服务是不能被服务管理命令直接找到的，而且一般会安装到 /usr/local/ 目录中。
+
+也就是说，在 /usr/local/ 目录中的服务都应该是通过源码包安装的服务。RPM 包默认安装的服务都会安装到系统默认位置，所以是可以被服务管理命令（如 service、chkconfig）识别的。
+
+
+
+区分独立的服务和基于 xinetd 的服务：
+
+```sh
+chkconfig --list [服务名]
+```
+
+选项：
+
+- --list：列出 RPM 包默认安装的所有服务的自启动状态；
+
+
+
+
+
+
+
+## 端口
+
+为了统一整个互联网的端口和网络服务的对应关系，以便让所有的主机都能使用相同的机制来请求或提供服务，同一个服务使用相同的端口，这就是协议。
+
+计算机中的协议主要分为两大类：
+
+- 面向连接的可靠的TCP协议（Transmission Control Protocol，传输控制协议）；
+- 面向无连接的不可靠的UDP协议（User Datagram Protocol，用户数据报协议）；
+
+
+
+这两种协议都支持 216，也就是 65535 个端口
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat -n  /etc/services
+     1	# Network services, Internet style
+     2	#
+     3	# Note that it is presently the policy of IANA to assign a single well-known
+     4	# port number for both TCP and UDP; hence, officially ports have two entries
+     5	# even if the protocol doesn't support UDP operations.
+     6	#
+     7	# Updated from https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml .
+     8	#
+     9	# New ports will be added on request if they have been officially assigned
+    10	# by IANA and used in the real-world or are needed by a debian package.
+    11	# If you need a huge list of used numbers please install the nmap package.
+    12	
+    13	tcpmux		1/tcp				# TCP port service multiplexer
+    14	echo		7/tcp
+    15	echo		7/udp
+    16	discard		9/tcp		sink null
+    17	discard		9/udp		sink null
+    18	systat		11/tcp		users
+    19	daytime		13/tcp
+    20	daytime		13/udp
+    21	netstat		15/tcp
+    22	qotd		17/tcp		quote
+    23	chargen		19/tcp		ttytst source
+    24	chargen		19/udp		ttytst source
+    25	ftp-data	20/tcp
+    26	ftp		21/tcp
+    27	fsp		21/udp		fspd
+    28	ssh		22/tcp				# SSH Remote Login Protocol
+    29	telnet		23/tcp
+    30	smtp		25/tcp		mail
+    31	time		37/tcp		timserver
+    32	time		37/udp		timserver
+    33	whois		43/tcp		nicname
+    34	tacacs		49/tcp				# Login Host Protocol (TACACS)
+    35	tacacs		49/udp
+    36	domain		53/tcp				# Domain Name Server
+    37	domain		53/udp
+    38	bootps		67/udp
+    39	bootpc		68/udp
+    40	tftp		69/udp
+    41	gopher		70/tcp				# Internet Gopher
+    42	finger		79/tcp
+    43	http		80/tcp		www		# WorldWideWeb HTTP
+    44	kerberos	88/tcp		kerberos5 krb5 kerberos-sec	# Kerberos v5
+    45	kerberos	88/udp		kerberos5 krb5 kerberos-sec	# Kerberos v5
+    46	iso-tsap	102/tcp		tsap		# part of ISODE
+    47	acr-nema	104/tcp		dicom		# Digital Imag. & Comm. 300
+    48	pop3		110/tcp		pop-3		# POP version 3
+    49	sunrpc		111/tcp		portmapper	# RPC 4.0 portmapper
+    50	sunrpc		111/udp		portmapper
+    51	auth		113/tcp		authentication tap ident
+    52	nntp		119/tcp		readnews untp	# USENET News Transfer Protocol
+    53	ntp		123/udp				# Network Time Protocol
+    54	epmap		135/tcp		loc-srv		# DCE endpoint resolution
+    55	netbios-ns	137/tcp				# NETBIOS Name Service
+    56	netbios-ns	137/udp
+    57	netbios-dgm	138/tcp				# NETBIOS Datagram Service
+    58	netbios-dgm	138/udp
+    59	netbios-ssn	139/tcp				# NETBIOS session service
+    60	netbios-ssn	139/udp
+    61	imap2		143/tcp		imap		# Interim Mail Access P 2 and 4
+    62	snmp		161/tcp				# Simple Net Mgmt Protocol
+    63	snmp		161/udp
+    64	snmp-trap	162/tcp		snmptrap	# Traps for SNMP
+    65	snmp-trap	162/udp		snmptrap
+    66	cmip-man	163/tcp				# ISO mgmt over IP (CMOT)
+    67	cmip-man	163/udp
+    68	cmip-agent	164/tcp
+    69	cmip-agent	164/udp
+    70	mailq		174/tcp			# Mailer transport queue for Zmailer
+    71	xdmcp		177/udp			# X Display Manager Control Protocol
+    72	bgp		179/tcp				# Border Gateway Protocol
+    73	smux		199/tcp				# SNMP Unix Multiplexer
+    74	qmtp		209/tcp				# Quick Mail Transfer Protocol
+    75	z3950		210/tcp		wais		# NISO Z39.50 database
+    76	ipx		213/udp				# IPX [RFC1234]
+    77	ptp-event	319/udp
+    78	ptp-general	320/udp
+    79	pawserv		345/tcp				# Perf Analysis Workbench
+    80	zserv		346/tcp				# Zebra server
+    81	rpc2portmap	369/tcp
+    82	rpc2portmap	369/udp				# Coda portmapper
+    83	codaauth2	370/tcp
+    84	codaauth2	370/udp				# Coda authentication server
+    85	clearcase	371/udp		Clearcase
+    86	ldap		389/tcp			# Lightweight Directory Access Protocol
+    87	ldap		389/udp
+    88	svrloc		427/tcp				# Server Location
+    89	svrloc		427/udp
+    90	https		443/tcp				# http protocol over TLS/SSL
+    91	snpp		444/tcp				# Simple Network Paging Protocol
+    92	microsoft-ds	445/tcp				# Microsoft Naked CIFS
+    93	microsoft-ds	445/udp
+    94	kpasswd		464/tcp
+    95	kpasswd		464/udp
+    96	submissions	465/tcp		ssmtp smtps urd # Submission over TLS [RFC8314]
+    97	saft		487/tcp			# Simple Asynchronous File Transfer
+    98	isakmp		500/udp				# IPSEC key management
+    99	rtsp		554/tcp			# Real Time Stream Control Protocol
+   100	rtsp		554/udp
+   101	nqs		607/tcp				# Network Queuing system
+   102	asf-rmcp	623/udp		# ASF Remote Management and Control Protocol
+   103	qmqp		628/tcp
+   104	ipp		631/tcp				# Internet Printing Protocol
+   105	#
+   106	# UNIX specific services
+   107	#
+   108	exec		512/tcp
+   109	biff		512/udp		comsat
+   110	login		513/tcp
+   111	who		513/udp		whod
+   112	shell		514/tcp		cmd syslog	# no passwords used
+   113	syslog		514/udp
+   114	printer		515/tcp		spooler		# line printer spooler
+   115	talk		517/udp
+   116	ntalk		518/udp
+   117	route		520/udp		router routed	# RIP
+   118	gdomap		538/tcp				# GNUstep distributed objects
+   119	gdomap		538/udp
+   120	uucp		540/tcp		uucpd		# uucp daemon
+   121	klogin		543/tcp				# Kerberized `rlogin' (v5)
+   122	kshell		544/tcp		krcmd		# Kerberized `rsh' (v5)
+   123	dhcpv6-client	546/udp
+   124	dhcpv6-server	547/udp
+   125	afpovertcp	548/tcp				# AFP over TCP
+   126	nntps		563/tcp		snntp		# NNTP over SSL
+   127	submission	587/tcp				# Submission [RFC4409]
+   128	ldaps		636/tcp				# LDAP over SSL
+   129	ldaps		636/udp
+   130	tinc		655/tcp				# tinc control port
+   131	tinc		655/udp
+   132	silc		706/tcp
+   133	kerberos-adm	749/tcp				# Kerberos `kadmin' (v5)
+   134	#
+   135	domain-s	853/tcp				# DNS over TLS [RFC7858]
+   136	domain-s	853/udp				# DNS over DTLS [RFC8094]
+   137	rsync		873/tcp
+   138	ftps-data	989/tcp				# FTP over SSL (data)
+   139	ftps		990/tcp
+   140	telnets		992/tcp				# Telnet over SSL
+   141	imaps		993/tcp				# IMAP over SSL
+   142	pop3s		995/tcp				# POP-3 over SSL
+   143	#
+   144	# From ``Assigned Numbers'':
+   145	#
+   146	#> The Registered Ports are not controlled by the IANA and on most systems
+   147	#> can be used by ordinary user processes or programs executed by ordinary
+   148	#> users.
+   149	#
+   150	#> Ports are used in the TCP [45,106] to name the ends of logical
+   151	#> connections which carry long term conversations.  For the purpose of
+   152	#> providing services to unknown callers, a service contact port is
+   153	#> defined.  This list specifies the port used by the server process as its
+   154	#> contact port.  While the IANA can not control uses of these ports it
+   155	#> does register or list uses of these ports as a convienence to the
+   156	#> community.
+   157	#
+   158	socks		1080/tcp			# socks proxy server
+   159	proofd		1093/tcp
+   160	rootd		1094/tcp
+   161	openvpn		1194/tcp
+   162	openvpn		1194/udp
+   163	rmiregistry	1099/tcp			# Java RMI Registry
+   164	lotusnote	1352/tcp	lotusnotes	# Lotus Note
+   165	ms-sql-s	1433/tcp			# Microsoft SQL Server
+   166	ms-sql-s	1433/udp
+   167	ms-sql-m	1434/tcp			# Microsoft SQL Monitor
+   168	ms-sql-m	1434/udp
+   169	ingreslock	1524/tcp
+   170	datametrics	1645/tcp	old-radius
+   171	datametrics	1645/udp	old-radius
+   172	sa-msg-port	1646/tcp	old-radacct
+   173	sa-msg-port	1646/udp	old-radacct
+   174	kermit		1649/tcp
+   175	groupwise	1677/tcp
+   176	l2f		1701/udp	l2tp
+   177	radius		1812/tcp
+   178	radius		1812/udp
+   179	radius-acct	1813/tcp	radacct		# Radius Accounting
+   180	radius-acct	1813/udp	radacct
+   181	cisco-sccp	2000/tcp			# Cisco SCCP
+   182	nfs		2049/tcp			# Network File System
+   183	nfs		2049/udp			# Network File System
+   184	gnunet		2086/tcp
+   185	gnunet		2086/udp
+   186	rtcm-sc104	2101/tcp			# RTCM SC-104 IANA 1/29/99
+   187	rtcm-sc104	2101/udp
+   188	gsigatekeeper	2119/tcp
+   189	gris		2135/tcp		# Grid Resource Information Server
+...
+...
+...
+   298	zabbix-agent	10050/tcp			# Zabbix Agent
+   299	zabbix-trapper	10051/tcp			# Zabbix Trapper
+   300	amanda		10080/tcp			# amanda backup services
+   301	dicom		11112/tcp
+   302	hkp		11371/tcp			# OpenPGP HTTP Keyserver
+   303	db-lsp		17500/tcp			# Dropbox LanSync Protocol
+   304	dcap		22125/tcp			# dCache Access Protocol
+   305	gsidcap		22128/tcp			# GSI dCache Access Protocol
+   306	wnn6		22273/tcp			# wnn6
+   307	
+   308	#
+   309	# Datagram Delivery Protocol services
+   310	#
+   311	rtmp		1/ddp			# Routing Table Maintenance Protocol
+   312	nbp		2/ddp			# Name Binding Protocol
+   313	echo		4/ddp			# AppleTalk Echo Protocol
+   314	zip		6/ddp			# Zone Information Protocol
+   315	
+   316	#=========================================================================
+   317	# The remaining port numbers are not as allocated by IANA.
+   318	#=========================================================================
+   319	
+   320	# Kerberos (Project Athena/MIT) services
+   321	kerberos4	750/udp		kerberos-iv kdc	# Kerberos (server)
+   322	kerberos4	750/tcp		kerberos-iv kdc
+   323	kerberos-master	751/udp		kerberos_master	# Kerberos authentication
+   324	kerberos-master	751/tcp
+   325	passwd-server	752/udp		passwd_server	# Kerberos passwd server
+   326	krb-prop	754/tcp		krb_prop krb5_prop hprop # Kerberos slave propagation
+   327	zephyr-srv	2102/udp			# Zephyr server
+   328	zephyr-clt	2103/udp			# Zephyr serv-hm connection
+   329	zephyr-hm	2104/udp			# Zephyr hostmanager
+   330	iprop		2121/tcp			# incremental propagation
+   331	supfilesrv	871/tcp			# Software Upgrade Protocol server
+   332	supfiledbg	1127/tcp		# Software Upgrade Protocol debugging
+   333	
+   334	#
+   335	# Services added for the Debian GNU/Linux distribution
+   336	#
+   337	poppassd	106/tcp				# Eudora
+   338	poppassd	106/udp
+   339	moira-db	775/tcp		moira_db	# Moira database
+   340	moira-update	777/tcp		moira_update	# Moira update protocol
+   341	moira-ureg	779/udp		moira_ureg	# Moira user registration
+   342	spamd		783/tcp				# spamassassin daemon
+   343	skkserv		1178/tcp			# skk jisho server port
+   344	predict		1210/udp			# predict -- satellite tracking
+   345	rmtcfg		1236/tcp			# Gracilis Packeten remote config server
+   346	xtel		1313/tcp			# french minitel
+   347	xtelw		1314/tcp			# french minitel
+   348	support		1529/tcp			# GNATS
+   349	cfinger		2003/tcp			# GNU Finger
+   350	frox		2121/tcp			# frox: caching ftp proxy
+   351	zebrasrv	2600/tcp			# zebra service
+   352	zebra		2601/tcp			# zebra vty
+   353	ripd		2602/tcp			# ripd vty (zebra)
+   354	ripngd		2603/tcp			# ripngd vty (zebra)
+   355	ospfd		2604/tcp			# ospfd vty (zebra)
+   356	bgpd		2605/tcp			# bgpd vty (zebra)
+   357	ospf6d		2606/tcp			# ospf6d vty (zebra)
+   358	ospfapi		2607/tcp			# OSPF-API
+   359	isisd		2608/tcp			# ISISd vty (zebra)
+   360	afbackup	2988/tcp			# Afbackup system
+   361	afbackup	2988/udp
+   362	afmbackup	2989/tcp			# Afmbackup system
+   363	afmbackup	2989/udp
+   364	fax		4557/tcp			# FAX transmission service (old)
+   365	hylafax		4559/tcp			# HylaFAX client-server protocol (new)
+   366	distmp3		4600/tcp			# distmp3host daemon
+   367	munin		4949/tcp	lrrd		# Munin
+   368	enbd-cstatd	5051/tcp			# ENBD client statd
+   369	enbd-sstatd	5052/tcp			# ENBD server statd
+   370	pcrd		5151/tcp			# PCR-1000 Daemon
+   371	noclog		5354/tcp			# noclogd with TCP (nocol)
+   372	noclog		5354/udp			# noclogd with UDP (nocol)
+   373	hostmon		5355/tcp			# hostmon uses TCP (nocol)
+   374	hostmon		5355/udp			# hostmon uses UDP (nocol)
+   375	rplay		5555/udp			# RPlay audio service
+   376	nrpe		5666/tcp			# Nagios Remote Plugin Executor
+   377	nsca		5667/tcp			# Nagios Agent - NSCA
+   378	mrtd		5674/tcp			# MRT Routing Daemon
+   379	bgpsim		5675/tcp			# MRT Routing Simulator
+   380	canna		5680/tcp			# cannaserver
+   381	syslog-tls	6514/tcp			# Syslog over TLS [RFC5425]
+   382	sane-port	6566/tcp	sane saned	# SANE network scanner daemon
+   383	ircd		6667/tcp			# Internet Relay Chat
+   384	zope-ftp	8021/tcp			# zope management by ftp
+   385	tproxy		8081/tcp			# Transparent Proxy
+   386	omniorb		8088/tcp			# OmniORB
+   387	omniorb		8088/udp
+   388	clc-build-daemon 8990/tcp			# Common lisp build daemon
+   389	xinetd		9098/tcp
+   390	mandelspawn	9359/udp	mandelbrot	# network mandelbrot
+   391	git		9418/tcp			# Git Version Control System
+   392	zope		9673/tcp			# zope server
+   393	webmin		10000/tcp
+   394	kamanda		10081/tcp			# amanda backup services (Kerberos)
+   395	amandaidx	10082/tcp			# amanda backup services
+   396	amidxtape	10083/tcp			# amanda backup services
+   397	smsqp		11201/tcp			# Alamin SMS gateway
+   398	smsqp		11201/udp
+   399	xpilot		15345/tcp			# XPilot Contact Port
+   400	xpilot		15345/udp
+   401	sgi-cmsd	17001/udp		# Cluster membership services daemon
+   402	sgi-crsd	17002/udp
+   403	sgi-gcd		17003/udp			# SGI Group membership daemon
+   404	sgi-cad		17004/tcp			# Cluster Admin daemon
+   405	isdnlog		20011/tcp			# isdn logging system
+   406	isdnlog		20011/udp
+   407	vboxd		20012/tcp			# voice box system
+   408	vboxd		20012/udp
+   409	binkp		24554/tcp			# binkp fidonet protocol
+   410	asp		27374/tcp			# Address Search Protocol
+   411	asp		27374/udp
+   412	csync2		30865/tcp			# cluster synchronization tool
+   413	dircproxy	57000/tcp			# Detachable IRC Proxy
+   414	tfido		60177/tcp			# fidonet EMSI over telnet
+   415	fido		60179/tcp			# fidonet EMSI over TCP
+   416	
+   417	# Local services
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## 查询系统中已经启动的服务
+
+通过查询服务器中开启的端口，来判断当前服务器开启了哪些服务：
+
+```sh
+netstat 选项
+```
+
+
+
+选项：
+
+- -a：列出系统中所有网络连接，包括已经连接的网络服务、监听的网络服务和 Socket 套接字；
+- -t：列出 TCP 数据；
+- -u：列出 UDP 数据；
+- -l：列出正在监听的网络服务（不包含已经连接的网络服务）；
+- -n：用端口号来显示而不用服务名；
+- -p：列出该服务的进程 ID (PID)；
+
+
+
+```sh
+mao@ubuntu:~/桌面$ netstat --help
+usage: netstat [-vWeenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help}
+       netstat [-vWnNcaeol] [<Socket> ...]
+       netstat { [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] }
+
+        -r, --route              显示路由表
+        -i, --interfaces         display interface table
+        -g, --groups             display multicast group memberships
+        -s, --statistics         display networking statistics (like SNMP)
+        -M, --masquerade         display masqueraded connections
+
+        -v, --verbose            显示详细信息
+        -W, --wide               don't truncate IP addresses
+        -n, --numeric            不解析名称
+        --numeric-hosts          不解析主机名
+        --numeric-ports          忽略端口名称
+        --numeric-users          忽略用户名
+        -N, --symbolic           resolve hardware names
+        -e, --extend             显示更多信息
+        -p, --programs           display PID/Program name for sockets
+        -o, --timers             display timers
+        -c, --continuous         continuous listing
+
+        -l, --listening          display listening server sockets
+        -a, --all                display all sockets (default: connected)
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+        -Z, --context            display SELinux security context for sockets
+
+  <Socket>={-t|--tcp} {-u|--udp} {-U|--udplite} {-S|--sctp} {-w|--raw}
+           {-x|--unix} --ax25 --ipx --netrom
+  <AF>=Use '-6|-4' or '-A <af>' or '--<af>'；默认： inet
+  列出所有支持的协议：
+    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) ipx (Novell IPX) ddp (Appletalk DDP) 
+    x25 (CCITT X.25) 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+列出系统中所有已经启动的服务（已经监听的端口），但不包含已经连接的网络服务：
+
+```sh
+mao@ubuntu:~/桌面$  netstat -tlunp
+（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）
+激活Internet连接 (仅服务器)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -                   
+tcp6       0      0 ::1:631                 :::*                    LISTEN      -                   
+udp        0      0 0.0.0.0:51042           0.0.0.0:*                           -                   
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           -                   
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           -                   
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -                   
+udp6       0      0 :::55966                :::*                                -                   
+udp6       0      0 :::5353                 :::*                                -                   
+mao@ubuntu:~/桌面$ sudo netstat -tlunp
+[sudo] mao 的密码： 
+激活Internet连接 (仅服务器)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      862/systemd-resolve 
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      988/cupsd           
+tcp6       0      0 ::1:631                 :::*                    LISTEN      988/cupsd           
+udp        0      0 0.0.0.0:51042           0.0.0.0:*                           895/avahi-daemon: r 
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           862/systemd-resolve 
+udp        0      0 0.0.0.0:631             0.0.0.0:*                           995/cups-browsed    
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           895/avahi-daemon: r 
+udp6       0      0 :::55966                :::*                                895/avahi-daemon: r 
+udp6       0      0 :::5353                 :::*                                895/avahi-daemon: r 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+- Proto：数据包的协议。分为 TCP 和 UDP 数据包；
+- Recv-Q：表示收到的数据已经在本地接收缓冲，但是还没有被进程取走的数据包数量；
+- Send-Q：对方没有收到的数据包数量；或者没有 Ack 回复的，还在本地缓冲区的数据包数量；
+- Local Address：本地 IP : 端口。通过端口可以知道本机开启了哪些服务；
+- Foreign Address：远程主机：端口。也就是远程是哪个 IP、使用哪个端口连接到本机。由于这条命令只能查看监听端口，所以没有 IP 连接到到本机；
+- State:连接状态。主要有已经建立连接（ESTABLISED）和监听（LISTEN）两种状态，当前只能查看监听状态；
+- PID/Program name：进程 ID 和进程命令；
+
+
+
+
+
+查看所有的网络连接，包括已连接的网络服务、监听的网络服务和Socket套接字：
+
+```sh
+ao@ubuntu:~/桌面$ netstat -an
+激活Internet连接 (服务器和已建立连接的)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN     
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN     
+tcp6       0      0 ::1:631                 :::*                    LISTEN     
+udp        0      0 0.0.0.0:51042           0.0.0.0:*                          
+udp        0      0 127.0.0.53:53           0.0.0.0:*                          
+udp        0      0 192.168.202.128:68      192.168.202.254:67      ESTABLISHED
+udp        0      0 0.0.0.0:631             0.0.0.0:*                          
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                          
+udp6       0      0 :::55966                :::*                               
+udp6       0      0 :::5353                 :::*                               
+raw6       0      0 :::58                   :::*                    7          
+活跃的UNIX域套接字 (服务器和已建立连接的)
+Proto RefCnt Flags       Type       State         I-Node   路径
+unix  3      [ ]         数据报                34457    /run/systemd/notify
+unix  2      [ ACC ]     流        LISTENING     34460    /run/systemd/private
+unix  2      [ ACC ]     流        LISTENING     34462    /run/systemd/userdb/io.systemd.DynamicUser
+unix  2      [ ]         数据报                34471    /run/systemd/journal/syslog
+unix  2      [ ]         数据报                58079    /run/user/1000/systemd/notify
+unix  2      [ ACC ]     流        LISTENING     34473    /run/systemd/fsck.progress
+unix  2      [ ACC ]     流        LISTENING     58082    /run/user/1000/systemd/private
+unix  2      [ ACC ]     流        LISTENING     58087    /run/user/1000/bus
+unix  16     [ ]         数据报                34481    /run/systemd/journal/dev-log
+unix  2      [ ACC ]     流        LISTENING     34483    /run/systemd/journal/stdout
+unix  8      [ ]         数据报                34485    /run/systemd/journal/socket
+unix  2      [ ACC ]     流        LISTENING     58088    /run/user/1000/gnupg/S.dirmngr
+unix  2      [ ACC ]     SEQPACKET  LISTENING     34487    /run/udev/control
+unix  2      [ ACC ]     流        LISTENING     58089    /run/user/1000/gnupg/S.gpg-agent.browser
+unix  2      [ ACC ]     流        LISTENING     58090    /run/user/1000/gnupg/S.gpg-agent.extra
+unix  2      [ ACC ]     流        LISTENING     58091    /run/user/1000/gnupg/S.gpg-agent.ssh
+unix  2      [ ACC ]     流        LISTENING     58092    /run/user/1000/gnupg/S.gpg-agent
+unix  2      [ ACC ]     流        LISTENING     58093    /run/user/1000/pk-debconf-socket
+unix  2      [ ACC ]     流        LISTENING     58094    /run/user/1000/pulse/native
+unix  2      [ ACC ]     流        LISTENING     45902    @/tmp/.ICE-unix/1817
+unix  2      [ ACC ]     流        LISTENING     58095    /run/user/1000/snapd-session-agent.socket
+unix  2      [ ACC ]     流        LISTENING     39872    @/tmp/dbus-79uqNDt0
+unix  2      [ ACC ]     流        LISTENING     52863    @/tmp/.X11-unix/X0
+unix  2      [ ACC ]     流        LISTENING     54126    /run/user/1000/keyring/control
+unix  2      [ ACC ]     流        LISTENING     21493    /run/systemd/journal/io.systemd.journal
+unix  2      [ ACC ]     流        LISTENING     58805    /run/user/1000/keyring/pkcs11
+unix  2      [ ACC ]     流        LISTENING     58829    /run/user/1000/keyring/ssh
+unix  2      [ ACC ]     流        LISTENING     52864    /tmp/.X11-unix/X0
+unix  2      [ ACC ]     流        LISTENING     44891    /tmp/ssh-hpKPX3PkCrcQ/agent.1715
+unix  2      [ ACC ]     流        LISTENING     45903    /tmp/.ICE-unix/1817
+unix  2      [ ACC ]     流        LISTENING     52466    @/tmp/dbus-MxgQM50k
+unix  2      [ ACC ]     流        LISTENING     61143    @/home/mao/.cache/ibus/dbus-O08ewsTm
+unix  2      [ ACC ]     流        LISTENING     36076    /run/acpid.socket
+unix  2      [ ACC ]     流        LISTENING     36078    /run/avahi-daemon/socket
+unix  2      [ ACC ]     流        LISTENING     36080    /run/cups/cups.sock
+unix  2      [ ACC ]     流        LISTENING     36082    /run/dbus/system_bus_socket
+unix  2      [ ACC ]     流        LISTENING     36084    /run/snapd.socket
+unix  2      [ ACC ]     流        LISTENING     36086    /run/snapd-snap.socket
+unix  2      [ ACC ]     流        LISTENING     44263    /var/run/vmware/guestServicePipe
+unix  2      [ ACC ]     流        LISTENING     36088    /run/uuidd/request
+unix  2      [ ACC ]     流        LISTENING     39871    @/tmp/dbus-Cc8TByyF
+unix  2      [ ACC ]     流        LISTENING     52465    @/tmp/dbus-jCwV600x
+unix  2      [ ACC ]     流        LISTENING     54190    @/tmp/dbus-oaJ2tknJpD
+unix  2      [ ACC ]     流        LISTENING     26072    /run/irqbalance//irqbalance909.sock
+unix  3      [ ]         流        已连接     62593    /run/user/1000/bus
+unix  3      [ ]         流        已连接     49490    
+unix  3      [ ]         流        已连接     48277    
+unix  3      [ ]         流        已连接     29675    
+unix  3      [ ]         流        已连接     25987    /run/systemd/journal/stdout
+unix  2      [ ]         数据报                58069    
+unix  3      [ ]         流        已连接     52581    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     29688    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     57090    
+unix  3      [ ]         流        已连接     58703    /run/user/1000/bus
+unix  3      [ ]         流        已连接     49495    
+unix  3      [ ]         流        已连接     25967    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     30330    
+unix  3      [ ]         流        已连接     18127    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     58836    
+unix  2      [ ]         数据报                45846    
+unix  2      [ ]         数据报                60937    
+unix  3      [ ]         流        已连接     66573    
+unix  3      [ ]         流        已连接     62691    /run/user/1000/bus
+unix  3      [ ]         流        已连接     53532    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     39400    
+unix  3      [ ]         流        已连接     58083    
+unix  2      [ ]         数据报                44405    
+unix  3      [ ]         流        已连接     44418    /run/dbus/system_bus_socket
+unix  2      [ ]         数据报                46294    
+unix  3      [ ]         流        已连接     58701    
+unix  3      [ ]         流        已连接     45843    
+unix  3      [ ]         流        已连接     64555    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     18421    /run/systemd/journal/stdout
+unix  2      [ ]         流        已连接     39643    
+unix  3      [ ]         流        已连接     30309    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     45995    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     30648    
+unix  3      [ ]         流        已连接     45044    
+unix  3      [ ]         流        已连接     28469    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     58803    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     39783    @/tmp/dbus-jCwV600x
+unix  3      [ ]         流        已连接     45996    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     45913    
+...
+...
+...
+unix  3      [ ]         流        已连接     45749    
+unix  3      [ ]         流        已连接     61895    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     61583    /run/user/1000/bus
+unix  2      [ ]         数据报                30683    
+unix  3      [ ]         流        已连接     52915    
+unix  3      [ ]         流        已连接     48911    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     49703    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     36265    
+unix  3      [ ]         流        已连接     55765    
+unix  3      [ ]         流        已连接     58314    
+unix  3      [ ]         流        已连接     30619    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     39846    
+unix  3      [ ]         流        已连接     64567    /run/user/1000/bus
+unix  3      [ ]         数据报                47501    
+unix  3      [ ]         流        已连接     45932    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     50942    /run/user/1000/bus
+unix  3      [ ]         流        已连接     45926    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     62596    
+unix  3      [ ]         流        已连接     45899    /run/user/1000/bus
+unix  3      [ ]         流        已连接     49872    /run/user/1000/bus
+unix  3      [ ]         流        已连接     63610    /run/user/1000/bus
+unix  3      [ ]         流        已连接     18153    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     63607    
+unix  3      [ ]         流        已连接     45838    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     66634    
+unix  3      [ ]         流        已连接     64581    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     63604    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     62863    
+unix  3      [ ]         流        已连接     55766    
+unix  3      [ ]         流        已连接     58118    
+unix  3      [ ]         流        已连接     52919    
+unix  3      [ ]         流        已连接     48122    
+unix  3      [ ]         流        已连接     54870    
+unix  3      [ ]         流        已连接     55779    
+unix  2      [ ]         数据报                21495    
+unix  3      [ ]         流        已连接     62642    
+unix  3      [ ]         流        已连接     45927    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     58117    
+unix  3      [ ]         流        已连接     30676    
+unix  3      [ ]         流        已连接     52970    
+unix  3      [ ]         流        已连接     45048    /run/systemd/journal/stdout
+unix  2      [ ]         数据报                47649    
+unix  3      [ ]         流        已连接     61255    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     59748    
+unix  3      [ ]         流        已连接     55805    
+unix  3      [ ]         流        已连接     44413    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     62758    
+unix  3      [ ]         流        已连接     56823    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     54750    
+unix  3      [ ]         流        已连接     55639    
+unix  3      [ ]         流        已连接     52948    
+unix  3      [ ]         流        已连接     51292    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     54127    
+unix  3      [ ]         流        已连接     55701    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     60982    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     39869    /run/user/1000/bus
+unix  3      [ ]         流        已连接     60926    /run/user/1000/bus
+unix  3      [ ]         流        已连接     30679    
+unix  3      [ ]         流        已连接     58323    @/tmp/.ICE-unix/1817
+unix  3      [ ]         流        已连接     56819    /run/dbus/system_bus_socket
+unix  2      [ ]         数据报                54112    
+unix  3      [ ]         流        已连接     55778    
+unix  3      [ ]         流        已连接     55696    
+unix  3      [ ]         流        已连接     60981    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     44955    /run/user/1000/bus
+unix  3      [ ]         流        已连接     49701    /run/dbus/system_bus_socket
+unix  3      [ ]         数据报                47502    
+unix  3      [ ]         流        已连接     39850    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     61896    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     60055    @/home/mao/.cache/ibus/dbus-O08ewsTm
+unix  3      [ ]         流        已连接     55802    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     60997    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     54571    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     63606    
+unix  3      [ ]         流        已连接     56567    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     62819    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     54867    
+unix  2      [ ]         数据报                36870    
+unix  3      [ ]         流        已连接     39867    /run/user/1000/bus
+unix  3      [ ]         流        已连接     39854    
+unix  3      [ ]         流        已连接     52969    
+unix  3      [ ]         流        已连接     60110    
+unix  3      [ ]         流        已连接     60100    
+unix  3      [ ]         流        已连接     55799    
+unix  3      [ ]         流        已连接     51044    
+unix  3      [ ]         数据报                36872    
+unix  3      [ ]         流        已连接     45994    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     58365    
+unix  3      [ ]         流        已连接     54775    
+unix  3      [ ]         流        已连接     64561    /run/user/1000/bus
+unix  3      [ ]         流        已连接     47586    
+unix  3      [ ]         流        已连接     30618    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     59757    
+unix  2      [ ]         数据报                55812    
+unix  3      [ ]         流        已连接     53298    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     18176    
+unix  3      [ ]         流        已连接     60346    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     45989    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     66578    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     61244    
+unix  3      [ ]         流        已连接     63603    
+unix  3      [ ]         流        已连接     45919    /run/user/1000/bus
+unix  3      [ ]         流        已连接     62690    /run/user/1000/bus
+unix  3      [ ]         流        已连接     56906    /run/user/1000/bus
+unix  3      [ ]         流        已连接     62585    
+unix  3      [ ]         流        已连接     45818    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     61856    /run/user/1000/bus
+unix  3      [ ]         流        已连接     30650    
+unix  3      [ ]         流        已连接     52924    
+unix  3      [ ]         流        已连接     25988    /run/systemd/journal/stdout
+unix  2      [ ]         数据报                47497    
+unix  3      [ ]         流        已连接     63605    
+unix  3      [ ]         流        已连接     64565    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     18177    
+unix  3      [ ]         数据报                36873    
+unix  3      [ ]         流        已连接     62687    
+unix  3      [ ]         流        已连接     56822    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     54766    
+unix  3      [ ]         流        已连接     66583    /run/user/1000/bus
+unix  3      [ ]         流        已连接     33566    
+unix  3      [ ]         流        已连接     44408    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     62762    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     60056    
+unix  3      [ ]         流        已连接     63608    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         数据报                36482    
+unix  3      [ ]         流        已连接     62865    
+unix  3      [ ]         流        已连接     55638    
+unix  3      [ ]         流        已连接     52922    /run/user/1000/pulse/native
+unix  3      [ ]         流        已连接     54823    
+unix  3      [ ]         流        已连接     45936    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     58104    
+unix  2      [ ]         数据报                28370    
+unix  3      [ ]         流        已连接     47514    
+unix  3      [ ]         流        已连接     55714    /run/user/1000/bus
+unix  3      [ ]         流        已连接     54114    
+unix  3      [ ]         流        已连接     63569    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     45591    
+unix  3      [ ]         流        已连接     58366    
+unix  2      [ ]         数据报                55694    
+unix  3      [ ]         流        已连接     64564    /run/systemd/journal/stdout
+unix  2      [ ]         数据报                47811    
+unix  3      [ ]         流        已连接     54101    
+unix  3      [ ]         流        已连接     58904    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     62685    
+unix  3      [ ]         流        已连接     58321    
+unix  3      [ ]         流        已连接     55698    
+unix  2      [ ]         数据报                51047    
+unix  3      [ ]         流        已连接     52866    
+unix  3      [ ]         流        已连接     50940    
+unix  3      [ ]         数据报                47500    
+unix  3      [ ]         流        已连接     63572    
+unix  3      [ ]         流        已连接     63626    @/dbus-vfs-daemon/socket-VJqkFTAK
+unix  3      [ ]         流        已连接     54776    
+unix  3      [ ]         流        已连接     52920    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     58838    @/home/mao/.cache/ibus/dbus-O08ewsTm
+unix  3      [ ]         流        已连接     52947    
+unix  3      [ ]         流        已连接     60068    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     47984    
+unix  3      [ ]         流        已连接     54779    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     60072    @/home/mao/.cache/ibus/dbus-O08ewsTm
+unix  3      [ ]         流        已连接     55767    /run/user/1000/bus
+unix  3      [ ]         流        已连接     54116    /run/user/1000/bus
+unix  3      [ ]         流        已连接     54768    @/home/mao/.cache/ibus/dbus-O08ewsTm
+unix  3      [ ]         流        已连接     60066    
+unix  3      [ ]         流        已连接     60112    @/tmp/.X11-unix/X0
+unix  3      [ ]         流        已连接     26073    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     45520    /run/systemd/journal/stdout
+unix  3      [ ]         流        已连接     58313    
+unix  3      [ ]         流        已连接     54769    
+unix  3      [ ]         流        已连接     60114    /run/user/1000/bus
+unix  3      [ ]         流        已连接     66577    /run/dbus/system_bus_socket
+unix  3      [ ]         流        已连接     60052    
+unix  3      [ ]         流        已连接     54194    
+unix  3      [ ]         流        已连接     52985    
+unix  3      [ ]         流        已连接     55804    
+unix  3      [ ]         流        已连接     62862    
+unix  3      [ ]         流        已连接     65606    @/tmp/dbus-oaJ2tknJpD
+unix  3      [ ]         流        已连接     55795    /run/user/1000/bus
+unix  3      [ ]         流        已连接     30675    
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+- Proto：协议，一般是unix；
+- RefCnt：连接到此Socket的进程数量；
+- Flags：连接标识；
+- Type：Socket访问类型；
+- State：状态，LISTENING表示监听，CONNECTED表示已经建立连接；
+- I-Node：程序文件的 i 节点号；
+- Path：Socke程序的路径，或者相关数据的输出路径；
+
+
+
+
+
+## 独立服务管理
 
