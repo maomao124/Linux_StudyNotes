@@ -19844,10 +19844,10 @@ mao@ubuntu:~/桌面$
 |  /var/log/dmesg   | 记录了系统在开机时内核自检的日志。也可以使用dmesg命令直接查看内核自检信息 |
 |   /var/log/btmp   | 记录错误登陆的日志。这个文件是二进制文件，不能直接用Vi查看，而要使用lastb命令查看。命令如下：lastb |
 | /var/log/lasllog  | 记录系统中所有用户最后一次的登录时间的曰志。这个文件也是二进制文件.不能直接用Vi 查看。而要使用lastlog命令查看 |
-|  /var/Iog/mailog  |                      记录邮件信息的曰志                      |
+|  /var/log/mailog  |                      记录邮件信息的曰志                      |
 | /var/log/messages | 它是核心系统日志文件，其中包含了系统启动时的引导信息，以及系统运行时的其他状态消息。I/O 错误、网络错误和其他系统错误都会记录到此文件中。其他信息，比如某个人的身份切换为 root，已经用户自定义安装软件的日志，也会在这里列出。 |
 |  /var/log/secure  | 记录验证和授权方面的倍息，只要涉及账户和密码的程序都会记录，比如系统的登录、ssh的登录、su切换用户，sudo授权，甚至添加用户和修改用户密码都会记录在这个日志文件中 |
-|   /var/log/wtmp   | 永久记录所有用户的登陆、注销信息，同时记录系统的后动、重启、关机事件。同样，这个文件也是二进制文件.不能直接用Vi查看，而要使用last命令查看 |
+|   /var/log/wtmp   | 永久记录所有用户的登陆、注销信息，同时记录系统的后动、重启、关机事件。同样，这个文件也是二进制文件。不能直接用Vi查看，而要使用last命令查看 |
 |   /var/tun/ulmp   | 记录当前已经登录的用户的信息。这个文件会随着用户的登录和注销而不断变化，只记录当前登录用户的信息。同样，这个文件不能直接用Vi查看，而要使用w、who、users等命令查看 |
 
  
@@ -20466,4 +20466,108 @@ mao                                        **从未登录过**
 systemd-coredump                           **从未登录过**
 mao@ubuntu:/var/log/cups$ 
 ```
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ cat -n /var/Iog/mailog
+cat: /var/Iog/mailog: 没有那个文件或目录
+mao@ubuntu:/var/log/cups$ cat -n /var/log/messages
+cat: /var/log/messages: 没有那个文件或目录
+mao@ubuntu:/var/log/cups$ 
+mao@ubuntu:/var/log/cups$ cat /var/log/mailog
+cat: /var/log/mailog: 没有那个文件或目录
+mao@ubuntu:/var/log/cups$ 
+mao@ubuntu:/var/log/cups$ cat -n /var/log/secure
+cat: /var/log/secure: 没有那个文件或目录
+mao@ubuntu:/var/log/cups$ last
+mao      :0           :0               Thu Jul 14 03:11   still logged in
+reboot   system boot  5.11.0-38-generi Thu Jul 14 03:11   still running
+mao      :0           :0               Tue Jul 12 21:39 - crash (1+05:31)
+reboot   system boot  5.11.0-38-generi Tue Jul 12 21:38   still running
+mao      :0           :0               Mon Jul 11 22:00 - crash  (23:38)
+reboot   system boot  5.11.0-38-generi Mon Jul 11 21:59   still running
+mao      :0           :0               Sat Jul  9 21:24 - crash (2+00:35)
+reboot   system boot  5.11.0-38-generi Sat Jul  9 21:24   still running
+mao      :0           :0               Fri Jul  8 06:45 - crash (1+14:38)
+reboot   system boot  5.11.0-38-generi Fri Jul  8 06:44   still running
+mao      :0           :0               Thu Jul  7 07:00 - crash  (23:43)
+mao      :0           :0               Thu Jul  7 06:08 - 07:00  (00:52)
+reboot   system boot  5.11.0-38-generi Thu Jul  7 06:08   still running
+mao      :0           :0               Wed Jul  6 22:10 - crash  (07:57)
+reboot   system boot  5.11.0-38-generi Wed Jul  6 22:10   still running
+mao      :0           :0               Wed Jul  6 04:44 - down   (01:51)
+reboot   system boot  5.11.0-38-generi Wed Jul  6 04:43 - 06:35  (01:51)
+mao      :0           :0               Tue Jul  5 04:00 - down   (02:39)
+reboot   system boot  5.11.0-38-generi Tue Jul  5 03:59 - 06:40  (02:40)
+mao      :0           :0               Mon Jul  4 21:46 - crash  (06:13)
+reboot   system boot  5.11.0-38-generi Mon Jul  4 21:44 - 06:40  (08:56)
+mao      :0           :0               Mon Jul  4 04:37 - crash  (17:06)
+reboot   system boot  5.11.0-38-generi Mon Jul  4 04:37 - 06:40 (1+02:03)
+mao      :0           :0               Sat Jul  2 21:46 - crash (1+06:51)
+reboot   system boot  5.11.0-38-generi Sat Jul  2 21:46 - 06:40 (2+08:54)
+mao      :0           :0               Sat Jul  2 04:23 - down   (02:43)
+reboot   system boot  5.11.0-38-generi Sat Jul  2 04:22 - 07:07  (02:44)
+mao      :0           :0               Thu Dec 30 04:32 - crash (183+22:50)
+reboot   system boot  5.11.0-38-generi Thu Dec 30 04:30 - 07:07 (184+01:36)
+mao      :0           :0               Wed Dec 29 03:11 - crash (1+01:19)
+reboot   system boot  5.11.0-38-generi Wed Dec 29 03:10 - 07:07 (185+02:56)
+mao      :0           :0               Wed Dec 29 02:38 - crash  (00:32)
+reboot   system boot  5.11.0-38-generi Wed Dec 29 02:36 - 07:07 (185+03:30)
+mao      :0           :0               Fri Nov 19 20:59 - crash (39+05:36)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:57 - 07:07 (224+09:09)
+mao      :0           :0               Fri Nov 19 20:37 - crash  (00:19)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:37 - 07:07 (224+09:29)
+mao      :0           :0               Fri Nov 19 20:20 - down   (00:16)
+reboot   system boot  5.11.0-38-generi Fri Nov 19 20:20 - 20:37  (00:16)
+mao      :0           :0               Fri Nov  5 05:21 - down   (00:20)
+reboot   system boot  5.11.0-38-generi Fri Nov  5 05:20 - 05:42  (00:21)
+mao      :0           :0               Thu Nov  4 22:21 - crash  (06:59)
+reboot   system boot  5.11.0-38-generi Thu Nov  4 22:20 - 05:42  (07:21)
+mao      :0           :0               Sat Oct 23 04:59 - crash (12+17:21)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 04:59 - 05:42 (13+00:43)
+mao      :0           :0               Sat Oct 23 04:15 - down   (00:03)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 04:15 - 04:19  (00:04)
+mao      :0           :0               Sat Oct 23 03:51 - down   (00:20)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:51 - 04:12  (00:20)
+mao      :0           :0               Sat Oct 23 03:41 - down   (00:07)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:41 - 03:49  (00:07)
+mao      :0           :0               Sat Oct 23 03:16 - down   (00:19)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:16 - 03:35  (00:19)
+mao      :0           :0               Sat Oct 23 03:12 - down   (00:01)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 03:11 - 03:14  (00:02)
+mao      :0           :0               Sat Oct 23 02:09 - crash  (01:02)
+reboot   system boot  5.11.0-38-generi Sat Oct 23 02:08 - 03:14  (01:05)
+mao      :0           :0               Fri Oct 22 23:22 - crash  (02:45)
+reboot   system boot  5.11.0-38-generi Fri Oct 22 23:21 - 03:14  (03:53)
+mao      :0           :0               Fri Oct 22 05:05 - crash  (18:15)
+reboot   system boot  5.11.0-27-generi Fri Oct 22 05:05 - 03:14  (22:09)
+mao      :0           :0               Fri Oct 15 05:21 - down   (00:03)
+mao      :0           :0               Fri Oct 15 04:22 - 05:21  (00:59)
+reboot   system boot  5.11.0-27-generi Fri Oct 15 04:20 - 05:24  (01:04)
+
+wtmp begins Fri Oct 15 04:20:13 2021
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+
+
+
+
+## 日志文件格式
+
+日志文件的格式包含以下 4 列：
+
+- 事件产生的时间。
+- 产生事件的服务器的主机名。
+- 产生事件的服务名或程序名。
+- 事件的具体信息。
+
+
+
+
+
+## rsyslogd配置文件
 
