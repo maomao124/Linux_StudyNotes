@@ -20827,3 +20827,695 @@ vi /etc/logrotate.d/alter
 
 ## logrotate命令
 
+
+
+```sh
+logrotate [选项] 配置文件名
+```
+
+选项：
+
+- 如果此命令没有选项，则会按照配置文件中的条件进行日志轮替
+- -v：显示日志轮替过程。加入了-v选项，会显示日志的轮替过程
+- -f： 强制进行日志轮替。不管日志轮替的条件是否符合，强制配置文件中所有的日志进行轮替
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ sudo logrotate -v /etc/logrotate.conf
+[sudo] mao 的密码： 
+reading config file /etc/logrotate.conf
+including /etc/logrotate.d
+reading config file alternatives
+reading config file apport
+reading config file apt
+reading config file bootlog
+reading config file btmp
+reading config file cups-daemon
+reading config file dpkg
+reading config file ppp
+reading config file rsyslog
+reading config file speech-dispatcher
+reading config file ubuntu-advantage-tools
+reading config file ufw
+reading config file unattended-upgrades
+reading config file wtmp
+Reading state from file: /var/lib/logrotate/status
+Allocating hash table for state file, size 64 entries
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+
+Handling 17 logs
+
+rotating pattern: /var/log/alternatives.log  monthly (12 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/alternatives.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-12 21:39
+  log does not need rotating (log has been rotated at 2022-7-12 21:39, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/apport.log  after 1 days (7 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/apport.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-04 04:37
+  log does not need rotating (log is empty)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/apt/term.log  monthly (12 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/apt/term.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-07 06:08
+  log does not need rotating (log has been rotated at 2022-7-7 6:8, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/apt/history.log  monthly (12 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/apt/history.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-07 06:08
+  log does not need rotating (log has been rotated at 2022-7-7 6:8, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/boot.log
+ after 1 days (7 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/boot.log
+  log /var/log/boot.log does not exist -- skipping
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/btmp  monthly (1 rotations)
+empty log files are rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/btmp
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-02 04:23
+  log does not need rotating (log has been rotated at 2022-7-2 4:23, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/cups/*log  after 1 days (7 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/cups/access_log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-14 03:11
+  log does not need rotating (log has been rotated at 2022-7-14 3:11, that is not day ago yet)
+considering log /var/log/cups/error_log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-06 04:43
+  log does not need rotating (log is empty)
+not running postrotate script, since no logs were rotated
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/dpkg.log  monthly (12 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/dpkg.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-07 06:08
+  log does not need rotating (log has been rotated at 2022-7-7 6:8, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/ppp-connect-errors  weekly (4 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/ppp-connect-errors
+  log /var/log/ppp-connect-errors does not exist -- skipping
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/syslog
+ after 1 days (7 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/syslog
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-14 03:11
+  log does not need rotating (log has been rotated at 2022-7-14 3:11, that is not day ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/mail.info
+/var/log/mail.warn
+/var/log/mail.err
+/var/log/mail.log
+/var/log/daemon.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/lpr.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+ weekly (4 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/mail.info
+  log /var/log/mail.info does not exist -- skipping
+considering log /var/log/mail.warn
+  log /var/log/mail.warn does not exist -- skipping
+considering log /var/log/mail.err
+  log /var/log/mail.err does not exist -- skipping
+considering log /var/log/mail.log
+  log /var/log/mail.log does not exist -- skipping
+considering log /var/log/daemon.log
+  log /var/log/daemon.log does not exist -- skipping
+considering log /var/log/kern.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-10 04:15
+  log does not need rotating (log has been rotated at 2022-7-10 4:15, that is not week ago yet)
+considering log /var/log/auth.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-10 04:15
+  log does not need rotating (log has been rotated at 2022-7-10 4:15, that is not week ago yet)
+considering log /var/log/user.log
+  log /var/log/user.log does not exist -- skipping
+considering log /var/log/lpr.log
+  log /var/log/lpr.log does not exist -- skipping
+considering log /var/log/cron.log
+  log /var/log/cron.log does not exist -- skipping
+considering log /var/log/debug
+  log /var/log/debug does not exist -- skipping
+considering log /var/log/messages
+  log /var/log/messages does not exist -- skipping
+not running postrotate script, since no logs were rotated
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/speech-dispatcher/speech-dispatcher.log /var/log/speech-dispatcher/speech-dispatcher-protocol.log  after 1 days (7 rotations)
+empty log files are rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/speech-dispatcher/speech-dispatcher.log
+  log /var/log/speech-dispatcher/speech-dispatcher.log does not exist -- skipping
+considering log /var/log/speech-dispatcher/speech-dispatcher-protocol.log
+  log /var/log/speech-dispatcher/speech-dispatcher-protocol.log does not exist -- skipping
+not running postrotate script, since no logs were rotated
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/speech-dispatcher/debug-epos-generic /var/log/speech-dispatcher/debug-festival /var/log/speech-dispatcher/debug-flite  after 1 days (2 rotations)
+empty log files are rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/speech-dispatcher/debug-epos-generic
+  log /var/log/speech-dispatcher/debug-epos-generic does not exist -- skipping
+considering log /var/log/speech-dispatcher/debug-festival
+  log /var/log/speech-dispatcher/debug-festival does not exist -- skipping
+considering log /var/log/speech-dispatcher/debug-flite
+  log /var/log/speech-dispatcher/debug-flite does not exist -- skipping
+not running postrotate script, since no logs were rotated
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/ubuntu-advantage.log  monthly (6 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/ubuntu-advantage.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-02 04:23
+  log does not need rotating (log has been rotated at 2022-7-2 4:23, that is not month ago yet)
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/ufw.log
+ weekly (4 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/ufw.log
+  log /var/log/ufw.log does not exist -- skipping
+not running postrotate script, since no logs were rotated
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/unattended-upgrades/unattended-upgrades.log 
+/var/log/unattended-upgrades/unattended-upgrades-dpkg.log
+/var/log/unattended-upgrades/unattended-upgrades-shutdown.log
+ monthly (6 rotations)
+empty log files are not rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/unattended-upgrades/unattended-upgrades.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2022-07-02 04:23
+  log does not need rotating (log has been rotated at 2022-7-2 4:23, that is not month ago yet)
+considering log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2021-11-04 22:20
+  log needs rotating
+considering log /var/log/unattended-upgrades/unattended-upgrades-shutdown.log
+  Now: 2022-07-14 05:27
+  Last rotated at 2021-10-22 05:00
+  log does not need rotating (log is empty)
+rotating log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log, log->rotateCount is 6
+dateext suffix '-20220714'
+glob pattern '-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.6.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.7.gz (rotatecount 6, logstart 1, i 6), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.6.gz does not exist
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.5.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.6.gz (rotatecount 6, logstart 1, i 5), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.5.gz does not exist
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.4.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.5.gz (rotatecount 6, logstart 1, i 4), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.4.gz does not exist
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.3.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.4.gz (rotatecount 6, logstart 1, i 3), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.3.gz does not exist
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.2.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.3.gz (rotatecount 6, logstart 1, i 2), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.2.gz does not exist
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.1.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.2.gz (rotatecount 6, logstart 1, i 1), 
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.0.gz to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.1.gz (rotatecount 6, logstart 1, i 0), 
+old log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.0.gz does not exist
+log /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.7.gz doesn't exist -- won't try to dispose of it
+renaming /var/log/unattended-upgrades/unattended-upgrades-dpkg.log to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log.1
+creating new /var/log/unattended-upgrades/unattended-upgrades-dpkg.log mode = 0644 uid = 0 gid = 4
+compressing log with: /bin/gzip
+switching uid to 0 and gid to 4
+switching euid to 0 and egid to 0
+
+rotating pattern: /var/log/wtmp  monthly (1 rotations)
+empty log files are rotated, only log files >= 1048576 bytes are rotated, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/wtmp
+  Now: 2022-07-14 05:27
+  Last rotated at 2021-10-22 05:00
+  log does not need rotating ('minsize' directive is used and the log size is smaller than the minsize value)
+switching euid to 0 and egid to 0
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+强制进行日志轮替，不管是否符合轮替条件：
+
+```sh
+logrotate -vf /etc/logrotate.conf
+```
+
+
+
+
+
+
+
+## 日志分析工具
+
+
+
+日志分析工具： logwatch
+
+需要安装
+
+
+
+CentOS：
+
+```sh
+yum -y install logwatch
+```
+
+
+
+ubuntu：
+
+```sh
+sudo apt install logwatch
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ sudo apt install logwatch
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+下列软件包是自动安装的并且现在不需要了：
+  linux-headers-5.11.0-27-generic linux-hwe-5.11-headers-5.11.0-27 linux-image-5.11.0-27-generic
+  linux-modules-5.11.0-27-generic linux-modules-extra-5.11.0-27-generic
+使用'sudo apt autoremove'来卸载它(它们)。
+将会同时安装下列软件：
+  libdate-manip-perl postfix
+建议安装：
+  libsys-cpu-perl libsys-meminfo-perl procmail postfix-mysql postfix-pgsql postfix-ldap postfix-pcre
+  postfix-lmdb postfix-sqlite sasl2-bin | dovecot-common resolvconf postfix-cdb postfix-doc
+下列【新】软件包将被安装：
+  libdate-manip-perl logwatch postfix
+升级了 0 个软件包，新安装了 3 个软件包，要卸载 0 个软件包，有 142 个软件包未被升级。
+需要下载 2,474 kB 的归档。
+解压缩后会消耗 19.7 MB 的额外空间。
+您希望继续执行吗？ [Y/n] y
+获取:1 http://cn.archive.ubuntu.com/ubuntu focal/main amd64 libdate-manip-perl all 6.79-1 [908 kB]
+获取:1 http://cn.archive.ubuntu.com/ubuntu focal/main amd64 libdate-manip-perl all 6.79-1 [908 kB]         
+获取:2 http://cn.archive.ubuntu.com/ubuntu focal-updates/main amd64 postfix amd64 3.4.13-0ubuntu1.2 [1,201 kB]
+获取:3 http://cn.archive.ubuntu.com/ubuntu focal-updates/main amd64 logwatch all 7.5.2-1ubuntu1.3 [366 kB] 
+已下载 2,013 kB，耗时 2分 26秒 (13.8 kB/s)                                                                 
+正在预设定软件包 ...
+正在选中未选择的软件包 libdate-manip-perl。
+(正在读取数据库 ... 系统当前共安装有 230613 个文件和目录。)
+准备解压 .../libdate-manip-perl_6.79-1_all.deb  ...
+正在解压 libdate-manip-perl (6.79-1) ...
+正在选中未选择的软件包 postfix。
+准备解压 .../postfix_3.4.13-0ubuntu1.2_amd64.deb  ...
+正在解压 postfix (3.4.13-0ubuntu1.2) ...
+正在选中未选择的软件包 logwatch。
+准备解压 .../logwatch_7.5.2-1ubuntu1.3_all.deb  ...
+正在解压 logwatch (7.5.2-1ubuntu1.3) ...
+正在设置 postfix (3.4.13-0ubuntu1.2) ...
+正在添加组"postfix" (GID 134)...
+完成。
+正在添加系统用户"postfix" (UID 127)...
+正在将新用户"postfix" (UID 127)添加到组"postfix"...
+无法创建主目录"/var/spool/postfix"。
+Creating /etc/postfix/dynamicmaps.cf
+正在添加组"postdrop" (GID 135)...
+完成。
+setting myhostname: ubuntu.localdomain
+setting alias maps
+setting alias database
+mailname is not a fully qualified domain name.  Not changing /etc/mailname.
+setting destinations: $myhostname, ubuntu, localhost.localdomain, , localhost
+setting relayhost: 
+setting mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+setting mailbox_size_limit: 0
+setting recipient_delimiter: +
+setting inet_interfaces: all
+setting inet_protocols: all
+/etc/aliases does not exist, creating it.
+WARNING: /etc/aliases exists, but does not have a root alias.
+
+Postfix (main.cf) is now set up with a default configuration.  If you need to 
+make changes, edit /etc/postfix/main.cf (and others) as needed.  To view 
+Postfix configuration values, see postconf(1).
+
+After modifying main.cf, be sure to run 'systemctl reload postfix'.
+
+Running newaliases
+Created symlink /etc/systemd/system/multi-user.target.wants/postfix.service → /lib/systemd/system/postfix.se
+rvice.
+正在设置 libdate-manip-perl (6.79-1) ...
+正在设置 logwatch (7.5.2-1ubuntu1.3) ...
+正在处理用于 ufw (0.36-6) 的触发器 ...
+正在处理用于 systemd (245.4-4ubuntu3.15) 的触发器 ...
+正在处理用于 man-db (2.9.1-1) 的触发器 ...
+正在处理用于 rsyslog (8.2001.0-1ubuntu1.3) 的触发器 ...
+正在处理用于 libc-bin (2.31-0ubuntu9.7) 的触发器 ...
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ logwatch --help
+
+Usage: /usr/sbin/logwatch [--detail <level>] [--logfile <name>] [--output <output_type>]
+   [--format <format_type>] [--encode <encoding>] [--numeric]
+   [--mailto <addr>] [--archives] [--range <range>] [--debug <level>]
+   [--filename <filename>] [--help|--usage] [--version] [--service <name>]
+   [--hostformat <host_format type>] [--hostlimit <host1,host2>] [--html_wrap <num_characters>]
+
+--detail <level>: Report Detail Level - High, Med, Low or any #.
+--logfile <name>: *Name of a logfile definition to report on.
+--logdir <name>: Name of default directory where logs are stored.
+--service <name>: *Name of a service definition to report on.
+--output <output type>: Report Output - stdout [default], mail, file.
+--format <formatting>: Report Format - text [default], html.
+--encode <encoding>: Encoding to use - none [default], base64.
+--mailto <addr>: Mail report to <addr>.
+--archives: Use archived log files too.
+--filename <filename>: Used to specify they filename to save to. --filename <filename> [Forces output to file].
+--range <range>: Date range: Yesterday, Today, All, Help
+                             where help will describe additional options
+--numeric: Display addresses numerically rather than symbolically and numerically
+           (saves  a  nameserver address-to-name lookup).
+--debug <level>: Debug Level - High, Med, Low or any #.
+--hostformat: Host Based Report Options - none [default], split, splitmail.
+--hostlimit: Limit report to hostname - host1,host2.
+--hostname: overwrites hostname
+--html_wrap <num_characters>: Default is 80.
+--version: Displays current version.
+--help: This message.
+--usage: Same as --help.
+* = Switch can be specified multiple times...
+
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+安装完成之后，需要手工生成 logwatch 的配置文件。默认配置文件是 /etc/logwatch/conf/logwatch.conf，不过这个配置文件是空的，需要把模板配置文件复制过来
+
+```sh
+cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/logwatch.conf
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/logwatch.conf
+cp: 无法创建普通文件'/etc/logwatch/conf/logwatch.conf': 权限不够
+mao@ubuntu:~/桌面$ sudo cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/logwatch.conf
+[sudo] mao 的密码： 
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ cat -n /etc/logwatch/conf/logwatch.conf
+     1	########################################################
+     2	# This was written and is maintained by:
+     3	#    Kirk Bauer <kirk@kaybee.org>
+     4	#
+     5	# Please send all comments, suggestions, bug reports,
+     6	#    etc, to kirk@kaybee.org.
+     7	#
+     8	########################################################
+     9	
+    10	# NOTE:
+    11	#   All these options are the defaults if you run logwatch with no
+    12	#   command-line arguments.  You can override all of these on the
+    13	#   command-line.
+    14	
+    15	# You can put comments anywhere you want to.  They are effective for the
+    16	# rest of the line.
+    17	
+    18	# this is in the format of <name> = <value>.  Whitespace at the beginning
+    19	# and end of the lines is removed.  Whitespace before and after the = sign
+    20	# is removed.  Everything is case *insensitive*.
+    21	
+    22	# Yes = True  = On  = 1
+    23	# No  = False = Off = 0
+    24	
+    25	# Default Log Directory
+    26	# All log-files are assumed to be given relative to this directory.
+    27	LogDir = /var/log
+    28	
+    29	# You can override the default temp directory (/tmp) here
+    30	TmpDir = /var/cache/logwatch
+    31	
+    32	#Output/Format Options
+    33	#By default Logwatch will print to stdout in text with no encoding.
+    34	#To make email Default set Output = mail to save to file set Output = file
+    35	Output = stdout
+    36	#To make Html the default formatting Format = html
+    37	Format = text
+    38	#To make Base64 [aka uuencode] Encode = base64
+    39	Encode = none
+    40	
+    41	# Input Encoding
+    42	# Logwatch assumes that the input is in UTF-8 encoding.  Defining CharEncoding
+    43	# will use iconv to convert text to the UTF-8 encoding.  Set CharEncoding
+    44	# to an empty string to use the default current locale.  If set to a valid
+    45	# encoding, the input characters are converted to UTF-8, discarding any
+    46	# illegal characters.  Valid encodings are as used by the iconv program,
+    47	# and `iconv -l` lists valid character set encodings.   
+    48	# Setting CharEncoding to UTF-8 simply discards illegal UTF-8 characters.
+    49	#CharEncoding = ""
+    50	
+    51	# Default person to mail reports to.  Can be a local account or a
+    52	# complete email address.  Variable Output should be set to mail, or
+    53	# --output mail should be passed on command line to enable mail feature.
+    54	MailTo = root
+    55	# WHen using option --multiemail, it is possible to specify a different
+    56	# email recipient per host processed.  For example, to send the report
+    57	# for hostname host1 to user@example.com, use:
+    58	#Mailto_host1 = user@example.com
+    59	# Multiple recipients can be specified by separating them with a space.
+    60	
+    61	# Default person to mail reports from.  Can be a local account or a
+    62	# complete email address.
+    63	MailFrom = Logwatch
+    64	
+    65	# if set, the results will be saved in <filename> instead of mailed
+    66	# or displayed. Be sure to set Output = file also.
+    67	#Filename = /tmp/logwatch
+    68	
+    69	# Use archives?  If set to 'Yes', the archives of logfiles
+    70	# (i.e. /var/log/messages.1 or /var/log/messages.1.gz) will
+    71	# be searched in addition to the /var/log/messages file.
+    72	# This usually will not do much if your range is set to just
+    73	# 'Yesterday' or 'Today'... it is probably best used with Range = All
+    74	# By default this is now set to Yes. To turn off Archives uncomment this.
+    75	#Archives = No
+    76	
+    77	# The default time range for the report...
+    78	# The current choices are All, Today, Yesterday
+    79	Range = yesterday
+    80	
+    81	# The default detail level for the report.
+    82	# This can either be Low, Med, High or a number.
+    83	# Low = 0
+    84	# Med = 5
+    85	# High = 10
+    86	Detail = Low
+    87	
+    88	
+    89	# The 'Service' option expects either the name of a filter
+    90	# (in /usr/share/logwatch/scripts/services/*) or 'All'.
+    91	# The default service(s) to report on.  This should be left as All for
+    92	# most people.
+    93	Service = All
+    94	# You can also disable certain services (when specifying all)
+    95	Service = "-zz-network"     # Prevents execution of zz-network service, which
+    96	                            # prints useful network configuration info.
+    97	Service = "-zz-sys"         # Prevents execution of zz-sys service, which
+    98	                            # prints useful system configuration info.
+    99	Service = "-eximstats"      # Prevents execution of eximstats service, which
+   100	                            # is a wrapper for the eximstats program.
+   101	# If you only cared about FTP messages, you could use these 2 lines
+   102	# instead of the above:
+   103	#Service = ftpd-messages   # Processes ftpd messages in /var/log/messages
+   104	#Service = ftpd-xferlog    # Processes ftpd messages in /var/log/xferlog
+   105	# Maybe you only wanted reports on PAM messages, then you would use:
+   106	#Service = pam_pwdb        # PAM_pwdb messages - usually quite a bit
+   107	#Service = pam             # General PAM messages... usually not many
+   108	
+   109	# You can also choose to use the 'LogFile' option.  This will cause
+   110	# logwatch to only analyze that one logfile.. for example:
+   111	#LogFile = messages
+   112	# will process /var/log/messages.  This will run all the filters that
+   113	# process that logfile.  This option is probably not too useful to
+   114	# most people.  Setting 'Service' to 'All' above analyzes all LogFiles
+   115	# anyways...
+   116	
+   117	#
+   118	# By default we assume that all Unix systems have sendmail or a sendmail-like MTA.
+   119	# The mailer code prints a header with To: From: and Subject:.
+   120	# At this point you can change the mailer to anything that can handle this output
+   121	# stream.
+   122	# TODO test variables in the mailer string to see if the To/From/Subject can be set
+   123	# From here with out breaking anything. This would allow mail/mailx/nail etc..... -mgt
+   124	mailer = "/usr/sbin/sendmail -t"
+   125	
+   126	#
+   127	# With this option set to a comma separated list of hostnames, only log entries
+   128	# for these particular hosts will be processed.  This can allow a log host to
+   129	# process only its own logs, or Logwatch can be run once per a set of hosts
+   130	# included in the logfiles.
+   131	# Example: HostLimit = hosta,hostb,myhost
+   132	#
+   133	# The default is to report on all log entries, regardless of its source host.
+   134	# Note that some logfiles do not include host information and will not be
+   135	# influenced by this setting.
+   136	#
+   137	#HostLimit = myhost
+   138	
+   139	#
+   140	# By default /var/adm is searched after LogDir.
+   141	#AppendVarAdmToLogDirs = 1
+   142	
+   143	#
+   144	# By default /var/log is to be searched after LogDir and /var/adm/ .
+   145	#AppendVarLogToLogDirs = 1
+   146	
+   147	#
+   148	# By default the current working directory is searched last after LogDir, /var/adm/, and /var/log/ .
+   149	#AppendCWDToLogDirs = 1
+   150	
+   151	# vi: shiftwidth=3 tabstop=3 et
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+```sh
+LogDir = /var/log
+#logwatch会分析和统计/var/log/中的日志
+
+TmpDir = /var/cache/logwatch
+#指定logwatch的临时目录
+
+MailTo = root
+#日志的分析结果，给root用户发送邮件
+
+MailFrom = Logwatch
+#邮件的发送者是Logwatch，在接收邮件时显示
+
+Print =
+#是否打印。如果选择“yes”，那么日志分析会被打印到标准输出，而且不会发送邮件。我们在这里不打印，#而是给root用户发送邮件
+#Save = /tmp/logwatch
+#如果开启这一项，日志分析就不会发送邮件，而是保存在/tmp/logwatch文件中
+#如果开启这一项，日志分析就不会发送邮件，而是保存在/tmp/logwatch文件中
+
+Range = yesterday
+#分析哪天的日志。可以识别“All”“Today”“Yesterday”，用来分析“所有日志”“今天日志”“昨天日志”
+
+Detail = Low
+#日志的详细程度。可以识别“Low”“Med”“High”。也可以用数字表示，范围为0～10，“0”代表最不详细，“10”代表最详细
+
+Service = All
+#分析和监控所有日志
+
+Service = "-zz-network"
+#但是不监控“-zz-network”服务的日志。“-服务名”表示不分析和监控此服务的日志
+
+Service = "-zz-sys"
+Service = "-eximstats"
+```
+
+
+
+如果想要让这个日志分析马上执行，则只需执行 logrotate 命令即可。
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 启动管理
+
