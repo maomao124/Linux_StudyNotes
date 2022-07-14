@@ -20571,3 +20571,259 @@ mao@ubuntu:/var/log/cups$
 
 ## rsyslogd配置文件
 
+rsyslogd 服务是依赖其配置文件 /etc/rsyslog.conf 来确定哪个服务的什么等级的日志信息会被记录在哪个位置的。也就是说，日志服务的配置文件中主要定义了服务的名称、日志等级和日志记录位置。
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ cat -n /etc/rsyslog.conf
+     1	# /etc/rsyslog.conf configuration file for rsyslog
+     2	#
+     3	# For more information install rsyslog-doc and see
+     4	# /usr/share/doc/rsyslog-doc/html/configuration/index.html
+     5	#
+     6	# Default logging rules can be found in /etc/rsyslog.d/50-default.conf
+     7	
+     8	
+     9	#################
+    10	#### MODULES ####
+    11	#################
+    12	
+    13	module(load="imuxsock") # provides support for local system logging
+    14	#module(load="immark")  # provides --MARK-- message capability
+    15	
+    16	# provides UDP syslog reception
+    17	#module(load="imudp")
+    18	#input(type="imudp" port="514")
+    19	
+    20	# provides TCP syslog reception
+    21	#module(load="imtcp")
+    22	#input(type="imtcp" port="514")
+    23	
+    24	# provides kernel logging support and enable non-kernel klog messages
+    25	module(load="imklog" permitnonkernelfacility="on")
+    26	
+    27	###########################
+    28	#### GLOBAL DIRECTIVES ####
+    29	###########################
+    30	
+    31	#
+    32	# Use traditional timestamp format.
+    33	# To enable high precision timestamps, comment out the following line.
+    34	#
+    35	$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+    36	
+    37	# Filter duplicated messages
+    38	$RepeatedMsgReduction on
+    39	
+    40	#
+    41	# Set the default permissions for all log files.
+    42	#
+    43	$FileOwner syslog
+    44	$FileGroup adm
+    45	$FileCreateMode 0640
+    46	$DirCreateMode 0755
+    47	$Umask 0022
+    48	$PrivDropToUser syslog
+    49	$PrivDropToGroup syslog
+    50	
+    51	#
+    52	# Where to place spool and state files
+    53	#
+    54	$WorkDirectory /var/spool/rsyslog
+    55	
+    56	#
+    57	# Include all config files in /etc/rsyslog.d/
+    58	#
+    59	$IncludeConfig /etc/rsyslog.d/*.conf
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+基本格式：
+
+```sh
+authpriv.* /var/log/secure
+#服务名称[连接符号]日志等级 日志记录位置
+#认证相关服务.所有日志等级 记录在/var/log/secure日志中
+```
+
+
+
+|           服务名称           |                            说 明                             |
+| :--------------------------: | :----------------------------------------------------------: |
+|        auth(LOG AUTH)        |                      安全和认证相关消息                      |
+|    authpriv(LOG_AUTHPRIV)    |                 安全和认证相关消息（私有的）                 |
+|       cron (LOG_CRON)        |               系统定时任务cront和at产生的日志                |
+|     daemon (LOG_DAEMON)      |                   与各个守护进程相关的曰志                   |
+|        ftp (LOG_FTP)         |                    ftp守护进程产生的曰志                     |
+|        kern(LOG_KERN)        |             内核产生的曰志（不是用户进程产生的）             |
+| Iocal0-local7 (LOG_LOCAL0-7) |                     为本地使用预留的服务                     |
+|        lpr (LOG_LPR)         |                        打印产生的日志                        |
+|       mail (LOG_MAIL)        |                         邮件收发信息                         |
+|       news (LOG_NEWS)        |                    与新闻服务器相关的日志                    |
+|     syslog (LOG_SYSLOG)      |                 存syslogd服务产生的曰志信息                  |
+|       user (LOG_USER)        |                    用户等级类别的日志信息                    |
+|       uucp (LOG_UUCP>        | uucp子系统的日志信息，uucp是早期Linux系统进行数据传递的协议，后来 也常用在新闻组服务中 |
+
+
+
+连接符号
+
+日志服务连接日志等级的格式如下：
+
+```sh
+日志服务[连接符号]日志等级 日志记录位置
+```
+
+
+
+|       等级名称       |                            说 明                             |
+| :------------------: | :----------------------------------------------------------: |
+|  debug (LOG_DEBUG)   |                      一般的调试信息说明                      |
+|   info (LOG_INFO)    |                        基本的通知信息                        |
+| nolice (LOG_NOTICE)  |                 普通信息，但是有一定的重要性                 |
+| warning(LOG_WARNING) |          警吿信息，但是还不会影响到服务或系统的运行          |
+|     err(LOG_ERR)     | 错误信息, 一般达到err等级的信息已经可以影响到服务成系统的运行了 |
+|   crit (LOG_CRIT)    |               临界状况信思，比err等级还要严重                |
+|  alert (LOG_ALERT)   |        状态信息，比crit等级还要严重，必须立即采取行动        |
+|  emerg (LOG_EMERG)   |               疼痛等级信息，系统已经无法使用了               |
+|          *           | 代表所有日志等级。比如，“authpriv.*”代表amhpriv认证信息服务产生的日志，所有的日志等级都记录 |
+
+
+
+
+
+
+
+## 日志轮替
+
+日志是重要的系统文件，记录和保存了系统中所有的重要事件。但是日志文件也需要进行定期的维护，因为日志文件是不断增长的，如果完全不进行日志维护，而任由其随意递增，那么用不了多久，我们的硬盘就会被写满。
+
+**日志维护的最主要的工作就是把旧的日志文件删除，从而腾出空间保存新的日志文件。**这项工作如果靠管理员手工来完成，那其实是非常烦琐的，而且也容易忘记。
+
+logrotate 就是用来进行日志轮替（也叫日志转储）的，也就是把旧的日志文件移动并改名，同时创建一个新的空日志文件用来记录新日志，当旧日志文件超出保存的范围时就删除。
+
+
+
+### 日志文件的命名规则
+
+日志轮替最主要的作用就是把旧的日志文件移动并改名，同时建立新的空日志文件，当旧日志文件超出保存的范围时就删除。那么，旧的日志文件改名之后，如何命名呢？主要依靠 /etc/logrotate.conf 配置文件中的“dateext”参数。
+
+如果配置文件中有“dateext”参数，那么日志会用日期来作为日志文件的后缀，如“secure-20130605”。这样日志文件名不会重叠，也就不需要对日志文件进行改名，只需要保存指定的日志个数，删除多余的日志文件即可。
+
+如果配置文件中没有“dateext”参数，那么日志文件就需要进行改名了。当第一次进行日志轮替时，当前的“secure”日志会自动改名为“secure.1”，然后新建“secure”日志，用来保存新的日志；当第二次进行日志轮替时，“secure.1”会自动改名为“secure.2”，当前的“secure”日志会自动改名为“secure.1”，然后也会新建“secure”日志，用来保存新的日志；以此类推。
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ cat -n /etc/logrotate.conf
+     1	# see "man logrotate" for details
+     2	# rotate log files weekly
+     3	weekly
+     4	
+     5	# use the adm group by default, since this is the owning group
+     6	# of /var/log/syslog.
+     7	su root adm
+     8	
+     9	# keep 4 weeks worth of backlogs
+    10	rotate 4
+    11	
+    12	# create new (empty) log files after rotating old ones
+    13	create
+    14	
+    15	# use date as a suffix of the rotated file
+    16	#dateext
+    17	
+    18	# uncomment this if you want your log files compressed
+    19	#compress
+    20	
+    21	# packages drop log rotation information into this directory
+    22	include /etc/logrotate.d
+    23	
+    24	# system-specific logs may be also be configured here.
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+|          参 致          |                           参数说明                           |
+| :---------------------: | :----------------------------------------------------------: |
+|          daily          |                     日志的轮替周期是毎天                     |
+|         weekly          |                     日志的轮替周期是每周                     |
+|         monthly         |                     日志的轮替周期是每月                     |
+|       rotate数宇        |              保留的日志文件的个数。0指没有备份               |
+|        compress         |             当进行日志轮替时，对旧的日志进行压缩             |
+| create mode owner group | 建立新日志，同时指定新日志的权限与所有者和所属组.如create 0600 root utmp |
+|      mail address       |    当进行日志轮替时，输出内存通过邮件发送到指定的邮件地址    |
+|        missingok        |            如果日志不存在，则忽略该日志的警告信息            |
+|       nolifempty        |              如果曰志为空文件，则不进行日志轮替              |
+|      minsize 大小       | 日志轮替的最小值。也就是日志一定要达到这个最小值才会进行轮持，否则就算时间达到也不进行轮替 |
+|        size 大小        | 日志只有大于指定大小才进行日志轮替，而不是按照时间轮替，如size 100k |
+|         dateext         |      使用日期作为日志轮替文件的后缀，如secure-20130605       |
+|      sharedscripts      |                在此关键宇之后的脚本只执行一次                |
+|   prerotate/cndscript   |  在曰志轮替之前执行脚本命令。endscript标识prerotate脚本结束  |
+|  postrolaie/endscript   | 在日志轮替之后执行脚本命令。endscripi标识postrotate脚本结束  |
+
+
+
+
+
+
+
+### 把自己的日志加入日志轮替
+
+- 第一种方法是直接在 /etc/logrotate.conf 配置文件中写入该日志的轮替策略，从而把日志加入轮替；
+- 第二种方法是在 /etc/logrotate.d/ 目录中新建立该日志的轮替文件，在该轮替文件中写入正确的轮替策略，因为该目录中的文件都会被包含到主配置文件中，所以也可以把日志加入轮替。
+
+
+
+先给日志文件赋予chattr的a属性，保证日志的安全：
+
+```sh
+chattr +a 日志文件位置
+```
+
+ /var/log/alert.log
+
+
+
+```sh
+vi /etc/logrotate.d/alter
+#创建alter轮替文件,把/var/log/alert.log加入轮替
+/var/log/alert.log {
+    weekly
+    #每周轮替一次
+    rotate 6
+    #保留6个轮替曰志
+    sharedscripts
+    #以下命令只执行一次
+    prerotate
+    #在日志轮替之前执行
+        /usr/bin/chattr -a /var/log/alert.log
+        #在日志轮替之前取消a属性,以便让日志可以轮替
+    endscript
+    #脚本结朿
+    sharedscripts
+    postrotate
+    #在日志轮替之后执行
+        /usr/bin/chattr +a /var/log/alert.log
+        #在日志轮替之后,重新加入a属性
+    endscript
+    sharedscripts
+    postrotate
+    /bin/kill -HUP $(/bin/cat /var/run/syslogd.pid 2>/dev/null) fi>/dev/null
+    endscript
+    #重启rsyslog服务，保证日志轮替正常进行
+}
+```
+
+
+
+
+
+
+
+## logrotate命令
+
