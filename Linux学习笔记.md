@@ -19790,3 +19790,680 @@ mao@ubuntu:~/桌面$
 
 # 系统日志管理
 
+## rsyslogd服务
+
+在 CentOS 6.x 中，日志服务已经由 rsyslogd 取代了原先的 syslogd。Red Hat 公司认为 syslogd 已经不能满足工作中的需求，rsyslogd 相比 syslogd 具有一些新的特点：
+
+- 基于TCP网络协议传输日志信息。
+- 更安全的网络传输方式。
+- 有日志信息的即时分析框架。
+- 后台数据库。
+- 在配置文件中可以写简单的逻辑判断。
+- 与syslog配置文件相兼容。
+
+
+
+rsyslogd 日志服务更加先进，功能更多。
+
+
+
+系统中的绝大多数日志文件是由 rsyslogd 服务来统一管理的，只要各个进程将信息给予这个服务，它就会自动地把日志按照特定的格式记录到不同的日志文件中。也就是说，采用 rsyslogd 服务管理的日志文件，它们的格式应该是统一的。
+
+
+
+查询 rsyslogd 服务的自启动状态：
+
+```sh
+ps aux | grep "rsyslog" | grep -v "grep"
+```
+
+```sh
+chkconfig --list | grep rsyslog
+```
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ps aux | grep "rsyslog" | grep -v "grep"
+syslog       933  0.0  0.1 224356  4436 ?        Ssl  03:11   0:00 /usr/sbin/rsyslogd -n -iNONE
+mao@ubuntu:~/桌面$ 
+```
+
+
+
+
+
+## 日志文件及其功能
+
+
+
+|     日志文件      |                            说 明                             |
+| :---------------: | :----------------------------------------------------------: |
+|   /var/log/cron   |                 记录与系统定时任务相关的曰志                 |
+|  /var/log/cups/   |                      记录打印信息的曰志                      |
+|  /var/log/dmesg   | 记录了系统在开机时内核自检的日志。也可以使用dmesg命令直接查看内核自检信息 |
+|   /var/log/btmp   | 记录错误登陆的日志。这个文件是二进制文件，不能直接用Vi查看，而要使用lastb命令查看。命令如下：lastb |
+| /var/log/lasllog  | 记录系统中所有用户最后一次的登录时间的曰志。这个文件也是二进制文件.不能直接用Vi 查看。而要使用lastlog命令查看 |
+|  /var/Iog/mailog  |                      记录邮件信息的曰志                      |
+| /var/log/messages | 它是核心系统日志文件，其中包含了系统启动时的引导信息，以及系统运行时的其他状态消息。I/O 错误、网络错误和其他系统错误都会记录到此文件中。其他信息，比如某个人的身份切换为 root，已经用户自定义安装软件的日志，也会在这里列出。 |
+|  /var/log/secure  | 记录验证和授权方面的倍息，只要涉及账户和密码的程序都会记录，比如系统的登录、ssh的登录、su切换用户，sudo授权，甚至添加用户和修改用户密码都会记录在这个日志文件中 |
+|   /var/log/wtmp   | 永久记录所有用户的登陆、注销信息，同时记录系统的后动、重启、关机事件。同样，这个文件也是二进制文件.不能直接用Vi查看，而要使用last命令查看 |
+|   /var/tun/ulmp   | 记录当前已经登录的用户的信息。这个文件会随着用户的登录和注销而不断变化，只记录当前登录用户的信息。同样，这个文件不能直接用Vi查看，而要使用w、who、users等命令查看 |
+
+ 
+
+|    日志文件     |                说明                 |
+| :-------------: | :---------------------------------: |
+| /var/log/httpd/ | RPM包安装的apache取务的默认日志目录 |
+| /var/log/mail/  |  RPM包安装的邮件服务的额外日志因录  |
+| /var/log/samba/ |   RPM色安装的Samba服务的日志目录    |
+| /var/log/sssd/  |        守护进程安全服务目录         |
+
+
+
+
+
+```sh
+mao@ubuntu:~/桌面$ ls -l /var/log/cups/
+总用量 40
+-rw-r----- 1 root adm 765 7月  14 04:09 access_log
+-rw-r----- 1 root adm 765 7月  12 22:37 access_log.1
+-rw-r----- 1 root adm 182 7月  11 22:58 access_log.2.gz
+-rw-r----- 1 root adm 167 7月  10 05:12 access_log.3.gz
+-rw-r----- 1 root adm 232 7月  10 04:15 access_log.4.gz
+-rw-r----- 1 root adm 182 7月   8 06:46 access_log.5.gz
+-rw-r----- 1 root adm 221 7月   7 07:01 access_log.6.gz
+-rw-r----- 1 root adm 278 7月   6 23:09 access_log.7.gz
+-rw-r----- 1 root adm   0 7月   6 04:43 error_log
+-rw-r----- 1 root adm  91 7月   5 06:40 error_log.1
+-rw-r----- 1 root adm 118 10月 23  2021 error_log.2.gz
+mao@ubuntu:~/桌面$ cd /var/log/cups/
+mao@ubuntu:/var/log/cups$ cat -n error_log.1
+     1	W [05/Jul/2022:06:40:23 -0700] Notifier for subscription 91 (dbus://) went away, retrying!
+mao@ubuntu:/var/log/cups$ cat -n access_log
+     1	localhost - - [14/Jul/2022:03:11:06 -0700] "POST / HTTP/1.1" 200 349 Create-Printer-Subscriptions successful-ok
+     2	localhost - - [14/Jul/2022:03:11:06 -0700] "POST / HTTP/1.1" 200 176 Create-Printer-Subscriptions successful-ok
+     3	localhost - - [14/Jul/2022:03:11:10 -0700] "POST / HTTP/1.1" 200 359 Create-Printer-Subscriptions successful-ok
+     4	localhost - - [14/Jul/2022:03:11:23 -0700] "POST / HTTP/1.1" 200 359 Create-Printer-Subscriptions successful-ok
+     5	localhost - - [14/Jul/2022:03:11:25 -0700] "POST / HTTP/1.1" 200 151 Cancel-Subscription successful-ok
+     6	localhost - - [14/Jul/2022:03:11:25 -0700] "POST / HTTP/1.1" 200 151 Cancel-Subscription client-error-not-found
+     7	localhost - - [14/Jul/2022:04:09:42 -0700] "POST / HTTP/1.1" 200 182 Renew-Subscription successful-ok
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ cat -n /var/log/dmesg
+     1	[    0.000000] kernel: Linux version 5.11.0-38-generic (buildd@lgw01-amd64-041) (gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #42~20.04.1-Ubuntu SMP Tue Sep 28 20:41:07 UTC 2021 (Ubuntu 5.11.0-38.42~20.04.1-generic 5.11.22)
+     2	[    0.000000] kernel: Command line: BOOT_IMAGE=/boot/vmlinuz-5.11.0-38-generic root=UUID=f016fec7-baa2-4d84-99bb-4b8bde2ff82c ro find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US quiet
+     3	[    0.000000] kernel: KERNEL supported cpus:
+     4	[    0.000000] kernel:   Intel GenuineIntel
+     5	[    0.000000] kernel:   AMD AuthenticAMD
+     6	[    0.000000] kernel:   Hygon HygonGenuine
+     7	[    0.000000] kernel:   Centaur CentaurHauls
+     8	[    0.000000] kernel:   zhaoxin   Shanghai  
+     9	[    0.000000] kernel: [Firmware Bug]: TSC doesn't count with P0 frequency!
+    10	[    0.000000] kernel: x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+    11	[    0.000000] kernel: x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+    12	[    0.000000] kernel: x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+    13	[    0.000000] kernel: x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+    14	[    0.000000] kernel: x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'compacted' format.
+    15	[    0.000000] kernel: BIOS-provided physical RAM map:
+    16	[    0.000000] kernel: BIOS-e820: [mem 0x0000000000000000-0x000000000009e7ff] usable
+    17	[    0.000000] kernel: BIOS-e820: [mem 0x000000000009e800-0x000000000009ffff] reserved
+    18	[    0.000000] kernel: BIOS-e820: [mem 0x00000000000dc000-0x00000000000fffff] reserved
+    19	[    0.000000] kernel: BIOS-e820: [mem 0x0000000000100000-0x00000000bfecffff] usable
+    20	[    0.000000] kernel: BIOS-e820: [mem 0x00000000bfed0000-0x00000000bfefefff] ACPI data
+    21	[    0.000000] kernel: BIOS-e820: [mem 0x00000000bfeff000-0x00000000bfefffff] ACPI NVS
+    22	[    0.000000] kernel: BIOS-e820: [mem 0x00000000bff00000-0x00000000bfffffff] usable
+    23	[    0.000000] kernel: BIOS-e820: [mem 0x00000000f0000000-0x00000000f7ffffff] reserved
+    24	[    0.000000] kernel: BIOS-e820: [mem 0x00000000fec00000-0x00000000fec0ffff] reserved
+    25	[    0.000000] kernel: BIOS-e820: [mem 0x00000000fee00000-0x00000000fee00fff] reserved
+    26	[    0.000000] kernel: BIOS-e820: [mem 0x00000000fffe0000-0x00000000ffffffff] reserved
+    27	[    0.000000] kernel: BIOS-e820: [mem 0x0000000100000000-0x000000013fffffff] usable
+    28	[    0.000000] kernel: NX (Execute Disable) protection: active
+    29	[    0.000000] kernel: SMBIOS 2.7 present.
+    30	[    0.000000] kernel: DMI: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 07/22/2020
+    31	[    0.000000] kernel: vmware: hypercall mode: 0x01
+    32	[    0.000000] kernel: Hypervisor detected: VMware
+    33	[    0.000000] kernel: vmware: TSC freq read from hypervisor : 3800.048 MHz
+    34	[    0.000000] kernel: vmware: Host bus clock speed read from hypervisor : 66000000 Hz
+    35	[    0.000000] kernel: vmware: using clock offset of 34315765264 ns
+    36	[    0.000025] kernel: tsc: Detected 3800.048 MHz processor
+    37	[    0.001937] kernel: e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+    38	[    0.001942] kernel: e820: remove [mem 0x000a0000-0x000fffff] usable
+    39	[    0.001947] kernel: last_pfn = 0x140000 max_arch_pfn = 0x400000000
+    40	[    0.002027] kernel: MTRR default type: uncachable
+    41	[    0.002030] kernel: MTRR fixed ranges enabled:
+    42	[    0.002031] kernel:   00000-9FFFF write-back
+    43	[    0.002032] kernel:   A0000-BFFFF uncachable
+    44	[    0.002033] kernel:   C0000-CFFFF write-protect
+    45	[    0.002034] kernel:   D0000-EFFFF uncachable
+    46	[    0.002035] kernel:   F0000-FFFFF write-protect
+    47	[    0.002036] kernel: MTRR variable ranges enabled:
+    48	[    0.002037] kernel:   0 base 000000000000 mask 1FE000000000 write-back
+    49	[    0.002039] kernel:   1 base 0000C0000000 mask 1FFFC0000000 uncachable
+    50	[    0.002041] kernel:   2 disabled
+    51	[    0.002042] kernel:   3 disabled
+    52	[    0.002042] kernel:   4 disabled
+    53	[    0.002043] kernel:   5 disabled
+    54	[    0.002043] kernel:   6 disabled
+    55	[    0.002044] kernel:   7 disabled
+    56	[    0.002056] kernel: x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+    57	[    0.002071] kernel: total RAM covered: 130048M
+    58	[    0.002450] kernel: Found optimal setting for mtrr clean up
+    59	[    0.002451] kernel:  gran_size: 64K         chunk_size: 64K         num_reg: 7          lose cover RAM: 0G
+    60	[    0.002518] kernel: e820: update [mem 0xc0000000-0xffffffff] usable ==> reserved
+    61	[    0.002526] kernel: last_pfn = 0xc0000 max_arch_pfn = 0x400000000
+    62	[    0.004960] kernel: found SMP MP-table at [mem 0x000f6a70-0x000f6a7f]
+    63	[    0.050847] kernel: check: Scanning 1 areas for low memory corruption
+    64	[    0.050912] kernel: Using GB pages for direct mapping
+    65	[    0.051104] kernel: RAMDISK: [mem 0x31abf000-0x34d56fff]
+    66	[    0.051111] kernel: ACPI: Early table checksum verification disabled
+    67	[    0.051115] kernel: ACPI: RSDP 0x00000000000F6A00 000024 (v02 PTLTD )
+    68	[    0.051120] kernel: ACPI: XSDT 0x00000000BFEDC633 00005C (v01 INTEL  440BX    06040000 VMW  01324272)
+    69	[    0.051126] kernel: ACPI: FACP 0x00000000BFEFEE73 0000F4 (v04 INTEL  440BX    06040000 PTL  000F4240)
+    70	[    0.051131] kernel: ACPI: DSDT 0x00000000BFEDD9E8 02148B (v01 PTLTD  Custom   06040000 MSFT 03000001)
+    71	[    0.051154] kernel: ACPI: FACS 0x00000000BFEFFFC0 000040
+    72	[    0.051159] kernel: ACPI: FACS 0x00000000BFEFFFC0 000040
+    73	[    0.051162] kernel: ACPI: BOOT 0x00000000BFEDD9C0 000028 (v01 PTLTD  $SBFTBL$ 06040000  LTP 00000001)
+    74	[    0.051165] kernel: ACPI: APIC 0x00000000BFEDD27E 000742 (v01 PTLTD  ? APIC   06040000  LTP 00000000)
+    75	[    0.051168] kernel: ACPI: MCFG 0x00000000BFEDD242 00003C (v01 PTLTD  $PCITBL$ 06040000  LTP 00000001)
+    76	[    0.051171] kernel: ACPI: SRAT 0x00000000BFEDC72F 0008D0 (v02 VMWARE MEMPLUG  06040000 VMW  00000001)
+    77	[    0.051174] kernel: ACPI: HPET 0x00000000BFEDC6F7 000038 (v01 VMWARE VMW HPET 06040000 VMW  00000001)
+    78	[    0.051177] kernel: ACPI: WAET 0x00000000BFEDC6CF 000028 (v01 VMWARE VMW WAET 06040000 VMW  00000001)
+    79	[    0.051180] kernel: ACPI: Reserving FACP table memory at [mem 0xbfefee73-0xbfefef66]
+    80	[    0.051182] kernel: ACPI: Reserving DSDT table memory at [mem 0xbfedd9e8-0xbfefee72]
+    81	[    0.051183] kernel: ACPI: Reserving FACS table memory at [mem 0xbfefffc0-0xbfefffff]
+    82	[    0.051184] kernel: ACPI: Reserving FACS table memory at [mem 0xbfefffc0-0xbfefffff]
+    83	[    0.051185] kernel: ACPI: Reserving BOOT table memory at [mem 0xbfedd9c0-0xbfedd9e7]
+    84	[    0.051186] kernel: ACPI: Reserving APIC table memory at [mem 0xbfedd27e-0xbfedd9bf]
+    85	[    0.051187] kernel: ACPI: Reserving MCFG table memory at [mem 0xbfedd242-0xbfedd27d]
+    86	[    0.051188] kernel: ACPI: Reserving SRAT table memory at [mem 0xbfedc72f-0xbfedcffe]
+    87	[    0.051188] kernel: ACPI: Reserving HPET table memory at [mem 0xbfedc6f7-0xbfedc72e]
+    88	[    0.051189] kernel: ACPI: Reserving WAET table memory at [mem 0xbfedc6cf-0xbfedc6f6]
+    89	[    0.051232] kernel: ACPI: Local APIC address 0xfee00000
+    90	[    0.051314] kernel: SRAT: PXM 0 -> APIC 0x00 -> Node 0
+...
+...
+...
+   216	[    0.051408] kernel: SRAT: PXM 0 -> APIC 0x7e -> Node 0
+   217	[    0.051408] kernel: SRAT: PXM 0 -> APIC 0x7f -> Node 0
+   218	[    0.051411] kernel: ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+   219	[    0.051413] kernel: ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+   220	[    0.051414] kernel: ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x13fffffff]
+   221	[    0.051416] kernel: ACPI: SRAT: Node 0 PXM 0 [mem 0x140000000-0x103fffffff] hotplug
+   222	[    0.051418] kernel: NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
+   223	[    0.051420] kernel: NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x13fffffff] -> [mem 0x00000000-0x13fffffff]
+   224	[    0.051428] kernel: NODE_DATA(0) allocated [mem 0x13ffd6000-0x13fffffff]
+   225	[    0.052668] kernel: Zone ranges:
+   226	[    0.052670] kernel:   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+   227	[    0.052673] kernel:   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+   228	[    0.052674] kernel:   Normal   [mem 0x0000000100000000-0x000000013fffffff]
+   229	[    0.052676] kernel:   Device   empty
+   230	[    0.052677] kernel: Movable zone start for each node
+   231	[    0.052679] kernel: Early memory node ranges
+   232	[    0.052680] kernel:   node   0: [mem 0x0000000000001000-0x000000000009dfff]
+   233	[    0.052681] kernel:   node   0: [mem 0x0000000000100000-0x00000000bfecffff]
+   234	[    0.052682] kernel:   node   0: [mem 0x00000000bff00000-0x00000000bfffffff]
+   235	[    0.052683] kernel:   node   0: [mem 0x0000000100000000-0x000000013fffffff]
+   236	[    0.052685] kernel: Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
+   237	[    0.052686] kernel: On node 0 totalpages: 1048429
+   238	[    0.052687] kernel:   DMA zone: 64 pages used for memmap
+   239	[    0.052688] kernel:   DMA zone: 21 pages reserved
+   240	[    0.052689] kernel:   DMA zone: 3997 pages, LIFO batch:0
+   241	[    0.052690] kernel:   DMA32 zone: 12224 pages used for memmap
+   242	[    0.052691] kernel:   DMA32 zone: 782288 pages, LIFO batch:63
+   243	[    0.052692] kernel:   Normal zone: 4096 pages used for memmap
+   244	[    0.052693] kernel:   Normal zone: 262144 pages, LIFO batch:63
+   245	[    0.052772] kernel: On node 0, zone DMA: 1 pages in unavailable ranges
+   246	[    0.053984] kernel: On node 0, zone DMA: 98 pages in unavailable ranges
+   247	[    0.283709] kernel: On node 0, zone DMA32: 48 pages in unavailable ranges
+   248	[    0.379059] kernel: ACPI: PM-Timer IO Port: 0x1008
+   249	[    0.379064] kernel: ACPI: Local APIC address 0xfee00000
+   250	[    0.379080] kernel: ACPI: LAPIC_NMI (acpi_id[0x00] high edge lint[0x1])
+...
+...
+...
+   369	[    0.379177] kernel: ACPI: LAPIC_NMI (acpi_id[0x77] high edge lint[0x1])
+   370	[    0.379177] kernel: ACPI: LAPIC_NMI (acpi_id[0x78] high edge lint[0x1])
+   371	[    0.379178] kernel: ACPI: LAPIC_NMI (acpi_id[0x79] high edge lint[0x1])
+   372	[    0.379179] kernel: ACPI: LAPIC_NMI (acpi_id[0x7a] high edge lint[0x1])
+   373	[    0.379180] kernel: ACPI: LAPIC_NMI (acpi_id[0x7b] high edge lint[0x1])
+   374	[    0.379181] kernel: ACPI: LAPIC_NMI (acpi_id[0x7c] high edge lint[0x1])
+   375	[    0.379181] kernel: ACPI: LAPIC_NMI (acpi_id[0x7d] high edge lint[0x1])
+   376	[    0.379182] kernel: ACPI: LAPIC_NMI (acpi_id[0x7e] high edge lint[0x1])
+   377	[    0.379183] kernel: ACPI: LAPIC_NMI (acpi_id[0x7f] high edge lint[0x1])
+   378	[    0.379359] kernel: IOAPIC[0]: apic_id 128, version 32, address 0xfec00000, GSI 0-23
+   379	[    0.379366] kernel: ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 high edge)
+   380	[    0.379370] kernel: ACPI: IRQ0 used by override.
+   381	[    0.379371] kernel: ACPI: IRQ9 used by override.
+   382	[    0.379373] kernel: Using ACPI (MADT) for SMP configuration information
+   383	[    0.379375] kernel: ACPI: HPET id: 0x8086af01 base: 0xfed00000
+   384	[    0.379418] kernel: smpboot: Allowing 128 CPUs, 112 hotplug CPUs
+   385	[    0.379435] kernel: PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+   386	[    0.379437] kernel: PM: hibernation: Registered nosave memory: [mem 0x0009e000-0x0009efff]
+   387	[    0.379438] kernel: PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+   388	[    0.379439] kernel: PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000dbfff]
+   389	[    0.379439] kernel: PM: hibernation: Registered nosave memory: [mem 0x000dc000-0x000fffff]
+   390	[    0.379441] kernel: PM: hibernation: Registered nosave memory: [mem 0xbfed0000-0xbfefefff]
+   391	[    0.379442] kernel: PM: hibernation: Registered nosave memory: [mem 0xbfeff000-0xbfefffff]
+   392	[    0.379500] kernel: PM: hibernation: Registered nosave memory: [mem 0xc0000000-0xefffffff]
+   393	[    0.379502] kernel: PM: hibernation: Registered nosave memory: [mem 0xf0000000-0xf7ffffff]
+   394	[    0.379503] kernel: PM: hibernation: Registered nosave memory: [mem 0xf8000000-0xfebfffff]
+   395	[    0.379504] kernel: PM: hibernation: Registered nosave memory: [mem 0xfec00000-0xfec0ffff]
+   396	[    0.379505] kernel: PM: hibernation: Registered nosave memory: [mem 0xfec10000-0xfedfffff]
+   397	[    0.379505] kernel: PM: hibernation: Registered nosave memory: [mem 0xfee00000-0xfee00fff]
+   398	[    0.379506] kernel: PM: hibernation: Registered nosave memory: [mem 0xfee01000-0xfffdffff]
+   399	[    0.379507] kernel: PM: hibernation: Registered nosave memory: [mem 0xfffe0000-0xffffffff]
+   400	[    0.379508] kernel: [mem 0xc0000000-0xefffffff] available for PCI devices
+   401	[    0.379510] kernel: Booting paravirtualized kernel on VMware hypervisor
+   402	[    0.379512] kernel: clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+   403	[    0.379520] kernel: setup_percpu: NR_CPUS:8192 nr_cpumask_bits:128 nr_cpu_ids:128 nr_node_ids:1
+   404	[    0.540401] kernel: percpu: Embedded 56 pages/cpu s192512 r8192 d28672 u262144
+   405	[    0.540418] kernel: pcpu-alloc: s192512 r8192 d28672 u262144 alloc=1*2097152
+   406	[    0.540421] kernel: pcpu-alloc: [0] 000 001 002 003 004 005 006 007 
+   407	[    0.540427] kernel: pcpu-alloc: [0] 008 009 010 011 012 013 014 015 
+   408	[    0.540432] kernel: pcpu-alloc: [0] 016 017 018 019 020 021 022 023 
+   409	[    0.540437] kernel: pcpu-alloc: [0] 024 025 026 027 028 029 030 031 
+   410	[    0.540442] kernel: pcpu-alloc: [0] 032 033 034 035 036 037 038 039 
+   411	[    0.540447] kernel: pcpu-alloc: [0] 040 041 042 043 044 045 046 047 
+   412	[    0.540452] kernel: pcpu-alloc: [0] 048 049 050 051 052 053 054 055 
+   413	[    0.540457] kernel: pcpu-alloc: [0] 056 057 058 059 060 061 062 063 
+   414	[    0.540462] kernel: pcpu-alloc: [0] 064 065 066 067 068 069 070 071 
+   415	[    0.540467] kernel: pcpu-alloc: [0] 072 073 074 075 076 077 078 079 
+   416	[    0.540472] kernel: pcpu-alloc: [0] 080 081 082 083 084 085 086 087 
+   417	[    0.540477] kernel: pcpu-alloc: [0] 088 089 090 091 092 093 094 095 
+   418	[    0.540482] kernel: pcpu-alloc: [0] 096 097 098 099 100 101 102 103 
+   419	[    0.540487] kernel: pcpu-alloc: [0] 104 105 106 107 108 109 110 111 
+   420	[    0.540492] kernel: pcpu-alloc: [0] 112 113 114 115 116 117 118 119 
+   421	[    0.540497] kernel: pcpu-alloc: [0] 120 121 122 123 124 125 126 127 
+   422	[    0.540591] kernel: Built 1 zonelists, mobility grouping on.  Total pages: 1032024
+   423	[    0.540595] kernel: Policy zone: Normal
+   424	[    0.540597] kernel: Kernel command line: BOOT_IMAGE=/boot/vmlinuz-5.11.0-38-generic root=UUID=f016fec7-baa2-4d84-99bb-4b8bde2ff82c ro find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US quiet
+   425	[    0.540706] kernel: printk: log_buf_len individual max cpu contribution: 4096 bytes
+   426	[    0.540708] kernel: printk: log_buf_len total cpu_extra contributions: 520192 bytes
+   427	[    0.540708] kernel: printk: log_buf_len min size: 262144 bytes
+   428	[    0.562781] kernel: printk: log_buf_len: 1048576 bytes
+   429	[    0.562785] kernel: printk: early log buf free: 236800(90%)
+   430	[    0.582114] kernel: Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+   431	[    0.591703] kernel: Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+   432	[    0.592629] kernel: mem auto-init: stack:off, heap alloc:on, heap free:off
+   433	[    0.751572] kernel: Memory: 3935528K/4193716K available (14345K kernel code, 3478K rwdata, 5460K rodata, 2688K init, 5976K bss, 257928K reserved, 0K cma-reserved)
+   434	[    0.751580] kernel: random: get_random_u64 called from __kmem_cache_create+0x2d/0x430 with crng_init=0
+   435	[    0.752577] kernel: SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=128, Nodes=1
+   436	[    0.752677] kernel: ftrace: allocating 48695 entries in 191 pages
+   437	[    0.769110] kernel: ftrace: allocated 191 pages with 7 groups
+   438	[    0.771216] kernel: rcu: Hierarchical RCU implementation.
+   439	[    0.771218] kernel: rcu:         RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=128.
+   440	[    0.771220] kernel:         Rude variant of Tasks RCU enabled.
+   441	[    0.771220] kernel:         Tracing variant of Tasks RCU enabled.
+   442	[    0.771221] kernel: rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+   443	[    0.771222] kernel: rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=128
+   444	[    0.776062] kernel: NR_IRQS: 524544, nr_irqs: 1448, preallocated irqs: 16
+   445	[    0.777010] kernel: random: crng done (trusting CPU's manufacturer)
+   446	[    0.812333] kernel: Console: colour VGA+ 80x25
+   447	[    0.812359] kernel: printk: console [tty0] enabled
+   448	[    0.812497] kernel: ACPI: Core revision 20201113
+   449	[    0.814361] kernel: clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 133484882848 ns
+   450	[    0.814722] kernel: APIC: Switch to symmetric I/O mode setup
+   451	[    0.815826] kernel: x2apic enabled
+   452	[    0.816350] kernel: Switched APIC routing to physical x2apic.
+   453	[    0.821112] kernel: ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+   454	[    0.821155] kernel: clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x6d8d08c86a3, max_idle_ns: 881590493188 ns
+   455	[    0.821162] kernel: Calibrating delay loop (skipped) preset value.. 7600.09 BogoMIPS (lpj=15200194)
+   456	[    0.821164] kernel: pid_max: default: 131072 minimum: 1024
+   457	[    0.821245] kernel: LSM: Security Framework initializing
+   458	[    0.821258] kernel: Yama: becoming mindful.
+   459	[    0.821452] kernel: AppArmor: AppArmor initialized
+   460	[    0.821931] kernel: Mount-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+   461	[    0.822242] kernel: Mountpoint-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+   462	[    0.823762] kernel: unchecked MSR access error: RDMSR from 0x852 at rIP: 0xffffffffbc47c4c8 (native_read_msr+0x8/0x40)
+   463	[    0.823762] kernel: Call Trace:
+   464	[    0.823762] kernel:  native_apic_msr_read+0x1c/0x30
+   465	[    0.823762] kernel:  setup_APIC_eilvt+0x54/0x140
+   466	[    0.823762] kernel:  mce_amd_feature_init+0x3c0/0x420
+   467	[    0.823762] kernel:  __mcheck_cpu_init_vendor+0x6c/0xd0
+   468	[    0.823762] kernel:  mcheck_cpu_init+0x157/0x480
+   469	[    0.823762] kernel:  identify_cpu+0x413/0x580
+   470	[    0.823762] kernel:  identify_boot_cpu+0x10/0x9a
+   471	[    0.823762] kernel:  check_bugs+0x2a/0x8af
+   472	[    0.823762] kernel:  start_kernel+0x6a5/0x6df
+   473	[    0.823762] kernel:  x86_64_start_reservations+0x24/0x26
+   474	[    0.823762] kernel:  x86_64_start_kernel+0x8b/0x8f
+   475	[    0.823762] kernel:  secondary_startup_64_no_verify+0xc2/0xcb
+   476	[    0.823762] kernel: LVT offset 2 assigned for vector 0xf4
+   477	[    0.823762] kernel: [Firmware Bug]: cpu 0, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   478	[    0.825159] kernel: Last level iTLB entries: 4KB 1024, 2MB 1024, 4MB 512
+   479	[    0.825159] kernel: Last level dTLB entries: 4KB 1536, 2MB 1536, 4MB 768, 1GB 0
+   480	[    0.825159] kernel: Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+   481	[    0.825159] kernel: Spectre V2 : Mitigation: Full AMD retpoline
+   482	[    0.825159] kernel: Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
+   483	[    0.825159] kernel: Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+   484	[    0.825159] kernel: Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl and seccomp
+   485	[    0.825159] kernel: Freeing SMP alternatives memory: 40K
+   486	[    0.833159] kernel: smpboot: CPU0: AMD Ryzen 7 2700 Eight-Core Processor (family: 0x17, model: 0x8, stepping: 0x2)
+   487	[    0.833409] kernel: Performance Events: AMD PMU driver.
+   488	[    0.833562] kernel: ... version:                0
+   489	[    0.833563] kernel: ... bit width:              48
+   490	[    0.833564] kernel: ... generic registers:      4
+   491	[    0.833564] kernel: ... value mask:             0000ffffffffffff
+   492	[    0.833565] kernel: ... max period:             00007fffffffffff
+   493	[    0.833566] kernel: ... fixed-purpose events:   0
+   494	[    0.833566] kernel: ... event mask:             000000000000000f
+   495	[    0.833806] kernel: rcu: Hierarchical SRCU implementation.
+   496	[    0.834607] kernel: NMI watchdog: Enabled. Permanently consumes one hw-PMU counter.
+   497	[    0.854625] kernel: smp: Bringing up secondary CPUs ...
+   498	[    0.856142] kernel: x86: Booting SMP configuration:
+   499	[    0.856144] kernel: .... node  #0, CPUs:          #1
+   500	[    0.044234] kernel: [Firmware Bug]: cpu 1, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   501	[    0.862491] kernel:    #2
+   502	[    0.044234] kernel: [Firmware Bug]: cpu 2, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   503	[    0.044234] kernel: smpboot: CPU 2 Converting physical 0 to logical die 1
+   504	[    0.870457] kernel:    #3
+   505	[    0.044234] kernel: [Firmware Bug]: cpu 3, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   506	[    0.874397] kernel:    #4
+   507	[    0.044234] kernel: [Firmware Bug]: cpu 4, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   508	[    0.044234] kernel: smpboot: CPU 4 Converting physical 0 to logical die 2
+   509	[    0.882462] kernel:    #5
+   510	[    0.044234] kernel: [Firmware Bug]: cpu 5, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   511	[    0.890197] kernel:    #6
+   512	[    0.044234] kernel: [Firmware Bug]: cpu 6, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   513	[    0.044234] kernel: smpboot: CPU 6 Converting physical 0 to logical die 3
+   514	[    0.898395] kernel:    #7
+   515	[    0.044234] kernel: [Firmware Bug]: cpu 7, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   516	[    0.902402] kernel:    #8
+   517	[    0.044234] kernel: [Firmware Bug]: cpu 8, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   518	[    0.044234] kernel: smpboot: CPU 8 Converting physical 0 to logical die 4
+   519	[    0.910561] kernel:    #9
+   520	[    0.044234] kernel: [Firmware Bug]: cpu 9, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   521	[    0.918235] kernel:   #10
+   522	[    0.044234] kernel: [Firmware Bug]: cpu 10, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   523	[    0.044234] kernel: smpboot: CPU 10 Converting physical 0 to logical die 5
+   524	[    0.926369] kernel:   #11
+   525	[    0.044234] kernel: [Firmware Bug]: cpu 11, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   526	[    0.931031] kernel:   #12
+   527	[    0.044234] kernel: [Firmware Bug]: cpu 12, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   528	[    0.044234] kernel: smpboot: CPU 12 Converting physical 0 to logical die 6
+   529	[    0.938360] kernel:   #13
+   530	[    0.044234] kernel: [Firmware Bug]: cpu 13, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   531	[    0.946601] kernel:   #14
+   532	[    0.044234] kernel: [Firmware Bug]: cpu 14, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   533	[    0.044234] kernel: smpboot: CPU 14 Converting physical 0 to logical die 7
+   534	[    0.954236] kernel:   #15
+   535	[    0.044234] kernel: [Firmware Bug]: cpu 15, try to use APIC520 (LVT offset 2) for vector 0xf4, but the register is already in use for vector 0x0 on this cpu
+   536	[    0.962051] kernel: smp: Brought up 1 node, 16 CPUs
+   537	[    0.964458] kernel: smpboot: Max logical packages: 64
+   538	[    0.964461] kernel: smpboot: Total of 16 processors activated (121601.55 BogoMIPS)
+   539	[    0.969618] kernel: devtmpfs: initialized
+   540	[    0.969618] kernel: x86/mm: Memory block size: 128MB
+   541	[    0.970504] kernel: PM: Registering ACPI NVS region [mem 0xbfeff000-0xbfefffff] (4096 bytes)
+   542	[    0.970504] kernel: clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+   543	[    0.981470] kernel: futex hash table entries: 32768 (order: 9, 2097152 bytes, linear)
+   544	[    0.981837] kernel: pinctrl core: initialized pinctrl subsystem
+   545	[    0.982482] kernel: PM: RTC time: 10:10:55, date: 2022-07-14
+   546	[    0.983887] kernel: NET: Registered protocol family 16
+   547	[    0.985159] kernel: DMA: preallocated 512 KiB GFP_KERNEL pool for atomic allocations
+   548	[    0.985159] kernel: DMA: preallocated 512 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+   549	[    0.985159] kernel: DMA: preallocated 512 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+   550	[    0.985159] kernel: audit: initializing netlink subsys (disabled)
+   551	[    0.985315] kernel: audit: type=2000 audit(1657793455.168:1): state=initialized audit_enabled=0 res=1
+   552	[    0.985636] kernel: thermal_sys: Registered thermal governor 'fair_share'
+   553	[    0.985638] kernel: thermal_sys: Registered thermal governor 'bang_bang'
+   554	[    0.985639] kernel: thermal_sys: Registered thermal governor 'step_wise'
+   555	[    0.985639] kernel: thermal_sys: Registered thermal governor 'user_space'
+   556	[    0.985640] kernel: thermal_sys: Registered thermal governor 'power_allocator'
+   557	[    0.985646] kernel: EISA bus registered
+   558	[    0.985682] kernel: cpuidle: using governor ladder
+   559	[    0.989162] kernel: cpuidle: using governor menu
+   560	[    0.993228] kernel: Simple Boot Flag at 0x36 set to 0x80
+   561	[    0.993364] kernel: ACPI: bus type PCI registered
+   562	[    0.993367] kernel: acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+   563	[    0.994186] kernel: PCI: MMCONFIG for domain 0000 [bus 00-7f] at [mem 0xf0000000-0xf7ffffff] (base 0xf0000000)
+   564	[    0.994191] kernel: PCI: MMCONFIG at [mem 0xf0000000-0xf7ffffff] reserved in E820
+   565	[    0.994204] kernel: PCI: Using configuration type 1 for base access
+   566	[    0.997124] kernel: Kprobes globally optimized
+   567	[    0.997428] kernel: HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+   568	[    0.997428] kernel: HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
+   569	[    1.021482] kernel: ACPI: Added _OSI(Module Device)
+   570	[    1.021484] kernel: ACPI: Added _OSI(Processor Device)
+   571	[    1.021485] kernel: ACPI: Added _OSI(3.0 _SCP Extensions)
+   572	[    1.021486] kernel: ACPI: Added _OSI(Processor Aggregator Device)
+   573	[    1.021486] kernel: ACPI: Added _OSI(Linux-Dell-Video)
+   574	[    1.021487] kernel: ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+   575	[    1.021488] kernel: ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+   576	[    1.052010] kernel: ACPI: 1 ACPI AML tables successfully acquired and loaded
+   577	[    1.054288] kernel: ACPI: [Firmware Bug]: BIOS _OSI(Linux) query ignored
+   578	[    1.079227] kernel: ACPI: Interpreter enabled
+   579	[    1.079240] kernel: ACPI: (supports S0 S1 S4 S5)
+   580	[    1.079242] kernel: ACPI: Using IOAPIC for interrupt routing
+   581	[    1.079267] kernel: PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+   582	[    1.081002] kernel: ACPI: Enabled 4 GPEs in block 00 to 0F
+   583	[    1.352848] kernel: ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-7f])
+   584	[    1.352857] kernel: acpi PNP0A03:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI HPX-Type3]
+   585	[    1.353230] kernel: acpi PNP0A03:00: _OSC: platform does not support [AER LTR]
+   586	[    1.353533] kernel: acpi PNP0A03:00: _OSC: OS now controls [PCIeHotplug SHPCHotplug PME PCIeCapability]
+   587	[    1.357206] kernel: PCI host bridge to bus 0000:00
+   588	[    1.357210] kernel: pci_bus 0000:00: root bus resource [bus 00-7f]
+   589	[    1.357211] kernel: pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+   590	[    1.357213] kernel: pci_bus 0000:00: root bus resource [io  0x0d00-0xfeff window]
+   591	[    1.357214] kernel: pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+   592	[    1.357215] kernel: pci_bus 0000:00: root bus resource [mem 0x000d0000-0x000dbfff window]
+   593	[    1.357217] kernel: pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+   594	[    1.357418] kernel: pci 0000:00:00.0: [8086:7190] type 00 class 0x060000
+   595	[    1.361159] kernel: pci 0000:00:01.0: [8086:7191] type 01 class 0x060400
+   596	[    1.383507] kernel: pci 0000:00:07.0: [8086:7110] type 00 class 0x060100
+   597	[    1.385870] kernel: pci 0000:00:07.1: [8086:7111] type 00 class 0x01018a
+   598	[    1.388651] kernel: pci 0000:00:07.1: reg 0x20: [io  0x1060-0x106f]
+   599	[    1.389731] kernel: pci 0000:00:07.1: legacy IDE quirk: reg 0x10: [io  0x01f0-0x01f7]
+   600	[    1.389734] kernel: pci 0000:00:07.1: legacy IDE quirk: reg 0x14: [io  0x03f6]
+   601	[    1.389735] kernel: pci 0000:00:07.1: legacy IDE quirk: reg 0x18: [io  0x0170-0x0177]
+   602	[    1.389736] kernel: pci 0000:00:07.1: legacy IDE quirk: reg 0x1c: [io  0x0376]
+   603	[    1.390208] kernel: pci 0000:00:07.3: [8086:7113] type 00 class 0x068000
+   604	[    1.393159] kernel: pci 0000:00:07.3: quirk: [io  0x1000-0x103f] claimed by PIIX4 ACPI
+   605	[    1.393159] kernel: pci 0000:00:07.3: quirk: [io  0x1040-0x104f] claimed by PIIX4 SMB
+   606	[    1.393402] kernel: pci 0000:00:07.7: [15ad:0740] type 00 class 0x088000
+   607	[    1.394671] kernel: pci 0000:00:07.7: reg 0x10: [io  0x1080-0x10bf]
+   608	[    1.395782] kernel: pci 0000:00:07.7: reg 0x14: [mem 0xfebfe000-0xfebfffff 64bit]
+   609	[    1.429159] kernel: pci 0000:00:0f.0: [15ad:0405] type 00 class 0x030000
+   610	[    1.430619] kernel: pci 0000:00:0f.0: reg 0x10: [io  0x1070-0x107f]
+   611	[    1.434304] kernel: pci 0000:00:0f.0: reg 0x14: [mem 0xe8000000-0xefffffff pref]
+   612	[    1.436563] kernel: pci 0000:00:0f.0: reg 0x18: [mem 0xfe000000-0xfe7fffff]
+   613	[    1.446366] kernel: pci 0000:00:0f.0: reg 0x30: [mem 0x00000000-0x00007fff pref]
+   614	[    1.452145] kernel: pci 0000:00:10.0: [1000:0030] type 00 class 0x010000
+   615	[    1.453162] kernel: pci 0000:00:10.0: reg 0x10: [io  0x1400-0x14ff]
+   616	[    1.457166] kernel: pci 0000:00:10.0: reg 0x14: [mem 0xfeba0000-0xfebbffff 64bit]
+   617	[    1.458923] kernel: pci 0000:00:10.0: reg 0x1c: [mem 0xfebc0000-0xfebdffff 64bit]
+   618	[    1.464577] kernel: pci 0000:00:10.0: reg 0x30: [mem 0x00000000-0x00003fff pref]
+   619	[    1.466746] kernel: pci 0000:00:11.0: [15ad:0790] type 01 class 0x060401
+   620	[    1.481613] kernel: pci 0000:00:15.0: [15ad:07a0] type 01 class 0x060400
+   621	[    1.483627] kernel: pci 0000:00:15.0: PME# supported from D0 D3hot D3cold
+   622	[    1.484546] kernel: pci 0000:00:15.1: [15ad:07a0] type 01 class 0x060400
+   623	[    1.486592] kernel: pci 0000:00:15.1: PME# supported from D0 D3hot D3cold
+   624	[    1.487620] kernel: pci 0000:00:15.2: [15ad:07a0] type 01 class 0x060400
+   625	[    1.489677] kernel: pci 0000:00:15.2: PME# supported from D0 D3hot D3cold
+   626	[    1.490563] kernel: pci 0000:00:15.3: [15ad:07a0] type 01 class 0x060400
+   627	[    1.492531] kernel: pci 0000:00:15.3: PME# supported from D0 D3hot D3cold
+   628	[    1.493514] kernel: pci 0000:00:15.4: [15ad:07a0] type 01 class 0x060400
+   629	[    1.495473] kernel: pci 0000:00:15.4: PME# supported from D0 D3hot D3cold
+   630	[    1.497424] kernel: pci 0000:00:15.5: [15ad:07a0] type 01 class 0x060400
+   631	[    1.499389] kernel: pci 0000:00:15.5: PME# supported from D0 D3hot D3cold
+...
+...
+...
+  1676	[    9.526981] kernel: [drm]   IntraSurface copy.
+  1677	[    9.526981] kernel: [drm]   DX3.
+  1678	[    9.526981] kernel: [drm] Max GMR ids is 64
+  1679	[    9.526982] kernel: [drm] Max number of GMR pages is 65536
+  1680	[    9.526983] kernel: [drm] Max dedicated hypervisor surface memory is 0 kiB
+  1681	[    9.526983] kernel: [drm] Maximum display memory size is 262144 kiB
+  1682	[    9.526984] kernel: [drm] VRAM at 0xe8000000 size is 4096 kiB
+  1683	[    9.526985] kernel: [drm] MMIO at 0xfe000000 size is 256 kiB
+  1684	[    9.527874] kernel: [TTM] Zone  kernel: Available graphics memory: 1997544 KiB
+  1685	[    9.529079] systemd[1]: Mounting Mount unit for gtk-common-themes, revision 1535...
+  1686	[    9.530825] kernel: [drm] Screen Target Display device initialized
+  1687	[    9.531074] kernel: [drm] width 640
+  1688	[    9.531110] kernel: [drm] height 480
+  1689	[    9.531147] kernel: [drm] bpp 32
+  1690	[    9.532268] systemd[1]: Mounting Mount unit for snap-store, revision 547...
+  1691	[    9.532961] kernel: [drm] Fifo max 0x00040000 min 0x00001000 cap 0x0000077f
+  1692	[    9.533596] kernel: [drm] Using command buffers with DMA pool.
+  1693	[    9.533603] kernel: [drm] Atomic: yes.
+  1694	[    9.533604] kernel: [drm] SM5 support available.
+  1695	[    9.534158] systemd[1]: Mounting Mount unit for snap-store, revision 558...
+  1696	[    9.536693] kernel: fbcon: svgadrmfb (fb0) is primary device
+  1697	[    9.537558] systemd[1]: Mounting Mount unit for snapd, revision 16010...
+  1698	[    9.538441] kernel: Console: switching to colour frame buffer device 100x37
+  1699	[    9.541259] systemd[1]: Mounting Mount unit for snapd, revision 16292...
+  1700	[    9.545961] systemd[1]: Starting udev Kernel Device Manager...
+  1701	[    9.550524] kernel: [drm] Initialized vmwgfx 2.18.0 20200114 for 0000:00:0f.0 on minor 0
+  1702	[    9.550673] kernel: loop1: detected capacity change from 0 to 113640
+  1703	[    9.552164] systemd[1]: Finished Load Kernel Modules.
+  1704	[    9.555005] systemd[1]: Mounting FUSE Control File System...
+  1705	[    9.557351] systemd[1]: Mounting Kernel Configuration File System...
+  1706	[    9.560486] systemd[1]: Starting Apply Kernel Variables...
+  1707	[    9.563751] systemd[1]: Mounted FUSE Control File System.
+  1708	[    9.563867] systemd[1]: Mounted Kernel Configuration File System.
+  1709	[    9.566187] systemd[1]: Mounting VMware vmblock fuse mount...
+  1710	[    9.572070] systemd[1]: Started Journal Service.
+  1711	[    9.586748] kernel: loop2: detected capacity change from 0 to 126784
+  1712	[    9.642493] kernel: loop3: detected capacity change from 0 to 126824
+  1713	[    9.665834] kernel: loop4: detected capacity change from 0 to 448512
+  1714	[    9.682122] kernel: loop5: detected capacity change from 0 to 820832
+  1715	[    9.711688] kernel: loop6: detected capacity change from 0 to 507712
+  1716	[    9.734637] kernel: loop7: detected capacity change from 0 to 187776
+  1717	[    9.789112] kernel: loop8: detected capacity change from 0 to 113736
+  1718	[    9.867197] kernel: loop9: detected capacity change from 0 to 96176
+  1719	[    9.954472] kernel: loop10: detected capacity change from 0 to 96160
+  1720	[    9.975731] kernel: vmw_vmci 0000:00:07.7: Found VMCI PCI device at 0x11080, irq 16
+  1721	[    9.976144] kernel: vmw_vmci 0000:00:07.7: Using capabilities 0x1c
+  1722	[    9.977828] kernel: Guest personality initialized and is active
+  1723	[    9.979045] kernel: VMCI host device registered (name=vmci, major=10, minor=122)
+  1724	[    9.979049] kernel: Initialized host personality
+  1725	[   10.031706] kernel: loop11: detected capacity change from 0 to 133552
+  1726	[   10.073146] kernel: RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+  1727	[   10.097635] kernel: cryptd: max_cpu_qlen set to 1000
+  1728	[   10.133213] kernel: AVX2 version of gcm_enc/dec engaged.
+  1729	[   10.133218] kernel: AES CTR mode by8 optimization enabled
+  1730	[   10.187508] kernel: loop12: detected capacity change from 0 to 448512
+  1731	[   10.193144] kernel: Decoding supported only on Scalable MCA processors.
+  1732	[   10.239997] kernel: Decoding supported only on Scalable MCA processors.
+  1733	[   10.262118] kernel: loop13: detected capacity change from 0 to 111080
+  1734	[   10.289481] kernel: Decoding supported only on Scalable MCA processors.
+  1735	[   10.374959] kernel: loop14: detected capacity change from 0 to 104360
+  1736	[   10.409795] kernel: Decoding supported only on Scalable MCA processors.
+  1737	[   10.468085] kernel: Decoding supported only on Scalable MCA processors.
+  1738	[   10.524081] kernel: Decoding supported only on Scalable MCA processors.
+  1739	[   10.572351] kernel: Decoding supported only on Scalable MCA processors.
+  1740	[   10.629795] kernel: Decoding supported only on Scalable MCA processors.
+  1741	[   10.677537] kernel: Decoding supported only on Scalable MCA processors.
+  1742	[   10.727933] kernel: Decoding supported only on Scalable MCA processors.
+  1743	[   10.769672] kernel: Decoding supported only on Scalable MCA processors.
+  1744	[   10.825311] kernel: Decoding supported only on Scalable MCA processors.
+  1745	[   10.884318] kernel: Decoding supported only on Scalable MCA processors.
+  1746	[   10.936418] kernel: Decoding supported only on Scalable MCA processors.
+  1747	[   10.993956] kernel: Decoding supported only on Scalable MCA processors.
+  1748	[   11.054940] kernel: Decoding supported only on Scalable MCA processors.
+  1749	[   11.239505] kernel: audit: type=1400 audit(1657793466.324:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libreoffice-xpdfimport" pid=868 comm="apparmor_parser"
+  1750	[   11.240634] kernel: audit: type=1400 audit(1657793466.324:3): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libreoffice-senddoc" pid=870 comm="apparmor_parser"
+  1751	[   11.241356] kernel: audit: type=1400 audit(1657793466.324:4): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libreoffice-oopslash" pid=856 comm="apparmor_parser"
+  1752	[   11.241800] kernel: audit: type=1400 audit(1657793466.328:5): apparmor="STATUS" operation="profile_load" profile="unconfined" name="ippusbxd" pid=862 comm="apparmor_parser"
+  1753	[   11.241806] kernel: audit: type=1400 audit(1657793466.328:6): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe" pid=857 comm="apparmor_parser"
+  1754	[   11.241811] kernel: audit: type=1400 audit(1657793466.328:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe//kmod" pid=857 comm="apparmor_parser"
+  1755	[   11.242848] kernel: audit: type=1400 audit(1657793466.328:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/bin/man" pid=860 comm="apparmor_parser"
+  1756	[   11.242860] kernel: audit: type=1400 audit(1657793466.328:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_filter" pid=860 comm="apparmor_parser"
+  1757	[   11.242863] kernel: audit: type=1400 audit(1657793466.328:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_groff" pid=860 comm="apparmor_parser"
+  1758	[   11.243477] kernel: audit: type=1400 audit(1657793466.328:11): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/snapd/snap-confine" pid=867 comm="apparmor_parser"
+  1759	[   11.349966] kernel: NET: Registered protocol family 40
+  1760	[   11.943372] kernel: e1000: ens33 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
+  1761	[   11.946840] kernel: IPv6: ADDRCONF(NETDEV_CHANGE): ens33: link becomes ready
+  1762	[   13.399005] kernel: loop15: detected capacity change from 0 to 8
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ lastb
+lastb: 打不开 /var/log/btmp: 权限不够
+mao@ubuntu:/var/log/cups$ sudo lastb
+[sudo] mao 的密码： 
+root     pts/0                         Mon Jul  4 22:13 - 22:13  (00:00)
+root     pts/0                         Mon Jul  4 22:13 - 22:13  (00:00)
+root     pts/0                         Mon Jul  4 22:12 - 22:12  (00:00)
+root     pts/0                         Mon Jul  4 22:12 - 22:12  (00:00)
+root     pts/0                         Mon Jul  4 22:11 - 22:11  (00:00)
+root     pts/0                         Mon Jul  4 22:11 - 22:11  (00:00)
+root     pts/0                         Mon Jul  4 22:00 - 22:00  (00:00)
+root     pts/0                         Mon Jul  4 21:59 - 21:59  (00:00)
+root     pts/0                         Mon Jul  4 21:58 - 21:58  (00:00)
+root     pts/0                         Mon Jul  4 05:06 - 05:06  (00:00)
+root     pts/0                         Mon Jul  4 05:06 - 05:06  (00:00)
+root     pts/0                         Mon Jul  4 05:06 - 05:06  (00:00)
+root     pts/0                         Mon Jul  4 05:06 - 05:06  (00:00)
+root     pts/0                         Mon Jul  4 05:06 - 05:06  (00:00)
+root     pts/0                         Mon Jul  4 05:05 - 05:05  (00:00)
+root     pts/0                         Mon Jul  4 05:05 - 05:05  (00:00)
+root     pts/0                         Sat Jul  2 04:38 - 04:38  (00:00)
+root     pts/0                         Sat Jul  2 04:38 - 04:38  (00:00)
+
+btmp begins Sat Jul  2 04:38:16 2022
+mao@ubuntu:/var/log/cups$ 
+```
+
+
+
+```sh
+mao@ubuntu:/var/log/cups$ lastlog
+用户名           端口     来自             最后登录时间
+root                                       **从未登录过**
+daemon                                     **从未登录过**
+bin                                        **从未登录过**
+sys                                        **从未登录过**
+sync                                       **从未登录过**
+games                                      **从未登录过**
+man                                        **从未登录过**
+lp                                         **从未登录过**
+mail                                       **从未登录过**
+news                                       **从未登录过**
+uucp                                       **从未登录过**
+proxy                                      **从未登录过**
+www-data                                   **从未登录过**
+backup                                     **从未登录过**
+list                                       **从未登录过**
+irc                                        **从未登录过**
+gnats                                      **从未登录过**
+nobody                                     **从未登录过**
+systemd-network                            **从未登录过**
+systemd-resolve                            **从未登录过**
+systemd-timesync                           **从未登录过**
+messagebus                                 **从未登录过**
+syslog                                     **从未登录过**
+_apt                                       **从未登录过**
+tss                                        **从未登录过**
+uuidd                                      **从未登录过**
+tcpdump                                    **从未登录过**
+avahi-autoipd                              **从未登录过**
+usbmux                                     **从未登录过**
+rtkit                                      **从未登录过**
+dnsmasq                                    **从未登录过**
+cups-pk-helper                             **从未登录过**
+speech-dispatcher                           **从未登录过**
+avahi                                      **从未登录过**
+kernoops                                   **从未登录过**
+saned                                      **从未登录过**
+nm-openvpn                                 **从未登录过**
+hplip                                      **从未登录过**
+whoopsie                                   **从未登录过**
+colord                                     **从未登录过**
+geoclue                                    **从未登录过**
+pulse                                      **从未登录过**
+gnome-initial-setup                           **从未登录过**
+gdm                                        **从未登录过**
+sssd                                       **从未登录过**
+mao                                        **从未登录过**
+systemd-coredump                           **从未登录过**
+mao@ubuntu:/var/log/cups$ 
+```
+
