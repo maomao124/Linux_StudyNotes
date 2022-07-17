@@ -1,4 +1,4 @@
-<h1>
+<h1 style="text-align: center">
 
 [Linux学习笔记.md](Linux学习笔记.md)
 
